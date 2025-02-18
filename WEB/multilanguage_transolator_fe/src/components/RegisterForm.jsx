@@ -5,7 +5,7 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import axios from "axios";
 
 function RegisterForm({ route, method }) {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -13,11 +13,21 @@ function RegisterForm({ route, method }) {
 
   const navigate = useNavigate();
 
+  // Hàm kiểm tra email phải kết thúc bằng @gmail.com
+  const validateEmail = (email) => {
+    const regex = /^[\w.-]+@gmail\.com$/;
+    return regex.test(email);
+  };
+
   // Hàm handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+    if (!validateEmail(email)) {
+      alert("Vui lòng nhập email");
+      setLoading(false);
+      return;
+    } 
     // Kiểm tra password khớp
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
@@ -27,7 +37,7 @@ function RegisterForm({ route, method }) {
 
     try {
       const data = {
-        username: username,
+        email: email,
         full_name: fullName,
         password: password,
         confirm_password: confirmPassword,
@@ -63,14 +73,14 @@ function RegisterForm({ route, method }) {
     <form onSubmit={handleSubmit} className="text-left">
       <div className="mb-4 text-left">
         <label className="block text-gray-700 text-sm font-semibold mb-2">
-          Username or email address
+          Email address
         </label>
         <input
           type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-          placeholder="Enter username or email"
+          placeholder="Enter email address"
           required
         />
       </div>

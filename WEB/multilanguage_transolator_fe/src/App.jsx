@@ -5,16 +5,15 @@ import RegisterPage from "./pages/registerPage";
 import Home from "./pages/HomePage";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ProfilePage from "./pages/ProfilePage";
 
 function Logout() {
-  localStorage.clear;
+  localStorage.removeItem("access"); // Xóa JWT token
+  localStorage.removeItem("refresh");
+  localStorage.removeItem("full_name");
   return <Navigate to="/login" />;
 }
 
-function RegisterAndLogout () {
-  localStorage.clear();
-  return <Navigate to="/register" />;
-}
 
 function App() {
   return (
@@ -24,6 +23,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/register" element={<RegisterPage/>} />
+          <Route path="/userProfile" element={<ProfilePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
     </BrowserRouter>
