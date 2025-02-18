@@ -1,27 +1,26 @@
-from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from api.models import CustomUser
 
-User = get_user_model()
+def validate_email(value):
+    if not value.endswith('@gmail.com'):
+        raise serializers.ValidationError("Email phải có định dạng @gmail.com.")
+    return value
 
 class RegisterSerializer(serializers.ModelSerializer):
-    confirm_password = serializers.CharField(write_only=True, required=True)
-    full_name = serializers.SerializerMethodField()
+    email = serializers.EmailField(validators=[validate_email])
+    
     class Meta:
-        model = User
-        fields = ["id", "username", "full_name" ,"password", "confirm_password"]
+        model = CustomUser
+        fields = ["email", "full_name", "password", "role"]
         extra_kwargs = {
-            "password": {"write_only": True, "required": True},
+            "password": {"write_only": True}
         }
-
-    def validate(self, data):
-        print(data)
-        """ Kiểm tra xem password và confirm_password có giống nhau không """
-        if data["password"] != data["confirm_password"]:
-            raise serializers.ValidationError({"confirm_password": "Passwords do not match"})
-        return data
-
+    
     def create(self, validated_data):
-        """ Xóa confirm_password trước khi lưu vào database """
-        validated_data.pop("confirm_password")  # Không cần lưu confirm_password vào database
-        user = User.objects.create_user(**validated_data)  # Sử dụng create_user để mã hóa mật khẩu
+        user = CustomUser.objects.create_user(
+            email=validated_data["email"],
+            full_name=validated_data["full_name"],
+            password=validated_data["password"],
+            role=validated_data.get("role", "User")
+        )
         return user

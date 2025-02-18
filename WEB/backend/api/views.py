@@ -5,7 +5,6 @@ from .serializers import RegisterSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 User = get_user_model()
@@ -18,12 +17,20 @@ class RegisterView(generics.CreateAPIView):
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
+        # Gọi validate gốc để sinh access & refresh token
         data = super().validate(attrs)
-        user = self.user
-
-        # Thêm full_name từ database vào response
+        
+        user = self.user  # User hiện tại
+        
+        # Thêm thông tin của user vào response
+        data["id"] = user.id
+        data["email"] = user.email
         data["full_name"] = user.full_name
-        return data
+        data["role"] = user.role
+        data["is_active"] = user.is_active
+        data["is_staff"] = user.is_staff
+        data["is_superuser"] = user.is_superuser
 
+        return data
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer

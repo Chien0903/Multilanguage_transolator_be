@@ -1,22 +1,23 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser
 
-@admin.register(CustomUser)
-class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ["id", "username", "full_name", "is_active", "is_staff", "is_superuser"]
-    search_fields = ["username", "full_name"]
-    list_filter = ["is_active", "is_staff", "is_superuser"]
+class CustomUserAdmin(UserAdmin):
+    model = CustomUser
+    list_display = ["id", "email", "full_name", "role", "is_active", "is_staff", "is_superuser"]
+    search_fields = ["email", "full_name"]
+    list_filter = ["is_active", "is_staff", "is_superuser", "role"]
     ordering = ["-id"]
     fieldsets = (
-        (None, {"fields": ("username", "full_name", "password")}),
+        (None, {"fields": ("email", "full_name", "password", "role")}),
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser")}),
     )
     add_fieldsets = (
         (None, {
             "classes": ("wide",),
-            "fields": ("username", "full_name", "password1", "password2", "is_active", "is_staff", "is_superuser"),
+            "fields": ("email", "full_name", "role", "password1", "password2", "is_active", "is_staff", "is_superuser"),
         }),
     )
-    filter_horizontal = ()
     readonly_fields = ["id"]
-# Register your models here.
+
+admin.site.register(CustomUser, CustomUserAdmin)
