@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import RegisterForm from "../components/RegisterForm";
+import RegisterForm from "../components/Form/RegisterForm";
 
 const API_URL = import.meta.env.VITE_API_URL; 
 
