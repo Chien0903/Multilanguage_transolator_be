@@ -40,7 +40,7 @@ function Form({ route, method }) {
     <form onSubmit={handleLogin} className="form-container">
       <div className="mb-4 text-left">
         <label className="block text-gray-700 text-sm font-semibold mb-2">
-          Username or email address
+          Email address
         </label>
         <input
           type="text"

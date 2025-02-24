@@ -52,7 +52,7 @@ const RegisterPage = () => {
       {/* Signup Card */}
       <div className="bg-white rounded-2xl shadow-lg p-8 w-96 text-center mt-40 relative z-10">
         <h1 className="text-2xl font-semibold mb-4">Sign up</h1>
-        <RegisterForm route={`${API_URL}api/user/register/`} method="register" />
+        <RegisterForm route="/api/user/register/" method="register" />
         <p className="mt-4 text-gray-600 text-sm">
           Already have an account?
           <a href="/login" className="text-blue-600 hover:underline">

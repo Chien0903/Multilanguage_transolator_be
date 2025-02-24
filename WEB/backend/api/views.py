@@ -24,12 +24,10 @@ class UserListView(generics.ListAPIView):
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
-        # Gọi validate gốc để sinh access & refresh token
         data = super().validate(attrs)
         
-        user = self.user  # User hiện tại
+        user = self.user
         
-        # Thêm thông tin của user vào response
         data["id"] = user.id
         data["email"] = user.email
         data["full_name"] = user.full_name
@@ -43,33 +41,63 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
     
 class ChangePasswordView(APIView):
-    permission_classes = [IsAuthenticated]  # Chỉ người dùng đã đăng nhập mới được đổi mật khẩu
+    permission_classes = [IsAuthenticated]
 
-    def put(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         user = request.user
-        current_password = request.data.get('currentPassword')
-        new_password = request.data.get('newPassword')
-        confirm_password = request.data.get('confirmPassword')
-
-        # Kiểm tra mật khẩu mới và xác nhận phải khớp
-        if new_password != confirm_password:
-            return Response(
-                {"detail": "Mật khẩu mới và xác nhận không khớp."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        # Kiểm tra mật khẩu hiện tại có đúng không
+        current_password = request.data.get('current_password')
+        new_password = request.data.get('new_password')
+        confirm_password = request.data.get('confirm_password')
         if not user.check_password(current_password):
             return Response(
                 {"detail": "Mật khẩu hiện tại không đúng."},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=400,
             )
 
-        # Cập nhật mật khẩu mới
+        if new_password != confirm_password:
+            return Response(
+                {"detail": "Mật khẩu mới và Mật khẩu xác nhận không khớp."},
+                status=404,
+            )
+
         user.set_password(new_password)
         user.save()
 
         return Response(
             {"detail": "Đổi mật khẩu thành công."},
-            status=status.HTTP_200_OK,
+            status=200,
+        )
+        
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get (self, request):
+        user = request.user
+        data = {
+            "full_name": user.full_name,
+            "email": user.email,
+            "role": user.role,
+            "is_active": user.is_active,
+        }
+
+        return Response(data, status=200)
+    
+class UpdateProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, *args, **kwargs):
+        user = request.user
+        full_name = request.data.get('full_name')
+        email = request.data.get('email')
+        role = request.data.get('role')
+        if email:
+            user.email = email
+        if full_name:
+            user.full_name = full_name
+        if role:
+            user.role = role
+        user.save()
+        return Response(
+            {"detail": "Cập nhật thông tin thành công."},
+            status=200,
         )

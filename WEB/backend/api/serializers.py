@@ -1,7 +1,10 @@
 from rest_framework import serializers
+from django.core.exceptions import ValidationError
 from api.models import CustomUser
 
 def validate_email(value):
+    # if CustomUser.objects.filter(email=value).exists():
+    #     raise ValidationError("Email đã tồn tại. Vui lòng sử dụng email khác.")
     if not value.endswith('@gmail.com'):
         raise serializers.ValidationError("Email phải có định dạng @gmail.com.")
     return value

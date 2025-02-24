@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../../api";
+import { ToastContainer, toast} from 'react-toastify';
 
 const ChangePasswordForm = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -7,13 +8,18 @@ const ChangePasswordForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(""); // Thêm state cho thông báo thành công
+  const successNotify = () => toast.success("Password changed successfully!");
 
   const handleSave = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
-    // Kiểm tra mật khẩu mới và xác nhận phải khớp nhau
+    if (currentPassword === "") {
+      setError("Mật khẩu hiện tại không được để trống!");
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       setError("Mật khẩu mới và mật khẩu xác nhận không khớp!");
       return;
@@ -21,12 +27,11 @@ const ChangePasswordForm = () => {
 
     try {
       const data = {
-        currentPassword: currentPassword,
-        newPassword: newPassword,
-        confirmPassword: confirmPassword,
+        current_password: currentPassword,
+        new_password: newPassword,
+        confirm_password: confirmPassword,
       };
-
-      const res = await axios.patch("/api/change-password", data, {
+      const res = await api.patch("/api/change-password/", data, {
         headers: {
           "Authorization": "Bearer " + localStorage.getItem("accessToken"),
         },
@@ -34,16 +39,14 @@ const ChangePasswordForm = () => {
 
       if (res.status === 200) {
         setSuccess(res.data.detail);
-        // Reset lại form
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
-      } else {
-        alert("Invalid credentials");
+        successNotify();
       }
+
     } catch (error) {
-      console.log(error);
-      alert("Invalid credentials");
+      setError(error.response.data.detail);
     }
   };
 
@@ -119,6 +122,7 @@ const ChangePasswordForm = () => {
           </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

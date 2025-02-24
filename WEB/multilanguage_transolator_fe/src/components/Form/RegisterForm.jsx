@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import api from "../api";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
-import axios from "axios";
+import { ToastContainer, toast} from 'react-toastify';
+import { FiAlertCircle } from 'react-icons/fi';
+import api from "../../api";
 
 function RegisterForm({ route, method }) {
   const [email, setEmail] = useState("");
@@ -12,7 +13,20 @@ function RegisterForm({ route, method }) {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-
+  const emailNotify = () => toast.error("Vui lòng nhập email!",{
+    style: {
+      backgroundColor: 'red',
+      color:  'white',
+    },
+    icon: <FiAlertCircle />
+  });
+  const passwordMatchNotify = () => toast.error("Mật khẩu xác nhận không khớp!",{
+    style: {
+      backgroundColor: 'red',
+      color:  'white',
+    },
+    icon: <FiAlertCircle />
+  });
   // Hàm kiểm tra email phải kết thúc bằng @gmail.com
   const validateEmail = (email) => {
     const regex = /^[\w.-]+@gmail\.com$/;
@@ -24,13 +38,13 @@ function RegisterForm({ route, method }) {
     e.preventDefault();
     setLoading(true);
     if (!validateEmail(email)) {
-      alert("Vui lòng nhập email");
+      emailNotify();
       setLoading(false);
       return;
     } 
     // Kiểm tra password khớp
     if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+      passwordMatchNotify();
       setLoading(false);
       return;
     }
@@ -43,7 +57,7 @@ function RegisterForm({ route, method }) {
         confirm_password: confirmPassword,
       };
 
-      const res = await axios.post(route, data, {
+      const res = await api.post(route, data, {
         headers: { "Content-Type": "application/json" },
       });      
       
@@ -125,6 +139,7 @@ function RegisterForm({ route, method }) {
           placeholder="Confirm password"
           required
         />
+        <ToastContainer />
       </div>
 
       <button
@@ -134,6 +149,7 @@ function RegisterForm({ route, method }) {
       >
         {loading ? "Loading..." : "Sign up"}
       </button>
+
     </form>
   );
 }

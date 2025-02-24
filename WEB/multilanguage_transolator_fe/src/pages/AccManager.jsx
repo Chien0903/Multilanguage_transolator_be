@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Header from "../components/Header/Header";
 import Sidebar from "../components/Home/SideBar";
-import axios from "axios";
+import api from "../api";
 
 const AccountManagement = () => {
   // State chứa danh sách tất cả tài khoản lấy từ API
@@ -13,8 +13,8 @@ const AccountManagement = () => {
 
   // Gọi API để lấy dữ liệu từ database khi component mount
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/user/") 
+    api
+      .get("/api/user/") 
       .then((response) => {
         setUser(response.data);
       })
