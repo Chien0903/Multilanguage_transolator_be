@@ -1,90 +1,74 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
-import { ToastContainer, toast} from 'react-toastify';
-import { FiAlertCircle } from 'react-icons/fi';
+import { ToastContainer, toast } from "react-toastify";
+import { FiAlertCircle } from "react-icons/fi";
 import api from "../../api";
 
-function RegisterForm({ route, method }) {
+function RegisterForm({ route }) {
   const [email, setEmail] = useState("");
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
-  const emailNotify = () => toast.error("Vui lòng nhập email!",{
-    style: {
-      backgroundColor: 'red',
-      color:  'white',
-    },
-    icon: <FiAlertCircle />
-  });
-  const passwordMatchNotify = () => toast.error("Mật khẩu xác nhận không khớp!",{
-    style: {
-      backgroundColor: 'red',
-      color:  'white',
-    },
-    icon: <FiAlertCircle />
-  });
-  const successNotify = () => toast.success("Đăng ký thành công!",{
-    style: {
-      backgroundColor: 'green',
-      color:  'white',
-    },
-    icon: <FiAlertCircle />
-  });
-  // Hàm kiểm tra email phải kết thúc bằng @gmail.com
-  const validateEmail = (email) => {
-    const regex = /^[\w.-]+@gmail\.com$/;
-    return regex.test(email);
-  };
 
-  // Hàm handle submit
+  const notifyError = (msg) =>
+    toast.error(msg, {
+      style: { backgroundColor: "red", color: "white" },
+      icon: <FiAlertCircle />,
+    });
+
+  const notifySuccess = () =>
+    toast.success("Đăng ký thành công!", {
+      style: { backgroundColor: "green", color: "white" },
+      icon: <FiAlertCircle />,
+    });
+
+  const validateEmail = (email) => /^[\w.-]+@gmail\.com$/.test(email);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     if (!validateEmail(email)) {
-      emailNotify();
+      notifyError("Vui lòng nhập email hợp lệ!");
       setLoading(false);
       return;
-    } 
-    // Kiểm tra password khớp
+    }
     if (password !== confirmPassword) {
-      passwordMatchNotify();
+      notifyError("Mật khẩu xác nhận không khớp!");
       setLoading(false);
       return;
     }
 
     try {
       const data = {
-        email: email,
-        full_name: fullName,
-        password: password,
+        email,
+        first_name: firstName,
+        last_name: lastName,
+        password,
         confirm_password: confirmPassword,
       };
 
       const res = await api.post(route, data, {
         headers: { "Content-Type": "application/json" },
-      });      
-      
-      // Kiểm tra xem server trả về gì
+      });
+
       if (res.status === 201 || res.status === 200) {
-        // Nếu muốn lưu token sau khi đăng ký (nếu server trả token khi đăng ký)
         if (res.data.access && res.data.refresh) {
           localStorage.setItem(ACCESS_TOKEN, res.data.access);
           localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
         }
-        // Chuyển hướng sang trang login hoặc trang chủ tuỳ ý
+        notifySuccess();
         navigate("/login");
-        successNotify();
       } else {
-        // Trường hợp khác
-        alert("Registration failed!");
+        notifyError("Registration failed!");
       }
     } catch (error) {
-      console.log(error);
-      alert("Registration failed!");
+      console.error(error);
+      notifyError("Registration failed!");
     } finally {
       setLoading(false);
     }
@@ -92,71 +76,77 @@ function RegisterForm({ route, method }) {
 
   return (
     <form onSubmit={handleSubmit} className="text-left">
-      <div className="mb-4 text-left">
-        <label className="block text-gray-700 text-sm font-semibold mb-2">
-          Email address
-        </label>
+      <div className="mb-4">
+        <label className="block text-gray-700 font-semibold">Email address</label>
         <input
           type="text"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full p-3 border rounded-lg"
           placeholder="Enter email address"
           required
         />
       </div>
 
-      <div className="mb-4 text-left">
-        <label className="block text-gray-700 text-sm font-semibold mb-2">
-          FullName
-        </label>
-        <input
-          type="text"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-          placeholder="Enter full name"
-          required
-        />
+      {/* First Name & Last Name in one row */}
+      <div className="mb-4 grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-gray-700 font-semibold">First Name</label>
+          <input
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            className="w-full p-3 border rounded-lg"
+            placeholder="Enter first name"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-gray-700 font-semibold">Last Name</label>
+          <input
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            className="w-full p-3 border rounded-lg"
+            placeholder="Enter last name"
+            required
+          />
+        </div>
       </div>
 
-      <div className="mb-4 text-left">
-        <label className="block text-gray-700 text-sm font-semibold mb-2">
-          Password
-        </label>
+      <div className="mb-4">
+        <label className="block text-gray-700 font-semibold">Password</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full p-3 border rounded-lg"
           placeholder="Enter password"
           required
         />
       </div>
 
-      <div className="mb-4 text-left">
-        <label className="block text-gray-700 text-sm font-semibold mb-2">
-          Confirm Password
-        </label>
+      <div className="mb-4">
+        <label className="block text-gray-700 font-semibold">Confirm Password</label>
         <input
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full p-3 border rounded-lg"
           placeholder="Confirm password"
           required
         />
-        <ToastContainer />
       </div>
 
+      <ToastContainer />
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+        className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition"
       >
         {loading ? "Loading..." : "Sign up"}
       </button>
-
     </form>
   );
 }

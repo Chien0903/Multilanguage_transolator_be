@@ -4,10 +4,10 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const ProfileForm = () => {
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
-  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -21,9 +21,9 @@ const ProfileForm = () => {
         });
         console.log(response.data);
         const userData = response.data;
-        setFullName(userData.full_name || "");
+        setFirstName(userData.first_name || "");
+        setLastName(userData.last_name || "");
         setEmail(userData.email || "");
-        setPhone(userData.phone || "");
         setRole(userData.role || "User");
       } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -39,23 +39,23 @@ const ProfileForm = () => {
 
     try {
       const updatedData = {
-        full_name: fullName,
+        first_name: firstName,
+        last_name: lastName,
         email: email,
-        phone: phone,
       };
 
       const response = await api.patch("/api/user/update-profile/", updatedData, {
         headers: {
-          "Authorization": "Bearer " + localStorage.getItem("accessToken"),
+          "Authorization": "Bearer " + localStorage.getItem("access"),
           "Content-Type": "application/json",
         },
       });
 
       if (response.status === 200) {
         toast.success("Profile updated successfully!");
-        localStorage.setItem("full_name", fullName);
+        localStorage.setItem("firstName", firstName);
+        localStorage.setItem("lastName", lastName);
         localStorage.setItem("email", email);
-        localStorage.setItem("phone", phone);
         
         setTimeout(() => {
           navigate("/");
@@ -77,20 +77,37 @@ const ProfileForm = () => {
       </div>
       <hr className="border-gray-300 mb-6 w-full" />
       <div className="w-full">
-        {/* Name */}
+        
+        {/* First Name & Last Name */}
         <div className="flex items-center mb-6">
-          <label className="text-gray-600 font-semibold w-2/5 text-right pr-4 text-xl">Name</label>
+          <label className="text-gray-600 font-semibold w-2/5 text-right pr-4 text-xl">
+            First Name
+          </label>
           <input
-            className="w-3/5 p-4 border border-gray-300 rounded-lg text-lg"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            placeholder="Enter your name"
+            className="w-1/2 p-4 border border-gray-300 rounded-lg text-lg"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            placeholder="Enter your first name"
+          />
+        </div>
+
+        <div className="flex items-center mb-6">
+          <label className="text-gray-600 font-semibold w-2/5 text-right pr-4 text-xl">
+            Last Name
+          </label>
+          <input
+            className="w-1/2 p-4 border border-gray-300 rounded-lg text-lg"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            placeholder="Enter your last name"
           />
         </div>
 
         {/* Email (Không cho chỉnh sửa) */}
         <div className="flex items-center mb-6">
-          <label className="text-gray-600 font-semibold w-2/5 text-right pr-4 text-xl">Email</label>
+          <label className="text-gray-600 font-semibold w-2/5 text-right pr-4 text-xl">
+            Email
+          </label>
           <input
             className="w-3/5 p-4 border border-gray-300 rounded-lg text-lg bg-gray-100"
             value={email}
@@ -99,20 +116,11 @@ const ProfileForm = () => {
           />
         </div>
 
-        {/* Phone Number */}
-        <div className="flex items-center mb-6">
-          <label className="text-gray-600 font-semibold w-2/5 text-right pr-4 text-xl">Phone number</label>
-          <input
-            className="w-3/5 p-4 border border-gray-300 rounded-lg text-lg"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="Enter your phone number"
-          />
-        </div>
-
         {/* Role (Không cho chỉnh sửa) */}
         <div className="flex items-center mb-6">
-          <label className="text-gray-600 font-semibold w-2/5 text-right pr-4 text-xl">Role</label>
+          <label className="text-gray-600 font-semibold w-2/5 text-right pr-4 text-xl">
+            Role
+          </label>
           <p className="w-3/5 text-black font-semibold text-lg">{role}</p>
         </div>
 

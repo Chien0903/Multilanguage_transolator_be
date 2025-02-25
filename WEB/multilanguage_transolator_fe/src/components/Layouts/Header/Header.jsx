@@ -4,15 +4,20 @@ import { FaUser, FaKey, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
-  const [fullName, setFullName] = useState("");
-  useEffect(() => {
-    const updateFullName = () => {
-      setFullName(localStorage.getItem("full_name") || "");
-    };
-    window.addEventListener("storage", updateFullName);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
+  useEffect(() => {
+    const updateName = () => {
+      setFirstName(localStorage.getItem("firstName") || "");
+      setLastName(localStorage.getItem("lastName") || "");
+    };
+
+    updateName(); // Cập nhật ngay khi component render
+
+    window.addEventListener("storage", updateName);
     return () => {
-      window.removeEventListener("storage", updateFullName);
+      window.removeEventListener("storage", updateName);
     };
   }, []);
 
@@ -33,7 +38,7 @@ const Header = () => {
         onMouseEnter={() => setShowUserMenu(true)}
         onMouseLeave={() => setShowUserMenu(false)}
       >
-        <span className="mr-2 font-semibold">{fullName}</span>
+        <span className="mr-2 font-semibold">{firstName} {lastName}</span>
         <IoPersonCircleOutline size={40} className="cursor-pointer" />
 
         {/* Dropdown Menu */}

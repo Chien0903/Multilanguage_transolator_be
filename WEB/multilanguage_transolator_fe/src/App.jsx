@@ -14,7 +14,8 @@ import Layout from "./components/Layouts/layout";
 function Logout() {
   localStorage.removeItem("access"); // Xóa JWT token
   localStorage.removeItem("refresh");
-  localStorage.removeItem("full_name");
+  localStorage.removeItem("firstName"); 
+  localStorage.removeItem("lastName");
   localStorage.removeItem("role");
   localStorage.removeItem("email");
   return <Navigate to="/login" />;

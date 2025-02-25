@@ -21,7 +21,8 @@ const Layout = () => {
         const response = await api.get("/api/user/profile/", {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
-        localStorage.setItem("full_name", response.data.full_name);
+        localStorage.setItem("firstName", response.data.first_name);
+        localStorage.setItem("lastName", response.data.last_name);
         localStorage.setItem("email", response.data.email);
         localStorage.setItem("role", response.data.role);
         setRole(response.data.role); 

@@ -30,7 +30,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         
         data["id"] = user.id
         data["email"] = user.email
-        data["full_name"] = user.full_name
+        data["first_name"] = user.first_name
+        data["last_name"] = user.last_name
         data["role"] = user.role
         data["is_active"] = user.is_active
         data["is_staff"] = user.is_staff
@@ -74,7 +75,8 @@ class UserProfileView(APIView):
     def get (self, request):
         user = request.user
         data = {
-            "full_name": user.full_name,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
             "email": user.email,
             "role": user.role,
             "is_active": user.is_active,
@@ -87,13 +89,16 @@ class UpdateProfileView(APIView):
 
     def patch(self, request, *args, **kwargs):
         user = request.user
-        full_name = request.data.get('full_name')
+        first_name = request.data.get('first_name')
+        last_name = request.data.get('last_name')
         email = request.data.get('email')
         role = request.data.get('role')
         if email:
             user.email = email
-        if full_name:
-            user.full_name = full_name
+        if first_name:
+            user.first_name = first_name
+        if last_name:
+            user.last_name = last_name
         if role:
             user.role = role
         user.save()
@@ -113,7 +118,8 @@ class GetUserDetailView(APIView):
 
         data = {
             "id": user.id,
-            "full_name": user.full_name,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
             "email": user.email,
             "role": user.role,
             "is_active": user.is_active,
@@ -142,3 +148,11 @@ class UpdateUserRoleView(APIView):
         user.save()
 
         return Response({"detail": "Cập nhật vai trò thành công."}, status=200)
+
+class DeleteUserView(APIView): 
+    
+    def delete(self, request, user_id):
+        user = CustomUser.objects.get(id=user_id)
+        user.delete()
+        
+        return Response({"detail": "Xóa người dùng thành công."}, status=200)

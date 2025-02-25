@@ -20,7 +20,8 @@ function Form({ route, method }) {
       if (method === "login" && res.status === 200) {
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
         localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
-        localStorage.setItem("full_name", res.data.full_name);
+        localStorage.setItem("firstName", res.data.first_name);
+        localStorage.setItem("lastName", res.data.last_name);
         localStorage.setItem("email", res.data.email);
         localStorage.setItem("role", res.data.role);
         navigate("/");
