@@ -4,13 +4,17 @@ import { FaUser, FaKey, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
-  const [fullName, setfullName] = useState("");
-      useEffect(() => {
-          const storedFullName = localStorage.getItem("full_name");
-          if (storedFullName) {
-              setfullName(storedFullName);
-          }  
-      }, []);
+  const [fullName, setFullName] = useState("");
+  useEffect(() => {
+    const updateFullName = () => {
+      setFullName(localStorage.getItem("full_name") || "");
+    };
+    window.addEventListener("storage", updateFullName);
+
+    return () => {
+      window.removeEventListener("storage", updateFullName);
+    };
+  }, []);
 
   const [showUserMenu, setShowUserMenu] = useState(false);
   const navigate = useNavigate();

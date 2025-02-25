@@ -27,6 +27,13 @@ function RegisterForm({ route, method }) {
     },
     icon: <FiAlertCircle />
   });
+  const successNotify = () => toast.success("Đăng ký thành công!",{
+    style: {
+      backgroundColor: 'green',
+      color:  'white',
+    },
+    icon: <FiAlertCircle />
+  });
   // Hàm kiểm tra email phải kết thúc bằng @gmail.com
   const validateEmail = (email) => {
     const regex = /^[\w.-]+@gmail\.com$/;
@@ -70,7 +77,7 @@ function RegisterForm({ route, method }) {
         }
         // Chuyển hướng sang trang login hoặc trang chủ tuỳ ý
         navigate("/login");
-        alert("Registration successful!");
+        successNotify();
       } else {
         // Trường hợp khác
         alert("Registration failed!");

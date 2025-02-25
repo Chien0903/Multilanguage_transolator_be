@@ -101,3 +101,44 @@ class UpdateProfileView(APIView):
             {"detail": "Cập nhật thông tin thành công."},
             status=200,
         )
+
+class GetUserDetailView(APIView):
+    permission_classes = [IsAuthenticated]  # Yêu cầu user phải đăng nhập
+
+    def get(self, request, user_id):
+        try:
+            user = CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
+            return Response({"detail": "Người dùng không tồn tại."}, status=404)
+
+        data = {
+            "id": user.id,
+            "full_name": user.full_name,
+            "email": user.email,
+            "role": user.role,
+            "is_active": user.is_active,
+        }
+
+        return Response(data, status=200)
+
+class UpdateUserRoleView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, user_id):
+        # Kiểm tra xem người gọi API có phải là Admin không
+        if not request.user.role == "Admin":
+            return Response({"detail": "Bạn không có quyền thay đổi vai trò."}, status=403)
+
+        try:
+            user = CustomUser.objects.get(id=user_id)
+        except CustomUser.DoesNotExist:
+            return Response({"detail": "Người dùng không tồn tại."}, status=404)
+
+        new_role = request.data.get("role")
+        if new_role not in ["Admin", "User"]:
+            return Response({"detail": "Vai trò không hợp lệ."}, status=400)
+
+        user.role = new_role
+        user.save()
+
+        return Response({"detail": "Cập nhật vai trò thành công."}, status=200)
