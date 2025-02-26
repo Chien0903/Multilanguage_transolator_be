@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import LanguageSelect from "./LanguageSelect";
 import UploadBox from "./UploadBox";
 
 const TranslationPanel = () => {
@@ -21,14 +20,13 @@ const TranslationPanel = () => {
 
   return (
     <>
-      <LanguageSelect
+      <UploadBox
         selectedOriginLanguage={selectedOriginLanguage}
         availableTargetLanguages={availableTargetLanguages}
         selectedTargetLanguages={selectedTargetLanguages}
         onOriginSelect={handleOriginLanguageSelect}
         onTargetSelect={handleTargetLanguageSelect}
       />
-      <UploadBox />
     </>
   );
 };

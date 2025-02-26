@@ -38,14 +38,11 @@ const Layout = () => {
 
   return (
     <div className="h-screen flex flex-col">
-      {/* Header */}
       <Header />
 
-      {/* Sidebar + Nội dung chính */}
       <div className="flex flex-1">
-        <Sidebar /> {/* Sidebar luôn hiển thị */}
+        <Sidebar />
         
-        {/* Nội dung thay đổi theo Route */}
         <div className="flex-1 p-6">
           <Outlet />
         </div>

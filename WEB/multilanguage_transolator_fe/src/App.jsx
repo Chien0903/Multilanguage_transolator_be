@@ -12,7 +12,7 @@ import EditUserRole from "./pages/EditUserRole";
 import Layout from "./components/Layouts/layout";
 
 function Logout() {
-  localStorage.removeItem("access"); // Xóa JWT token
+  localStorage.removeItem("access");
   localStorage.removeItem("refresh");
   localStorage.removeItem("firstName"); 
   localStorage.removeItem("lastName");
