@@ -1,12 +1,14 @@
 from rest_framework import serializers
 from django.core.exceptions import ValidationError
-from api.models import CustomUser
+from api.models import CustomUser, CommonKeyword
+        
+
 
 def validate_email(value):
     if CustomUser.objects.filter(email=value).exists():
         raise ValidationError("Email đã tồn tại. Vui lòng sử dụng email khác.")
-    if not value.endswith('@gmail.com'):
-        raise serializers.ValidationError("Email phải có định dạng @gmail.com.")
+    if not value.endswith('@mail.toray'):
+        raise serializers.ValidationError("Email phải có định dạng @mail.toray.")
     return value
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -33,3 +35,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'email', 'first_name', 'last_name', 'role']
+
+class CommonKeywordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommonKeyword
+        fields = "__all__"

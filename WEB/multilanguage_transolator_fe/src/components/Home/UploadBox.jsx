@@ -224,7 +224,7 @@ const LanguageUploadSection = ({ onSelectOrigin, onSelectTarget, onTranslate }) 
             <DocViewer
               documents={[file]}
               pluginRenderers={DocViewerRenderers}
-              style={{ width: "100%", height: "800px" }}
+              style={{ width: "100%", height: "800px", overflow: "auto" }}
             />
           ) : (
             <iframe

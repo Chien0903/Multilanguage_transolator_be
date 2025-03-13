@@ -1,3 +1,9 @@
 {
-  "cSpell.words": ["corsheaders", "dotenv", "simplejwt"]
+  "cSpell.words": [
+    "allauth",
+    "corsheaders",
+    "dotenv",
+    "simplejwt",
+    "socialaccount"
+  ]
 }

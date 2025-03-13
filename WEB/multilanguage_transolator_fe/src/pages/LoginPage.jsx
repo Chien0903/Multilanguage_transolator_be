@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Form from "../components/Form/LoginForm";
+import LoginForm from "../components/Form/LoginForm";
 
 const images = [
   "https://www.toray.com/global/images/index_kv_06.webp",
@@ -50,7 +50,7 @@ const LoginPage = () => {
       {/* Login Card */}
       <div className="bg-white rounded-2xl shadow-lg p-8 w-96 text-center mt-20 relative z-10">
         <h1 className="text-2xl font-semibold mb-4">Sign in</h1>
-        <Form route="/api/token/" method="login" />
+        <LoginForm route="/api/token/" method="login" />
         <p className="mt-4 text-gray-600 text-sm">
           New to <strong>'TORAY'</strong> Multi-Language Translator? <br />
           <a href="/register" className="text-blue-600 hover:underline">

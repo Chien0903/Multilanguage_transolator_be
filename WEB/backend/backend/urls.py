@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 from django.urls import path, include
-from api.views import RegisterView, CustomTokenObtainPairView, UserListView, ChangePasswordView, UserProfileView, UpdateProfileView, UpdateUserRoleView, GetUserDetailView, DeleteUserView
+from api.views import RegisterView, CustomTokenObtainPairView, UserListView, ChangePasswordView, UserProfileView, UpdateProfileView, UpdateUserRoleView, GetUserDetailView, DeleteUserView, CommonKeywordListView, CommonKeywordDetailView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -16,5 +16,8 @@ urlpatterns = [
     path("api/user/<int:user_id>/", GetUserDetailView.as_view(), name="get-user-detail"),
     path("api/user/<int:user_id>/update-role/", UpdateUserRoleView.as_view(), name="update-user-role"),
     path("api/user/<int:user_id>/delete/", DeleteUserView.as_view(), name="delete-user"),
+    path("api/common-keyword/", CommonKeywordListView.as_view(), name="common-keyword-list"),
+    path("api/common-keyword/<int:pk>/", CommonKeywordDetailView.as_view(), name="common-keyword-detail"),
     path("api-auth/", include("rest_framework.urls")),
+    
 ]

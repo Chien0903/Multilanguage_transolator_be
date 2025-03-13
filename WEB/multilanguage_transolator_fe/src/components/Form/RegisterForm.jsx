@@ -26,14 +26,14 @@ function RegisterForm({ route }) {
       icon: <FiAlertCircle />,
     });
 
-  const validateEmail = (email) => /^[\w.-]+@gmail\.com$/.test(email);
+  const validateEmail = (email) => /^[\w.-]+@mail\.toray$/.test(email);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     if (!validateEmail(email)) {
-      notifyError("Vui lòng nhập email hợp lệ!");
+      notifyError("Email phải có định dạng @mail.toray!");
       setLoading(false);
       return;
     }
@@ -83,7 +83,7 @@ function RegisterForm({ route }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full p-3 border rounded-lg"
-          placeholder="Enter email address"
+          placeholder="example@mail.toray"
           required
         />
       </div>

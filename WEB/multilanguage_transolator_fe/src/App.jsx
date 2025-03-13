@@ -10,6 +10,7 @@ import AccountManagement from "./pages/AccManager";
 import ChangePassword from "./pages/ChangePassword";
 import EditUserRole from "./pages/EditUserRole";
 import Layout from "./components/Layouts/layout";
+import CommonLibraryManagement from "./pages/CommonLibraryManagement";
 
 function Logout() {
   localStorage.removeItem("access");
@@ -34,6 +35,7 @@ function App() {
             <Route path="/admin/edit-user/:id" element={<EditUserRole />} />
             <Route path="/admin" element={<AccountManagement />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/common-library" element={<CommonLibraryManagement />} />
           </Route>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage/>} />
