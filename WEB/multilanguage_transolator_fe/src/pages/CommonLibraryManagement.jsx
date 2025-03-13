@@ -12,7 +12,7 @@ const CommonLibraryManagement = () => {
   const [selectedKeyword, setSelectedKeyword] = useState(null);
   const [editingKeyword, setEditingKeyword] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
   const [newKeyword, setNewKeyword] = useState({
     japanese: "",
     english: "",
@@ -43,7 +43,9 @@ const CommonLibraryManagement = () => {
   const handleDelete = async (id) => {
     try {
       await api.delete(`/api/common-keyword/${id}/`);
-      setKeywords(keywords.filter((item) => item.id !== id));
+      // Cập nhật danh sách bằng cách gọi lại API
+      const res = await api.get("/api/common-keyword/");
+      setKeywords(res.data);
       toast.success("Common keyword deleted successfully!", {
         style: { backgroundColor: "green", color: "white" },
         icon: <FiAlertCircle />,
@@ -139,7 +141,6 @@ const CommonLibraryManagement = () => {
       const firstSheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[firstSheetName];
       const importedKeywords = XLSX.utils.sheet_to_json(worksheet);
-      console.log(importedKeywords)
       // Chuẩn hóa dữ liệu import
       const standardizedKeywords = importedKeywords.map((keyword) => ({
         japanese: keyword.japanese || "",
@@ -148,12 +149,10 @@ const CommonLibraryManagement = () => {
         chinese_traditional: keyword.chinese_traditional || "",
         chinese_simplified: keyword.chinese_simplified || "",
       }));
-      console.log(standardizedKeywords);
       // Gọi API để lưu dữ liệu import vào backend
       const saveImportedKeywords = async () => {
         try {
           for (const keyword of standardizedKeywords) {
-            // Kiểm tra dữ liệu trước khi gửi
             if (
               !keyword.japanese ||
               !keyword.english ||
@@ -179,7 +178,7 @@ const CommonLibraryManagement = () => {
             style: { backgroundColor: "green", color: "white" },
             icon: <FiAlertCircle />,
           });
-          // Lấy lại danh sách từ API
+          // Cập nhật danh sách từ API
           const res = await api.get("/api/common-keyword/");
           setKeywords(res.data);
         } catch (error) {
@@ -193,19 +192,17 @@ const CommonLibraryManagement = () => {
           });
         }
       };
-  
       saveImportedKeywords();
     };
     reader.readAsArrayBuffer(file);
   };
 
   const handleExport = () => {
-    // Chuẩn hóa dữ liệu trước khi export
     const exportData = keywords.map((keyword) => ({
       japanese: keyword.japanese || "",
       english: keyword.english || "",
       vietnamese: keyword.vietnamese || "",
-      chinese_tr: keyword.chinese_traditional || "", // Xuất với tên cột là chinese_tr để khớp với file Excel
+      chinese_tr: keyword.chinese_traditional || "",
       chinese_simplified: keyword.chinese_simplified || "",
       date_modified: keyword.date_modified || "",
     }));

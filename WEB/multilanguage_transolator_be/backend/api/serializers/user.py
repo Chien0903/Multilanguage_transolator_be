@@ -1,8 +1,6 @@
 from rest_framework import serializers
 from django.core.exceptions import ValidationError
-from api.models import CustomUser, CommonKeyword
-        
-
+from api.models.user import CustomUser
 
 def validate_email(value):
     if CustomUser.objects.filter(email=value).exists():
@@ -36,7 +34,3 @@ class CustomUserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ['id', 'email', 'first_name', 'last_name', 'role']
 
-class CommonKeywordSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CommonKeyword
-        fields = "__all__"
