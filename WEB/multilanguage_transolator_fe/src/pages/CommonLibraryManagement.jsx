@@ -141,6 +141,7 @@ const CommonLibraryManagement = () => {
       const firstSheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[firstSheetName];
       const importedKeywords = XLSX.utils.sheet_to_json(worksheet);
+      console.log("Imported Keywords:", importedKeywords);
       // Chuẩn hóa dữ liệu import
       const standardizedKeywords = importedKeywords.map((keyword) => ({
         japanese: keyword.japanese || "",
@@ -149,6 +150,7 @@ const CommonLibraryManagement = () => {
         chinese_traditional: keyword.chinese_traditional || "",
         chinese_simplified: keyword.chinese_simplified || "",
       }));
+      console.log("Standardized Keywords:", standardizedKeywords);
       // Gọi API để lưu dữ liệu import vào backend
       const saveImportedKeywords = async () => {
         try {

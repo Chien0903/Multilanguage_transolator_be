@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "api",
+    "backend.api",
     "rest_framework",
 ]
 
@@ -63,7 +63,7 @@ MIDDLEWARE = [
 
 ]
 
-ROOT_URLCONF = 'backend.urls'
+ROOT_URLCONF = 'backend.config.urls'
 
 TEMPLATES = [
     {
