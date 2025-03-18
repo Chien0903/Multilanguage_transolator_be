@@ -24,3 +24,14 @@ class CustomUserAdmin(UserAdmin):
     readonly_fields = ["id"]
 
 admin.site.register(CustomUser, CustomUserAdmin)
+
+
+from django.contrib import admin
+from .models import CommonKeyword
+
+@admin.register(CommonKeyword)
+class CommonKeywordAdmin(admin.ModelAdmin):
+    list_display = ("id", "japanese", "english", "vietnamese", "chinese_traditional", "chinese_simplified", "date_modified")
+    search_fields = ("japanese", "english", "vietnamese", "chinese_traditional", "chinese_simplified")
+    list_filter = ("date_modified",)
+    ordering = ("-date_modified",)

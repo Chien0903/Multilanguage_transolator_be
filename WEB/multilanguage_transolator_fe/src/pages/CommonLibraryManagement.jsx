@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { FaSearch, FaSort, FaEdit, FaTrash, FaPlus, FaFileImport, FaFileExport } from "react-icons/fa";
+import {
+  FaSearch,
+  FaSort,
+  FaEdit,
+  FaTrash,
+  FaPlus,
+  FaFileImport,
+  FaFileExport,
+} from "react-icons/fa";
 import * as XLSX from "xlsx";
 import api from "../api";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,7 +16,7 @@ import { FiAlertCircle } from "react-icons/fi";
 const CommonLibraryManagement = () => {
   const [keywords, setKeywords] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortOrder, setSortOrder] = useState("id_asc");
   const [selectedKeyword, setSelectedKeyword] = useState(null);
   const [editingKeyword, setEditingKeyword] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -64,8 +72,15 @@ const CommonLibraryManagement = () => {
 
   const handleSave = async () => {
     try {
-      const res = await api.put(`/api/common-keyword/${editingKeyword.id}/`, editingKeyword);
-      setKeywords(keywords.map((item) => (item.id === editingKeyword.id ? res.data : item)));
+      const res = await api.put(
+        `/api/common-keyword/${editingKeyword.id}/`,
+        editingKeyword
+      );
+      setKeywords(
+        keywords.map((item) =>
+          item.id === editingKeyword.id ? res.data : item
+        )
+      );
       setEditingKeyword(null);
       toast.success("Common keyword updated successfully!", {
         style: { backgroundColor: "green", color: "white" },
@@ -133,7 +148,8 @@ const CommonLibraryManagement = () => {
   };
 
   const handleImport = (event) => {
-    const file = event.target.files[0];
+    const fileInput = event.target;
+    const file = fileInput.files[0];
     const reader = new FileReader();
     reader.onload = (e) => {
       const data = new Uint8Array(e.target.result);
@@ -141,6 +157,7 @@ const CommonLibraryManagement = () => {
       const firstSheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[firstSheetName];
       const importedKeywords = XLSX.utils.sheet_to_json(worksheet);
+      console.log("Imported Keywords:", importedKeywords);
       // Chuẩn hóa dữ liệu import
       const standardizedKeywords = importedKeywords.map((keyword) => ({
         japanese: keyword.japanese || "",
@@ -149,6 +166,7 @@ const CommonLibraryManagement = () => {
         chinese_traditional: keyword.chinese_traditional || "",
         chinese_simplified: keyword.chinese_simplified || "",
       }));
+      console.log("Standardized Keywords:", standardizedKeywords);
       // Gọi API để lưu dữ liệu import vào backend
       const saveImportedKeywords = async () => {
         try {
@@ -181,6 +199,8 @@ const CommonLibraryManagement = () => {
           // Cập nhật danh sách từ API
           const res = await api.get("/api/common-keyword/");
           setKeywords(res.data);
+          // Reset input file
+          fileInput.value = "";
         } catch (error) {
           const errorMsg =
             error.response?.data?.detail ||
@@ -190,6 +210,8 @@ const CommonLibraryManagement = () => {
             style: { backgroundColor: "red", color: "white" },
             icon: <FiAlertCircle />,
           });
+          // Reset input file khi có lỗi
+          fileInput.value = "";
         }
       };
       saveImportedKeywords();
@@ -229,16 +251,29 @@ const CommonLibraryManagement = () => {
       );
     })
     .sort((a, b) => {
-      const dateA = a.date_modified || new Date().toISOString().split("T")[0];
-      const dateB = b.date_modified || new Date().toISOString().split("T")[0];
-      return sortOrder === "asc"
-        ? dateA.localeCompare(dateB)
-        : dateB.localeCompare(dateA);
+      const dateA = a.date_modified || "";
+      const dateB = b.date_modified || "";
+
+      switch (sortOrder) {
+        case "id_asc":
+          return a.id - b.id;
+        case "id_desc":
+          return b.id - a.id;
+        case "date_asc":
+          return dateA.localeCompare(dateB);
+        case "date_desc":
+          return dateB.localeCompare(dateA);
+        default:
+          return a.id - b.id;
+      }
     });
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredKeywords.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredKeywords.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
   const totalPages = Math.ceil(filteredKeywords.length / itemsPerPage);
 
   const handleNextPage = () => {
@@ -249,7 +284,12 @@ const CommonLibraryManagement = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
-  if (loading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        Loading...
+      </div>
+    );
 
   return (
     <div className="flex-1 p-6">
@@ -273,7 +313,12 @@ const CommonLibraryManagement = () => {
           </button>
           <label className="flex items-center px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 cursor-pointer">
             <FaFileImport className="mr-2" /> Import Keywords
-            <input type="file" accept=".xlsx, .xls" className="hidden" onChange={handleImport} />
+            <input
+              type="file"
+              accept=".xlsx, .xls"
+              className="hidden"
+              onChange={handleImport}
+            />
           </label>
         </div>
         <div className="flex items-center gap-3 ml-auto">
@@ -294,8 +339,10 @@ const CommonLibraryManagement = () => {
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
             >
-              <option value="asc">Sort by Date (Asc)</option>
-              <option value="desc">Sort by Date (Desc)</option>
+              <option value="id_asc">Sort by ID (Ascending)</option>
+              <option value="id_desc">Sort by ID (Descending)</option>
+              <option value="date_asc">Sort by Date (Ascending)</option>
+              <option value="date_desc">Sort by Date (Descending)</option>
             </select>
           </div>
         </div>
@@ -322,16 +369,28 @@ const CommonLibraryManagement = () => {
                 className="border hover:bg-gray-100 cursor-pointer"
                 onClick={() => setSelectedKeyword(item)}
               >
-                <td className="p-3 border">{index + 1 + (currentPage - 1) * itemsPerPage}</td>
-                <td className="p-3 border truncate max-w-[100px]">{item.japanese}</td>
-                <td className="p-3 border truncate max-w-[100px]">{item.english}</td>
-                <td className="p-3 border truncate max-w-[100px]">{item.vietnamese}</td>
-                <td className="p-3 border truncate max-w-[100px]">{item.chinese_traditional}</td>
-                <td className="p-3 border truncate max-w-[100px]">{item.chinese_simplified}</td>
+                <td className="p-3 border">
+                  {index + 1 + (currentPage - 1) * itemsPerPage}
+                </td>
+                <td className="p-3 border truncate max-w-[100px]">
+                  {item.japanese}
+                </td>
+                <td className="p-3 border truncate max-w-[100px]">
+                  {item.english}
+                </td>
+                <td className="p-3 border truncate max-w-[100px]">
+                  {item.vietnamese}
+                </td>
+                <td className="p-3 border truncate max-w-[100px]">
+                  {item.chinese_traditional}
+                </td>
+                <td className="p-3 border truncate max-w-[100px]">
+                  {item.chinese_simplified}
+                </td>
                 <td className="p-3 border">{item.date_modified}</td>
                 <td className="p-3 border">
                   <button
-                    className="text-blue-500 hover:text-blue-700 mr-2 text-xl"
+                    className="text-blue-500 hover:text-blue-700 mr-2 text-xl cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleEdit(item);
@@ -340,7 +399,7 @@ const CommonLibraryManagement = () => {
                     <FaEdit />
                   </button>
                   <button
-                    className="text-red-500 hover:text-red-700 text-xl"
+                    className="text-red-500 hover:text-red-700 text-xl cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDelete(item.id);
@@ -413,7 +472,9 @@ const CommonLibraryManagement = () => {
                   <td className="p-3 border whitespace-normal break-words">
                     {selectedKeyword.chinese_simplified}
                   </td>
-                  <td className="p-3 border">{selectedKeyword.date_modified}</td>
+                  <td className="p-3 border">
+                    {selectedKeyword.date_modified}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -437,7 +498,12 @@ const CommonLibraryManagement = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-lg font-bold mb-4">EDIT COMMON KEYWORD</h3>
-            <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSave();
+              }}
+            >
               <table className="border-collapse border border-gray-300 w-full">
                 <thead>
                   <tr className="bg-gray-200">
@@ -536,7 +602,12 @@ const CommonLibraryManagement = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-lg font-bold mb-4">ADD NEW COMMON KEYWORD</h3>
-            <form onSubmit={(e) => { e.preventDefault(); handleAddKeyword(); }}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleAddKeyword();
+              }}
+            >
               <table className="border-collapse border border-gray-300 w-full">
                 <thead>
                   <tr className="bg-gray-200">
@@ -554,7 +625,10 @@ const CommonLibraryManagement = () => {
                         name="japanese"
                         value={newKeyword.japanese}
                         onChange={(e) =>
-                          setNewKeyword({ ...newKeyword, japanese: e.target.value })
+                          setNewKeyword({
+                            ...newKeyword,
+                            japanese: e.target.value,
+                          })
                         }
                         className="w-full p-2 border rounded resize-y"
                         required
@@ -565,7 +639,10 @@ const CommonLibraryManagement = () => {
                         name="english"
                         value={newKeyword.english}
                         onChange={(e) =>
-                          setNewKeyword({ ...newKeyword, english: e.target.value })
+                          setNewKeyword({
+                            ...newKeyword,
+                            english: e.target.value,
+                          })
                         }
                         className="w-full p-2 border rounded resize-y"
                         required
@@ -576,7 +653,10 @@ const CommonLibraryManagement = () => {
                         name="vietnamese"
                         value={newKeyword.vietnamese}
                         onChange={(e) =>
-                          setNewKeyword({ ...newKeyword, vietnamese: e.target.value })
+                          setNewKeyword({
+                            ...newKeyword,
+                            vietnamese: e.target.value,
+                          })
                         }
                         className="w-full p-2 border rounded resize-y"
                         required

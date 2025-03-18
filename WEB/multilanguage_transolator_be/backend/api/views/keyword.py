@@ -48,6 +48,6 @@ class CommonKeywordDetailView(APIView):
     def delete(self, request, pk):
         keyword = self.get_object(pk)
         if keyword is None:
-            return Response({"detail": "Keyword not found"}, status=status.HTTP404_NOT_FOUND)
+            return Response({"detail": "Keyword not found"}, status=404)
         keyword.delete()
-        return Response(status=status.HTTP204_NO_CONTENT)
+        return Response(status=204)
