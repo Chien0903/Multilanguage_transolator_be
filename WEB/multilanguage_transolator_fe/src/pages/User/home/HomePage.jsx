@@ -1,5 +1,5 @@
-
-import TranslationPanel from "../components/Home/TranslationPanel";
+import React from "react";
+import TranslationPanel from "../../../components/Home/TranslationPanel";
 
 const HomePage = () => {
   return (

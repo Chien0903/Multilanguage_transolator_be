@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom"; 
-import api from "../api";
+import api from "../../api";
+
 import { toast } from "react-toastify";
 
 function AccountManagement() {

@@ -1,5 +1,5 @@
 import React from "react";
-import ChangePassForm from "../components/Form/ChangePassForm";
+import ChangePassForm from "../../../components/Form/ChangePassForm";
 
 const ChangePassword = () => {
   return (

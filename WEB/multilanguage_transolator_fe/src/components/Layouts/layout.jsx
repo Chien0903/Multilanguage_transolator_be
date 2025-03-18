@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import Header from "../Layouts/Header/Header";  
-import Sidebar from "../Layouts/Sidebar/SideBar";  
+import Header from "./Header";  
+import Sidebar from "./SideBar";  
 import api from "../../api"
 
 const Layout = () => {

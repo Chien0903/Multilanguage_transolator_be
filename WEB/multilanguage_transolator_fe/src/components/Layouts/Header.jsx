@@ -47,7 +47,7 @@ const Header = () => {
             <ul className="flex flex-col">
               <li
                 className="p-3 text-sm font-medium text-gray-700 hover:bg-blue-100 cursor-pointer flex items-center space-x-2"
-                onClick={() => navigate("/userProfile")}
+                onClick={() => navigate("/myprofile")}
               >
                 <FaUser className="text-gray-600" />
                 <span>My Account</span>
