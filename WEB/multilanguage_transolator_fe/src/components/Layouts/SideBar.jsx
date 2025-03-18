@@ -55,7 +55,7 @@ const SideBar = () => {
           {/* Update Vocabulary */}
           <div
             className="absolute bottom-32 flex flex-col items-center justify-center cursor-pointer hover:bg-[#003080] p-2 rounded w-full text-center"
-            onClick={() => navigate('/adminlibrary')}
+            onClick={() => navigate('/commonlibrary')}
           >
             <MdLibraryBooks size={32} />
             <span className="text-xs mt-1 leading-tight">Update Vocabulary</span>

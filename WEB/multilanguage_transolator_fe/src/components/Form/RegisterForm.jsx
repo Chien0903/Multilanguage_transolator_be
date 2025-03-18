@@ -16,13 +16,13 @@ function RegisterForm({ route }) {
 
   const notifyError = (msg) =>
     toast.error(msg, {
-      style: { backgroundColor: "red", color: "white" },
+      style: { backgroundColor: "#f44336", color: "white" },
       icon: <FiAlertCircle />,
     });
 
   const notifySuccess = () =>
-    toast.success("Đăng ký thành công!", {
-      style: { backgroundColor: "green", color: "white" },
+    toast.success("Registration successful!", {
+      style: { backgroundColor: "#4caf50", color: "white" },
       icon: <FiAlertCircle />,
     });
 
@@ -33,12 +33,12 @@ function RegisterForm({ route }) {
     setLoading(true);
 
     if (!validateEmail(email)) {
-      notifyError("Email phải có định dạng @mail.toray!");
+      notifyError("Email must have the format @mail.toray!");
       setLoading(false);
       return;
     }
     if (password !== confirmPassword) {
-      notifyError("Mật khẩu xác nhận không khớp!");
+      notifyError("Password confirmation doesn't match!");
       setLoading(false);
       return;
     }
@@ -68,7 +68,7 @@ function RegisterForm({ route }) {
       }
     } catch (error) {
       console.error(error);
-      notifyError("Registration failed!");
+      notifyError(error.response?.data?.message || "Registration failed!");
     } finally {
       setLoading(false);
     }
@@ -77,12 +77,12 @@ function RegisterForm({ route }) {
   return (
     <form onSubmit={handleSubmit} className="text-left">
       <div className="mb-4">
-        <label className="block text-gray-700 font-semibold">Email address</label>
+        <label className="block text-gray-700 text-sm font-semibold mb-2">Email address</label>
         <input
           type="text"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-3 border rounded-lg"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           placeholder="example@mail.toray"
           required
         />
@@ -91,24 +91,24 @@ function RegisterForm({ route }) {
       {/* First Name & Last Name in one row */}
       <div className="mb-4 grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-gray-700 font-semibold">First Name</label>
+          <label className="block text-gray-700 text-sm font-semibold mb-2">First Name</label>
           <input
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            className="w-full p-3 border rounded-lg"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             placeholder="Enter first name"
             required
           />
         </div>
 
         <div>
-          <label className="block text-gray-700 font-semibold">Last Name</label>
+          <label className="block text-gray-700 text-sm font-semibold mb-2">Last Name</label>
           <input
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            className="w-full p-3 border rounded-lg"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             placeholder="Enter last name"
             required
           />
@@ -116,24 +116,24 @@ function RegisterForm({ route }) {
       </div>
 
       <div className="mb-4">
-        <label className="block text-gray-700 font-semibold">Password</label>
+        <label className="block text-gray-700 text-sm font-semibold mb-2">Password</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-3 border rounded-lg"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           placeholder="Enter password"
           required
         />
       </div>
 
-      <div className="mb-4">
-        <label className="block text-gray-700 font-semibold">Confirm Password</label>
+      <div className="mb-5">
+        <label className="block text-gray-700 text-sm font-semibold mb-2">Confirm Password</label>
         <input
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          className="w-full p-3 border rounded-lg"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           placeholder="Confirm password"
           required
         />
@@ -143,9 +143,19 @@ function RegisterForm({ route }) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition"
+        className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition font-medium shadow-md flex justify-center items-center"
       >
-        {loading ? "Loading..." : "Sign up"}
+        {loading ? (
+          <>
+            <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Creating Account...
+          </>
+        ) : (
+          "Sign up"
+        )}
       </button>
     </form>
   );

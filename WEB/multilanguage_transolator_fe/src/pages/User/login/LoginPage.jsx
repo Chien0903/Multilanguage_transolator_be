@@ -22,9 +22,9 @@ const LoginPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-blue-100 relative">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-blue-400 to-purple-600 relative">
       {/* Background Slideshow */}
-      <div className="absolute inset-0 w-full h-full">
+      <div className="absolute inset-0 w-full h-full overflow-hidden">
         {images.map((image, index) => (
           <div
             key={index}
@@ -34,33 +34,60 @@ const LoginPage = () => {
             style={{ backgroundImage: `url(${image})` }}
           ></div>
         ))}
+        <div className="absolute inset-0 bg-black opacity-30"></div>
       </div>
 
       {/* Header Section */}
-      <div className="w-full flex items-center justify-between bg-white py-0 px-8 shadow-md mb-6 absolute top-0 left-0 right-0">
-        <div className="flex items-center">
-          <img
-            src="https://www.toray.com/global/shared/images/toray_logo.svg"
-            alt="Logo"
-            className="w-30 h-30 mr-3"
-          />
+      <header className="w-full bg-white bg-opacity-90 py-4 px-8 shadow-md z-20">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <img
+              src="https://www.toray.com/global/shared/images/toray_logo.svg"
+              alt="Toray Logo"
+              className="h-10"
+            />
+          </div>
+          <div className="absolute left-1/2 transform -translate-x-1/2">
+            <span className="text-2xl font-semibold text-blue-900 uppercase">
+              Multi-Language Translator
+            </span>
+          </div>
+          <nav>
+            <span className="text-gray-600 cursor-default mx-4">
+              Home
+            </span>
+            <a
+              href="/about"
+              className="text-gray-600 hover:text-blue-600 transition-colors mx-4"
+            >
+              About
+            </a>
+            <a
+              href="/contact"
+              className="text-gray-600 hover:text-blue-600 transition-colors mx-4"
+            >
+              Contact
+            </a>
+          </nav>
         </div>
-      </div>
+      </header>
 
-      {/* Login Card */}
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-96 text-center mt-20 relative z-10">
-        <h1 className="text-2xl font-semibold mb-4">Sign in</h1>
-        <LoginForm route="/api/token/" method="login" />
-        <p className="mt-4 text-gray-600 text-sm">
-          New to <strong>'TORAY'</strong> Multi-Language Translator? <br />
-          <a href="/register" className="text-blue-600 hover:underline">
-            Create an account
-          </a>
-        </p>
+      {/* Main content container - full height minus header */}
+      <div className="flex items-center justify-center flex-1 w-full">
+        {/* Login Card */}
+        <div className="bg-white bg-opacity-90 rounded-2xl shadow-2xl p-10 w-96 text-center mx-auto relative z-10 my-8">
+          <h1 className="text-2xl font-semibold mb-6">Sign in</h1>
+          <LoginForm route="/api/token/" method="login" />
+          <p className="mt-6 text-gray-600 text-sm">
+            New to <strong>'TORAY'</strong> Multi-Language Translator? <br />
+            <a href="/register" className="text-blue-600 hover:underline">
+              Create an account
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );
-
 };
 
 export default LoginPage;

@@ -10,7 +10,7 @@ import AccountManagement from "./pages/Admin/AccountManagement";
 import ChangePassword from "./pages/User/profile/ChangePassword";
 import EditUserRole from "./pages/Admin/EditUserRole"; 
 import Layout from "./components/Layouts/layout";
-import AdminLibrary from './pages/Admin/AdminLibrary';
+import CommonLibraryManagement from './pages/Admin/CommonLibraryManagement';
 import UserLibrary from './pages/User/home/UserLibrary';
 
 function Logout() {
@@ -35,7 +35,7 @@ function App() {
           <Route path="/admin/edit-user/:id" element={<EditUserRole />} />
           <Route path="/admin" element={<AccountManagement />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/adminlibrary" element={<AdminLibrary />} />
+          <Route path="/commonlibrary" element={<CommonLibraryManagement />} />
           <Route path="/userlibrary" element={<UserLibrary />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />

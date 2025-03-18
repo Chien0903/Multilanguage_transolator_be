@@ -11,7 +11,7 @@ const UPLOAD_PRESET = "Torray";
 const LanguageUploadSection = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
   const [showLanguages, setShowLanguages] = useState(false);
   const [selectedOriginLanguage, setSelectedOriginLanguage] = useState("Origin Language");
-  const [availableTargetLanguages, setAvailableTargetLanguages] = useState(["English", "Japanese", "Chinese", "Vietnamese"]);
+  const [availableTargetLanguages, setAvailableTargetLanguages] = useState(["English", "Japanese", "Chinese (Simplified)", "Chinese (Traditional)", "Vietnamese"]);
   const [selectedTargetLanguages, setSelectedTargetLanguages] = useState([]);
   const [showTargetDropdown, setShowTargetDropdown] = useState(false);
 
@@ -22,11 +22,19 @@ const LanguageUploadSection = ({ onSelectOrigin, onSelectTarget, onTranslate }) 
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  // ---- Chọn ngôn ngữ (giữ nguyên) ----
+  // ---- Chọn ngôn ngữ (cập nhật) ----
   const handleOriginLanguageSelect = (language) => {
     setSelectedOriginLanguage(language);
     setShowLanguages(false);
-    setAvailableTargetLanguages(["English", "Japanese", "Chinese", "Vietnamese"].filter((lang) => lang !== language));
+    // Filter out the selected origin language but keep the other Chinese variant available
+    setAvailableTargetLanguages(["English", "Japanese", "Chinese (Simplified)", "Chinese (Traditional)", "Vietnamese"].filter(lang => {
+      if (language === "Chinese (Simplified)" && lang === "Chinese (Traditional)") {
+        return true;
+      } else if (language === "Chinese (Traditional)" && lang === "Chinese (Simplified)") {
+        return true;
+      }
+      return lang !== language;
+    }));
     setSelectedTargetLanguages([]);
     onSelectOrigin(language);
   };
@@ -127,9 +135,9 @@ const LanguageUploadSection = ({ onSelectOrigin, onSelectTarget, onTranslate }) 
           {selectedOriginLanguage} <span className="ml-1">▼</span>
         </button>
         {showLanguages && (
-          <div className="absolute left-0 top-full mt-1 bg-white border rounded shadow-md w-28 z-10">
+          <div className="absolute left-0 top-full mt-1 bg-white border rounded shadow-md w-48 z-10">
             <ul>
-              {["English", "Japanese", "Chinese", "Vietnamese"].map((lang) => (
+              {["English", "Japanese", "Chinese (Simplified)", "Chinese (Traditional)", "Vietnamese"].map((lang) => (
                 <li
                   key={lang}
                   className="p-2 hover:bg-gray-200 cursor-pointer"

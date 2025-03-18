@@ -1,16 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { FaUser, FaKey, FaSignOutAlt } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Header = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [role, setRole] = useState("");
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Determine page title based on current route
+  const getPageTitle = () => {
+    const path = location.pathname.toLowerCase();
+    
+    if (path.includes("/commonlibrary")) {
+      return "COMMON LIBRARY";
+    } 
+    
+    return null;
+  };
+
+  const pageTitle = getPageTitle();
 
   useEffect(() => {
     const updateName = () => {
       setFirstName(localStorage.getItem("firstName") || "");
       setLastName(localStorage.getItem("lastName") || "");
+      setRole(localStorage.getItem("role") || "");
     };
 
     updateName(); // Cập nhật ngay khi component render
@@ -21,24 +39,36 @@ const Header = () => {
     };
   }, []);
 
-  const [showUserMenu, setShowUserMenu] = useState(false);
-  const navigate = useNavigate();
-
   return (
-    <div className="bg-[#C4D3E7] flex items-center justify-between p-4 shadow-md w-full">
-      <img
-        src="https://www.toray.com/global/shared/images/toray_logo.svg"
-        alt="Toray Logo"
-        className="h-10"
-      />
+    <div className="bg-[#C4D3E7] flex items-center p-4 shadow-md w-full relative">
+      {/* Logo on left */}
+      <div className="z-10">
+        <img
+          src="https://www.toray.com/global/shared/images/toray_logo.svg"
+          alt="Toray Logo"
+          className="h-10"
+        />
+      </div>
+      
+      {/* Centered title */}
+      {pageTitle && (
+        <div className="absolute left-0 right-0 flex justify-center items-center pointer-events-none">
+          <h1 className="text-2xl font-bold text-[#004098CC]">
+            {pageTitle}
+          </h1>
+        </div>
+      )}
 
-      {/* Container avatar + menu */}
+      {/* User menu on right */}
       <div
-        className="relative inline-flex items-center whitespace-nowrap" 
+        className="relative inline-flex items-center whitespace-nowrap ml-auto z-10" 
         onMouseEnter={() => setShowUserMenu(true)}
         onMouseLeave={() => setShowUserMenu(false)}
       >
-        <span className="mr-2 font-semibold">{firstName} {lastName}</span>
+        <div className="flex flex-col items-end mr-2">
+          <span className="font-semibold">{firstName} {lastName}</span>
+          <span className="text-xs text-gray-600">{role}</span>
+        </div>
         <IoPersonCircleOutline size={40} className="cursor-pointer" />
 
         {/* Dropdown Menu */}

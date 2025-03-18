@@ -5,6 +5,9 @@ const images = [
   "https://www.toray.com/global/images/index_kv_06.webp",
   "https://www.toray.com/global/images/index_kv_08.webp",
   "https://www.toray.com/global/images/index_kv_04.webp",
+  "https://www.toray.com/global/images/index_kv_01.webp",
+  "https://www.toray.com/global/images/index_kv_05.webp",
+  "https://www.toray.com/global/images/index_kv_02.webp",
 ];
 
 const RegisterPage = () => {
@@ -18,8 +21,8 @@ const RegisterPage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  return (
-    <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden bg-blue-100">
+return (
+  <div className="flex flex-col min-h-screen bg-blue-100 relative">
       {/* Background Slideshow */}
       <div className="absolute inset-0 w-full h-full">
         {images.map((image, index) => (
@@ -34,24 +37,53 @@ const RegisterPage = () => {
       </div>
 
       {/* Header Section */}
-      <div className="absolute top-0 left-0 right-0 w-full flex items-center justify-between bg-white shadow-md py-4 px-8 z-20">
-        <img
-          src="https://www.toray.com/global/shared/images/toray_logo.svg"
-          alt="Toray Logo"
-          className="w-32"
-        />
-      </div>
+      <header className="w-full bg-white bg-opacity-90 py-4 px-8 shadow-md z-20">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <img
+              src="https://www.toray.com/global/shared/images/toray_logo.svg"
+              alt="Toray Logo"
+              className="h-10"
+            />
+          </div>
+          <div className="absolute left-1/2 transform -translate-x-1/2">
+            <span className="text-2xl font-semibold text-blue-900 uppercase">
+              Multi-Language Translator
+            </span>
+          </div>
+          <nav>
+            <span className="text-gray-600 cursor-default mx-4">
+              Home
+            </span>
+            <a
+              href="/about"
+              className="text-gray-600 hover:text-blue-600 transition-colors mx-4"
+            >
+              About
+            </a>
+            <a
+              href="/contact"
+              className="text-gray-600 hover:text-blue-600 transition-colors mx-4"
+            >
+              Contact
+            </a>
+          </nav>
+        </div>
+      </header>
 
-      {/* Signup Card */}
-      <div className="relative z-30 bg-white rounded-2xl shadow-lg p-8 w-96 text-center mt-20">
-        <h1 className="text-2xl font-semibold mb-4">Sign up</h1>
-        <RegisterForm route="/api/user/register/" />
-        <p className="mt-4 text-gray-600 text-sm">
-          Already have an account?
-          <a href="/login" className="text-blue-600 hover:underline ml-1">
-            Sign in
-          </a>
-        </p>
+      {/* Main content container - full height minus header */}
+      <div className="flex items-center justify-center flex-1 w-full">
+        {/* Signup Card */}
+        <div className="relative z-30 bg-white rounded-2xl shadow-lg p-8 w-96 text-center mx-auto my-8">
+          <h1 className="text-2xl font-semibold mb-6">Sign up</h1>
+          <RegisterForm route="/api/user/register/" />
+          <p className="mt-6 text-gray-600 text-sm">
+            Already have an account?
+            <a href="/login" className="text-blue-600 hover:underline ml-1">
+              Sign in
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );
