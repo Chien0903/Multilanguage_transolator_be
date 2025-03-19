@@ -22,30 +22,32 @@ const LanguageUploadSection = ({ onSelectOrigin, onSelectTarget, onTranslate }) 
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  // ---- Chọn ngôn ngữ (cập nhật) ----
   const handleOriginLanguageSelect = (language) => {
     setSelectedOriginLanguage(language);
     setShowLanguages(false);
-    // Filter out the selected origin language but keep the other Chinese variant available
-    setAvailableTargetLanguages(["English", "Japanese", "Chinese (Simplified)", "Chinese (Traditional)", "Vietnamese"].filter(lang => {
-      if (language === "Chinese (Simplified)" && lang === "Chinese (Traditional)") {
-        return true;
-      } else if (language === "Chinese (Traditional)" && lang === "Chinese (Simplified)") {
-        return true;
-      }
-      return lang !== language;
-    }));
+    
+    let filteredLanguages = ["English", "Japanese", "Chinese (Simplified)", "Chinese (Traditional)", "Vietnamese"].filter(lang => lang !== language);
+    
+    // If Chinese (Traditional) is selected as origin, remove Chinese (Simplified) from targets
+    if (language === "Chinese (Traditional)") {
+      filteredLanguages = filteredLanguages.filter(lang => lang !== "Chinese (Simplified)");
+    }
+    // If Chinese (Simplified) is selected as origin, remove Chinese (Traditional) from targets
+    else if (language === "Chinese (Simplified)") {
+      filteredLanguages = filteredLanguages.filter(lang => lang !== "Chinese (Traditional)");
+    }
+    
+    setAvailableTargetLanguages(filteredLanguages);
     setSelectedTargetLanguages([]);
     onSelectOrigin(language);
   };
 
   const handleTargetLanguageSelect = (language) => {
-    setSelectedTargetLanguages((prev) =>
-      prev.includes(language) ? prev.filter((lang) => lang !== language) : [...prev, language]
+    setSelectedTargetLanguages(prev =>
+      prev.includes(language) ? prev.filter(lang => lang !== language) : [...prev, language]
     );
     onSelectTarget(language);
   };
-
   // ---- Xử lý file (chọn 1 file duy nhất) ----
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
@@ -127,56 +129,60 @@ const LanguageUploadSection = ({ onSelectOrigin, onSelectTarget, onTranslate }) 
   return (
     <div className="w-full">
       {/* Dropdown chọn ngôn ngữ */}
-      <div className="border-b-2 border-blue-700 flex items-center justify-between p-2 w-full bg-gray-100 relative mt-4">
-        <button
-          className="bg-gray-300 px-3 py-2 rounded flex items-center text-sm"
-          onClick={() => setShowLanguages(!showLanguages)}
-        >
-          {selectedOriginLanguage} <span className="ml-1">▼</span>
-        </button>
-        {showLanguages && (
-          <div className="absolute left-0 top-full mt-1 bg-white border rounded shadow-md w-48 z-10">
-            <ul>
-              {["English", "Japanese", "Chinese (Simplified)", "Chinese (Traditional)", "Vietnamese"].map((lang) => (
-                <li
-                  key={lang}
-                  className="p-2 hover:bg-gray-200 cursor-pointer"
-                  onClick={() => handleOriginLanguageSelect(lang)}
-                >
-                  {lang}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+      <div className="border-b-2 border-blue-700 flex flex-wrap items-center justify-between p-2 w-full bg-gray-100 relative mt-4">
+        <div className="flex items-center mb-2 sm:mb-0 relative">
+          <button
+            className="bg-gray-300 px-3 py-2 rounded flex items-center justify-between text-sm mr-4 w-44"
+            onClick={() => setShowLanguages(!showLanguages)}
+          >
+            <span>{selectedOriginLanguage}</span> <span>▼</span>
+          </button>
+          {showLanguages && (
+            <div className="absolute left-0 top-full mt-1 bg-white border rounded shadow-md w-44 z-10">
+              <ul>
+                {["English", "Japanese", "Chinese (Simplified)", "Chinese (Traditional)", "Vietnamese"].map((lang) => (
+                  <li
+                    key={lang}
+                    className="p-2 hover:bg-gray-200 cursor-pointer"
+                    onClick={() => handleOriginLanguageSelect(lang)}
+                  >
+                    {lang}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
 
-        <button
-          className="bg-gray-300 px-3 py-2 rounded flex items-center text-sm"
-          onClick={() => setShowTargetDropdown(!showTargetDropdown)}
-        >
-          Target Language <span className="ml-2">▼</span>
-        </button>
-        {showTargetDropdown && (
-          <div className="absolute right-0 top-full mt-1 bg-white border rounded shadow-md w-40 max-h-40 overflow-auto z-10">
-            <ul>
-              {availableTargetLanguages.map((lang) => (
-                <li
-                  key={lang}
-                  className="p-2 hover:bg-gray-200 cursor-pointer flex items-center"
-                  onClick={() => handleTargetLanguageSelect(lang)}
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedTargetLanguages.includes(lang)}
-                    readOnly
-                    className="mr-2 pointer-events-none"
-                  />
-                  {lang}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <div className="flex items-center relative">
+          <button
+            className="bg-gray-300 px-3 py-2 rounded flex items-center justify-between text-sm w-44"
+            onClick={() => setShowTargetDropdown(!showTargetDropdown)}
+          >
+            <span>Target Language</span> <span>▼</span>
+          </button>
+          {showTargetDropdown && (
+            <div className="absolute right-0 top-full mt-1 bg-white border rounded shadow-md w-44 z-10">
+              <ul>
+                {availableTargetLanguages.map((lang) => (
+                  <li
+                    key={lang}
+                    className="p-2 hover:bg-gray-200 cursor-pointer flex items-center"
+                    onClick={() => handleTargetLanguageSelect(lang)}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedTargetLanguages.includes(lang)}
+                      readOnly
+                      className="mr-2 pointer-events-none"
+                    />
+                    {lang}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Khu vực upload */}
