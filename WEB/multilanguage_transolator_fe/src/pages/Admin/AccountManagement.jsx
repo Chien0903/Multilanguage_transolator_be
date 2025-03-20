@@ -11,7 +11,7 @@ function AccountManagement() {
   const [searchTerm, setSearchTerm] = useState(""); 
   const [filterRole, setFilterRole] = useState(""); 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 7;
   const [isAddingAccount, setIsAddingAccount] = useState(false);
   const [newAccount, setNewAccount] = useState({
     first_name: "",
@@ -243,7 +243,7 @@ function AccountManagement() {
                   value={newAccount.email}
                   onChange={(e) => setNewAccount({...newAccount, email: e.target.value})}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="example@company.com"
+                  placeholder="example@mail.toray"
                   required
                 />
               </div>
@@ -258,7 +258,7 @@ function AccountManagement() {
                   value={newAccount.password}
                   onChange={(e) => setNewAccount({...newAccount, password: e.target.value})}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Create a strong password"
+                  placeholder="Password"
                   required
                 />
                 <p className="text-xs text-gray-500 mt-1">Password should be at least 8 characters long</p>
