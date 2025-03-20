@@ -372,7 +372,7 @@ const CommonLibraryManagement = () => {
               <FaSearch className="absolute left-3 top-3 text-black z-10" />
               <input
                 type="text"
-                placeholder="Search key-word..."
+                placeholder="Search keyword..."
                 className="p-2 pl-10 border rounded w-full bg-white text-black placeholder-gray-400"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
+import { FaEdit, FaTrash, FaSearch, FaPlus } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom"; 
 import api from "../../api";
 
@@ -12,6 +12,14 @@ function AccountManagement() {
   const [filterRole, setFilterRole] = useState(""); 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+  const [isAddingAccount, setIsAddingAccount] = useState(false);
+  const [newAccount, setNewAccount] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    role: "User"
+  });
 
   useEffect(() => {
     const userRole = localStorage.getItem("role");
@@ -51,6 +59,40 @@ function AccountManagement() {
     }
   };
 
+  const handleAddAccount = async (e) => {
+    e.preventDefault();
+
+    if (
+      !newAccount.first_name ||
+      !newAccount.last_name ||
+      !newAccount.email ||
+      !newAccount.password
+    ) {
+      toast.error("All fields are required!");
+      return;
+    }
+
+    try {
+      await api.post("/api/user/register/", newAccount);
+      toast.success("Account created successfully!");
+      fetchUsers();
+      setIsAddingAccount(false);
+      setNewAccount({
+        first_name: "",
+        last_name: "",
+        email: "",
+        password: "",
+        role: "User"
+      });
+    } catch (error) {
+      const errorMsg = 
+        error.response?.data?.detail || 
+        Object.values(error.response?.data || {}).join(", ") || 
+        "Failed to create account!";
+      toast.error(errorMsg);
+    }
+  };
+
   const filteredUsers = user.filter(account => {
     return (
       account.full_name.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -68,6 +110,14 @@ function AccountManagement() {
     <div className="flex-1 p-6 flex flex-col h-screen overflow-hidden">
       
       <div className="bg-[#004098CC] p-3 rounded flex flex-wrap items-center text-white gap-4">
+        <div className="flex items-center gap-3">
+          <button
+            className="flex items-center px-4 py-2 rounded text-white bg-orange-500 hover:bg-orange-600"
+            onClick={() => setIsAddingAccount(true)}
+          >
+            <FaPlus className="mr-2" /> Create Account
+          </button>
+        </div>
         <div className="flex items-center gap-3 ml-auto">
           <div className="relative w-64">
             <FaSearch className="absolute left-3 top-3 text-black z-10" />
@@ -134,6 +184,122 @@ function AccountManagement() {
           </tbody>
         </table>
       </div>
+
+      {/* Create Account Modal */}
+      {isAddingAccount && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+          onClick={() => setIsAddingAccount(false)}
+        >
+          <div
+            className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full mx-4 transform transition-all duration-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-bold text-gray-800">Create New Account</h3>
+              <p className="text-gray-500 text-sm mt-1">Fill in the details to create a new user account</p>
+            </div>
+            
+            <form onSubmit={handleAddAccount} className="space-y-4">
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1">
+                  <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="first_name">
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    id="first_name"
+                    value={newAccount.first_name}
+                    onChange={(e) => setNewAccount({...newAccount, first_name: e.target.value})}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter first name"
+                    required
+                  />
+                </div>
+                
+                <div className="flex-1">
+                  <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="last_name">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    id="last_name"
+                    value={newAccount.last_name}
+                    onChange={(e) => setNewAccount({...newAccount, last_name: e.target.value})}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter last name"
+                    required
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="email">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={newAccount.email}
+                  onChange={(e) => setNewAccount({...newAccount, email: e.target.value})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="example@company.com"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="password">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  value={newAccount.password}
+                  onChange={(e) => setNewAccount({...newAccount, password: e.target.value})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Create a strong password"
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-1">Password should be at least 8 characters long</p>
+              </div>
+              
+              <div>
+                <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="role">
+                  Account Role
+                </label>
+                <select
+                  id="role"
+                  value={newAccount.role}
+                  onChange={(e) => setNewAccount({...newAccount, role: e.target.value})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                  required
+                >
+                  <option value="User">User</option>
+                  <option value="Admin">Admin</option>
+                </select>
+                <p className="text-xs text-gray-500 mt-1">Admin role has access to all features</p>
+              </div>
+              
+              <div className="flex justify-center gap-3 pt-4">
+                <button
+                  type="button"
+                  className="px-5 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors duration-300"
+                  onClick={() => setIsAddingAccount(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300 font-medium"
+                >
+                  Create Account
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Pagination controls - positioned at bottom */}
       <div className="flex justify-center py-4 mt-auto">
