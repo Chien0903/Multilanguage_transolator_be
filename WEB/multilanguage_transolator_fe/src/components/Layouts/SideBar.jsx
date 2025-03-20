@@ -55,7 +55,11 @@ const SideBar = () => {
           {/* Update Vocabulary */}
           <div
             className="absolute bottom-32 flex flex-col items-center justify-center cursor-pointer hover:bg-[#003080] p-2 rounded w-full text-center"
+<<<<<<< HEAD:WEB/multilanguage_transolator_fe/src/components/Layouts/Sidebar/SideBar.jsx
             onClick={() => navigate('/common-library')}
+=======
+            onClick={() => navigate('/commonlibrary')}
+>>>>>>> Minh:WEB/multilanguage_transolator_fe/src/components/Layouts/SideBar.jsx
           >
             <MdLibraryBooks size={32} />
             <span className="text-xs mt-1 leading-tight">Common Library</span>
