@@ -52,23 +52,7 @@ const LoginPage = () => {
               Multi-Language Translator
             </span>
           </div>
-          <nav>
-            <span className="text-gray-600 cursor-default mx-4">
-              Home
-            </span>
-            <a
-              href="/about"
-              className="text-gray-600 hover:text-blue-600 transition-colors mx-4"
-            >
-              About
-            </a>
-            <a
-              href="/contact"
-              className="text-gray-600 hover:text-blue-600 transition-colors mx-4"
-            >
-              Contact
-            </a>
-          </nav>
+          
         </div>
       </header>
 

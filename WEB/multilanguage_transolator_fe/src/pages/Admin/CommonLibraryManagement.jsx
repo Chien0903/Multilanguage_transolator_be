@@ -20,7 +20,7 @@ const CommonLibraryManagement = () => {
   const [selectedKeyword, setSelectedKeyword] = useState(null);
   const [editingKeyword, setEditingKeyword] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6; // Changed from 6 to 7 to display one more row
+  const [itemsPerPage, setItemsPerPage] = useState(6); // Changed to state instead of constant
   const [newKeyword, setNewKeyword] = useState({
     japanese: "",
     english: "",
@@ -30,6 +30,55 @@ const CommonLibraryManagement = () => {
   });
   const [isAddingKeyword, setIsAddingKeyword] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+
+  // Function to calculate rows based on screen height
+  const calculateItemsPerPage = () => {
+    // More accurate row height measurement
+    const rowHeight = 50; // Slightly reduced from 53px for more accurate measurement
+    const navbarHeight = 60; // Reduced estimate 
+    const headerHeight = 110; // Controls area with buttons - reduced
+    const paginationHeight = 60; // Pagination controls - reduced
+    const tableHeaderHeight = 54; // Table header row
+    const safetyBuffer = 20; // Buffer to prevent scrolling edge cases
+    
+    // Calculate precise available height
+    const totalNonTableHeight = navbarHeight + headerHeight + paginationHeight + tableHeaderHeight + safetyBuffer;
+    const availableHeight = window.innerHeight - totalNonTableHeight;
+    
+    // Calculate number of rows that can fit
+    const calculatedRows = Math.max(1, Math.floor(availableHeight / rowHeight));
+    
+    // Add 1 more row since calculations are conservative, but cap at 15 rows
+    return Math.min(calculatedRows -2, 15);
+  };
+
+  // Update items per page when window is resized or when content/filters change
+  useEffect(() => {
+    const handleResize = () => {
+      const newItemsPerPage = calculateItemsPerPage();
+      setItemsPerPage(newItemsPerPage);
+      setWindowHeight(window.innerHeight);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    // Call immediately when component mounts or when loading completes
+    if (!loading) {
+      handleResize();
+    }
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [windowHeight, loading]);
+  
+  // Recalculate when search term or sorting changes (as they affect content height)
+  useEffect(() => {
+    if (!loading) {
+      setItemsPerPage(calculateItemsPerPage());
+    }
+  }, [searchTerm, sortOrder, loading]);
 
   useEffect(() => {
     const fetchKeywords = async () => {
@@ -292,8 +341,8 @@ const CommonLibraryManagement = () => {
     );
 
   return (
-    <div className="flex flex-1 flex-col justify-center">
-      <div className=" flex p-6 flex-1 flex-col  justify-center">
+    <div className="flex flex-1 flex-col h-screen overflow-hidden">
+      <div className="flex p-6 flex-1 flex-col h-full overflow-hidden">
         <div className="bg-[#004098CC] p-3 rounded mb-4 flex flex-wrap items-center text-white gap-4">
           <div className="flex items-center gap-3">
             <button
@@ -345,7 +394,7 @@ const CommonLibraryManagement = () => {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-auto flex-1">
           <table className="w-full border border-gray-300 rounded-lg overflow-hidden text-center shadow-lg">
             <thead>
               <tr className="bg-white text-black font-bold border-b">
@@ -411,7 +460,7 @@ const CommonLibraryManagement = () => {
           </table>
         </div>
 
-        <div className="flex justify-center mt-10 ">
+        <div className="flex justify-center py-4 h-min">
           <button
             onClick={handlePreviousPage}
             disabled={currentPage === 1}
