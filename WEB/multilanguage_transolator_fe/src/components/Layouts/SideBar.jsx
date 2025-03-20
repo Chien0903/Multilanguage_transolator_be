@@ -41,10 +41,10 @@ const SideBar = () => {
 
         <div 
         className="flex flex-col items-center justify-center cursor-pointer hover:bg-[#003080] p-2 rounded w-full text-center"
-        onClick={() => navigate('/userlibrary')}
+        onClick={() => navigate('/privatelibrary')}
         >
           <MdLibraryBooks size={32} />
-          <span className="text-xs mt-1">Library</span>
+          <span className="text-xs mt-1">Private Library</span>
         </div>
 
       {/* Chỉ hiển thị khi role là Admin */}
@@ -58,7 +58,7 @@ const SideBar = () => {
             onClick={() => navigate('/commonlibrary')}
           >
             <MdLibraryBooks size={32} />
-            <span className="text-xs mt-1 leading-tight">Update Vocabulary</span>
+            <span className="text-xs mt-1 leading-tight">Common Library</span>
           </div>
 
           {/* Account Management */}

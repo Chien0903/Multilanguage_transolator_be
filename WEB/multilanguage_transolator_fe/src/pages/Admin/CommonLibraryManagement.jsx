@@ -50,7 +50,7 @@ const CommonLibraryManagement = () => {
     const calculatedRows = Math.max(1, Math.floor(availableHeight / rowHeight));
     
     // Add 1 more row since calculations are conservative, but cap at 15 rows
-    return Math.min(calculatedRows -2, 15);
+    return Math.min(calculatedRows -1, 15);
   };
 
   // Update items per page when window is resized or when content/filters change
@@ -341,9 +341,9 @@ const CommonLibraryManagement = () => {
     );
 
   return (
-    <div className="flex flex-1 flex-col h-screen overflow-hidden">
-      <div className="flex p-6 flex-1 flex-col h-full overflow-hidden">
-        <div className="bg-[#004098CC] p-3 rounded mb-4 flex flex-wrap items-center text-white gap-4">
+    <div className="flex flex-1 flex-col h-screen overflow-hidden ">
+      <div className="flex p-2 flex-1 flex-col h-full overflow-hidden  ">
+        <div className="bg-[#004098CC] p-3 rounded  flex flex-wrap items-center text-white gap-4">
           <div className="flex items-center gap-3">
             <button
               className="flex items-center px-4 py-2 rounded text-white bg-orange-500 hover:bg-orange-600"
@@ -369,19 +369,19 @@ const CommonLibraryManagement = () => {
           </div>
           <div className="flex items-center gap-3 ml-auto">
             <div className="relative w-64">
-              <FaSearch className="absolute left-3 top-3 text-white" />
+              <FaSearch className="absolute left-3 top-3 text-black z-10" />
               <input
                 type="text"
                 placeholder="Search key-word..."
-                className="p-2 pl-10 border rounded w-full bg-[#004098CC] text-white placeholder-white"
+                className="p-2 pl-10 border rounded w-full bg-white text-black placeholder-gray-400"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <div className="relative w-64">
-              <FaSort className="absolute left-3 top-3 text-white" />
+              <FaSort className="absolute left-3 top-3 text-black z-10" />
               <select
-                className="p-2 pl-10 border rounded w-full bg-[#004098CC] text-white"
+                className="p-2 pl-10 border rounded w-full bg-white text-black"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
               >
@@ -394,47 +394,48 @@ const CommonLibraryManagement = () => {
           </div>
         </div>
 
+        {/* Main data table - enhance borders */}
         <div className="overflow-auto flex-1">
-          <table className="w-full border border-gray-300 rounded-lg overflow-hidden text-center shadow-lg">
+          <table className="w-full border border-gray-400 rounded-sm overflow-hidden text-center ">
             <thead>
-              <tr className="bg-white text-black font-bold border-b">
-                <th className="p-3 border w-[5%]">No</th>
-                <th className="p-3 border w-[15%]">Japanese</th>
-                <th className="p-3 border w-[15%]">English</th>
-                <th className="p-3 border w-[15%]">Vietnamese</th>
-                <th className="p-3 border w-[15%]">Chinese (Traditional)</th>
-                <th className="p-3 border w-[15%]">Chinese (Simplified)</th>
-                <th className="p-3 border w-[10%]">Date Modified</th>
-                <th className="p-3 border w-[10%]">Action</th>
+              <tr className=" bg-white text-black font-bold border-b-2  border-gray-400">
+                <th className="p-3 border-2 border-gray-300 w-[5%]">No</th>
+                <th className="p-3 border-2 border-gray-300 w-[15%]">Japanese</th>
+                <th className="p-3 border-2 border-gray-300 w-[15%]">English</th>
+                <th className="p-3 border-2 border-gray-300 w-[15%]">Vietnamese</th>
+                <th className="p-3 border-2 border-gray-300 w-[15%]">Chinese (Traditional)</th>
+                <th className="p-3 border-2 border-gray-300 w-[15%]">Chinese (Simplified)</th>
+                <th className="p-3 border-2 border-gray-300 w-[10%]">Date Modified</th>
+                <th className="p-3 border-2 border-gray-300 w-[10%]">Action</th>
               </tr>
             </thead>
             <tbody>
               {currentItems.map((item, index) => (
                 <tr
                   key={item.id}
-                  className="border hover:bg-gray-100 cursor-pointer"
+                  className="border-2 border-gray-300 hover:bg-gray-100 cursor-pointer"
                   onClick={() => setSelectedKeyword(item)}
                 >
-                  <td className="p-3 border">
+                  <td className="p-3 border-2 border-gray-300">
                     {index + 1 + (currentPage - 1) * itemsPerPage}
                   </td>
-                  <td className="p-3 border truncate max-w-[100px]">
+                  <td className="p-3 border-2 border-gray-300 truncate max-w-[100px]">
                     {item.japanese}
                   </td>
-                  <td className="p-3 border truncate max-w-[100px]">
+                  <td className="p-3 border-2 border-gray-300 truncate max-w-[100px]">
                     {item.english}
                   </td>
-                  <td className="p-3 border truncate max-w-[100px]">
+                  <td className="p-3 border-2 border-gray-300 truncate max-w-[100px]">
                     {item.vietnamese}
                   </td>
-                  <td className="p-3 border truncate max-w-[100px]">
+                  <td className="p-3 border-2 border-gray-300 truncate max-w-[100px]">
                     {item.chinese_traditional}
                   </td>
-                  <td className="p-3 border truncate max-w-[100px]">
+                  <td className="p-3 border-2 border-gray-300 truncate max-w-[100px]">
                     {item.chinese_simplified}
                   </td>
-                  <td className="p-3 border">{item.date_modified}</td>
-                  <td className="p-3 border">
+                  <td className="p-3 border-2 border-gray-300">{item.date_modified}</td>
+                  <td className="p-3 border-2 border-gray-300">
                     <button
                       className="text-blue-500 hover:text-blue-700 mr-2 text-xl cursor-pointer"
                       onClick={(e) => {
@@ -480,6 +481,7 @@ const CommonLibraryManagement = () => {
           </button>
         </div>
 
+        {/* Detail modal table - enhance borders */}
         {selectedKeyword && (
           <div
             className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
@@ -491,35 +493,35 @@ const CommonLibraryManagement = () => {
             >
               <h3 className="text-lg font-bold mb-4">COMMON KEYWORD DETAILS</h3>
               <div className="overflow-x-auto">
-                <table className="border-collapse border border-gray-300 w-full">
+                <table className="border-collapse border-2 border-gray-400 w-full">
                   <thead>
                     <tr className="bg-gray-200">
-                      <th className="p-3 border w-1/6">Japanese</th>
-                      <th className="p-3 border w-1/6">English</th>
-                      <th className="p-3 border w-1/6">Vietnamese</th>
-                      <th className="p-3 border w-1/6">Chinese (Traditional)</th>
-                      <th className="p-3 border w-1/6">Chinese (Simplified)</th>
-                      <th className="p-3 border w-1/6">Date Modified</th>
+                      <th className="p-3 border-2 border-gray-300 w-1/6">Japanese</th>
+                      <th className="p-3 border-2 border-gray-300 w-1/6">English</th>
+                      <th className="p-3 border-2 border-gray-300 w-1/6">Vietnamese</th>
+                      <th className="p-3 border-2 border-gray-300 w-1/6">Chinese (Traditional)</th>
+                      <th className="p-3 border-2 border-gray-300 w-1/6">Chinese (Simplified)</th>
+                      <th className="p-3 border-2 border-gray-300 w-1/6">Date Modified</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="p-3 border whitespace-normal break-words">
+                      <td className="p-3 border-2 border-gray-300 whitespace-normal break-words">
                         {selectedKeyword.japanese}
                       </td>
-                      <td className="p-3 border whitespace-normal break-words">
+                      <td className="p-3 border-2 border-gray-300 whitespace-normal break-words">
                         {selectedKeyword.english}
                       </td>
-                      <td className="p-3 border whitespace-normal break-words">
+                      <td className="p-3 border-2 border-gray-300 whitespace-normal break-words">
                         {selectedKeyword.vietnamese}
                       </td>
-                      <td className="p-3 border whitespace-normal break-words">
+                      <td className="p-3 border-2 border-gray-300 whitespace-normal break-words">
                         {selectedKeyword.chinese_traditional}
                       </td>
-                      <td className="p-3 border whitespace-normal break-words">
+                      <td className="p-3 border-2 border-gray-300 whitespace-normal break-words">
                         {selectedKeyword.chinese_simplified}
                       </td>
-                      <td className="p-3 border">
+                      <td className="p-3 border-2 border-gray-300">
                         {selectedKeyword.date_modified}
                       </td>
                     </tr>
@@ -536,6 +538,7 @@ const CommonLibraryManagement = () => {
           </div>
         )}
 
+        {/* Edit modal table - enhance borders */}
         {editingKeyword && (
           <div
             className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
@@ -553,70 +556,70 @@ const CommonLibraryManagement = () => {
                 }}
               >
                 <div className="overflow-x-auto">
-                  <table className="border-collapse border border-gray-300 w-full">
+                  <table className="border-collapse border-2 border-gray-400 w-full">
                     <thead>
                       <tr className="bg-gray-200">
-                        <th className="p-3 border w-1/6">Japanese</th>
-                        <th className="p-3 border w-1/6">English</th>
-                        <th className="p-3 border w-1/6">Vietnamese</th>
-                        <th className="p-3 border w-1/6">Chinese (Traditional)</th>
-                        <th className="p-3 border w-1/6">Chinese (Simplified)</th>
-                        <th className="p-3 border w-1/6">Date Modified</th>
+                        <th className="p-3 border-2 border-gray-300 w-1/6">Japanese</th>
+                        <th className="p-3 border-2 border-gray-300 w-1/6">English</th>
+                        <th className="p-3 border-2 border-gray-300 w-1/6">Vietnamese</th>
+                        <th className="p-3 border-2 border-gray-300 w-1/6">Chinese (Traditional)</th>
+                        <th className="p-3 border-2 border-gray-300 w-1/6">Chinese (Simplified)</th>
+                        <th className="p-3 border-2 border-gray-300 w-1/6">Date Modified</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td className="p-3 border">
+                        <td className="p-3 border-2 border-gray-300">
                           <textarea
                             name="japanese"
                             value={editingKeyword.japanese}
                             onChange={handleChange}
-                            className="w-full p-2 border rounded resize-y"
+                            className="w-full p-2 border-2 border-gray-300 rounded resize-y"
                             required
                           />
                         </td>
-                        <td className="p-3 border">
+                        <td className="p-3 border-2 border-gray-300">
                           <textarea
                             name="english"
                             value={editingKeyword.english}
                             onChange={handleChange}
-                            className="w-full p-2 border rounded resize-y"
+                            className="w-full p-2 border-2 border-gray-300 rounded resize-y"
                             required
                           />
                         </td>
-                        <td className="p-3 border">
+                        <td className="p-3 border-2 border-gray-300">
                           <textarea
                             name="vietnamese"
                             value={editingKeyword.vietnamese}
                             onChange={handleChange}
-                            className="w-full p-2 border rounded resize-y"
+                            className="w-full p-2 border-2 border-gray-300 rounded resize-y"
                             required
                           />
                         </td>
-                        <td className="p-3 border">
+                        <td className="p-3 border-2 border-gray-300">
                           <textarea
                             name="chinese_traditional"
                             value={editingKeyword.chinese_traditional}
                             onChange={handleChange}
-                            className="w-full p-2 border rounded resize-y"
+                            className="w-full p-2 border-2 border-gray-300 rounded resize-y"
                             required
                           />
                         </td>
-                        <td className="p-3 border">
+                        <td className="p-3 border-2 border-gray-300">
                           <textarea
                             name="chinese_simplified"
                             value={editingKeyword.chinese_simplified}
                             onChange={handleChange}
-                            className="w-full p-2 border rounded resize-y"
+                            className="w-full p-2 border-2 border-gray-300 rounded resize-y"
                             required
                           />
                         </td>
-                        <td className="p-3 border">
+                        <td className="p-3 border-2 border-gray-300">
                           <textarea
                             name="date_modified"
                             value={editingKeyword.date_modified}
                             onChange={handleChange}
-                            className="w-full p-2 border rounded resize-y"
+                            className="w-full p-2 border-2 border-gray-300 rounded resize-y"
                             disabled
                           />
                         </td>
@@ -642,6 +645,7 @@ const CommonLibraryManagement = () => {
           </div>
         )}
 
+        {/* Add keyword modal table - enhance borders */}
         {isAddingKeyword && (
           <div
             className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
@@ -659,19 +663,19 @@ const CommonLibraryManagement = () => {
                 }}
               >
                 <div className="overflow-x-auto">
-                  <table className="border-collapse border border-gray-300 w-full">
+                  <table className="border-collapse border-2 border-gray-400 w-full">
                     <thead>
                       <tr className="bg-gray-200">
-                        <th className="p-3 border w-1/5">Japanese</th>
-                        <th className="p-3 border w-1/5">English</th>
-                        <th className="p-3 border w-1/5">Vietnamese</th>
-                        <th className="p-3 border w-1/5">Chinese (Traditional)</th>
-                        <th className="p-3 border w-1/5">Chinese (Simplified)</th>
+                        <th className="p-3 border-2 border-gray-300 w-1/5">Japanese</th>
+                        <th className="p-3 border-2 border-gray-300 w-1/5">English</th>
+                        <th className="p-3 border-2 border-gray-300 w-1/5">Vietnamese</th>
+                        <th className="p-3 border-2 border-gray-300 w-1/5">Chinese (Traditional)</th>
+                        <th className="p-3 border-2 border-gray-300 w-1/5">Chinese (Simplified)</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td className="p-3 border">
+                        <td className="p-3 border-2 border-gray-300">
                           <textarea
                             name="japanese"
                             value={newKeyword.japanese}
@@ -681,11 +685,11 @@ const CommonLibraryManagement = () => {
                                 japanese: e.target.value,
                               })
                             }
-                            className="w-full p-2 border rounded resize-y"
+                            className="w-full p-2 border-2 border-gray-300 rounded resize-y"
                             required
                           />
                         </td>
-                        <td className="p-3 border">
+                        <td className="p-3 border-2 border-gray-300">
                           <textarea
                             name="english"
                             value={newKeyword.english}
@@ -695,11 +699,11 @@ const CommonLibraryManagement = () => {
                                 english: e.target.value,
                               })
                             }
-                            className="w-full p-2 border rounded resize-y"
+                            className="w-full p-2 border-2 border-gray-300 rounded resize-y"
                             required
                           />
                         </td>
-                        <td className="p-3 border">
+                        <td className="p-3 border-2 border-gray-300">
                           <textarea
                             name="vietnamese"
                             value={newKeyword.vietnamese}
@@ -709,11 +713,11 @@ const CommonLibraryManagement = () => {
                                 vietnamese: e.target.value,
                               })
                             }
-                            className="w-full p-2 border rounded resize-y"
+                            className="w-full p-2 border-2 border-gray-300 rounded resize-y"
                             required
                           />
                         </td>
-                        <td className="p-3 border">
+                        <td className="p-3 border-2 border-gray-300">
                           <textarea
                             name="chinese_traditional"
                             value={newKeyword.chinese_traditional}
@@ -723,11 +727,11 @@ const CommonLibraryManagement = () => {
                                 chinese_traditional: e.target.value,
                               })
                             }
-                            className="w-full p-2 border rounded resize-y"
+                            className="w-full p-2 border-2 border-gray-300 rounded resize-y"
                             required
                           />
                         </td>
-                        <td className="p-3 border">
+                        <td className="p-3 border-2 border-gray-300">
                           <textarea
                             name="chinese_simplified"
                             value={newKeyword.chinese_simplified}
@@ -737,7 +741,7 @@ const CommonLibraryManagement = () => {
                                 chinese_simplified: e.target.value,
                               })
                             }
-                            className="w-full p-2 border rounded resize-y"
+                            className="w-full p-2 border-2 border-gray-300 rounded resize-y"
                             required
                           />
                         </td>

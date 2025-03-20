@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom"; 
 import api from "../../api";
 
@@ -58,62 +58,61 @@ function AccountManagement() {
     );
   });
   
-
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   const currentAccounts = filteredUsers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  
-
   return (
-    <div className="flex-1 p-6">
-      <h2 className="text-3xl font-bold mb-6">Account Management</h2>
-
-      <div className="flex items-center justify-between mb-4">
-        <input
-          type="text"
-          placeholder="Search by name..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="p-2 border rounded-md w-1/3"
-        />
-        
-        <select
-          value={filterRole}
-          onChange={(e) => setFilterRole(e.target.value)}
-          className="p-2 border rounded-md"
-        >
-          <option value="">All Roles</option>
-          <option value="Admin">Admin</option>
-          <option value="User">User</option>
-        </select>
+    <div className="flex-1 p-6 flex flex-col h-screen overflow-hidden">
+      
+      <div className="bg-[#004098CC] p-3 rounded flex flex-wrap items-center text-white gap-4">
+        <div className="flex items-center gap-3 ml-auto">
+          <div className="relative w-64">
+            <FaSearch className="absolute left-3 top-3 text-black z-10" />
+            <input
+              type="text"
+              placeholder="Search by name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="p-2 pl-10 border rounded w-full bg-white text-black placeholder-gray-400"
+            />
+          </div>
+          
+          <select
+            value={filterRole}
+            onChange={(e) => setFilterRole(e.target.value)}
+            className="p-2 border rounded bg-white text-black"
+          >
+            <option value="">All Roles</option>
+            <option value="Admin">Admin</option>
+            <option value="User">User</option>
+          </select>
+        </div>
       </div>
 
-      <div className="bg-white shadow-md rounded-lg p-4">
-        <h3 className="text-xl font-semibold mb-4">Account</h3>
-
-        <table className="w-full border-collapse">
+      <div className="overflow-auto flex-1">
+        <table className="w-full border border-gray-400 rounded-smsm overflow-hidden text-center">
           <thead>
-            <tr className="bg-gray-200">
-              <th className="p-3 text-left">#</th>
-              <th className="p-3 text-left">Name</th>
-              <th className="p-3 text-left">Role</th>
-              <th className="p-3 text-left">Email</th>
-              <th className="p-3 text-center">Actions</th>
+            <tr className="bg-white text-black font-bold border-b-2 border-gray-400">
+              <th className="p-3 border-2 border-gray-300 w-[5%]">#</th>
+              <th className="p-3 border-2 border-gray-300 w-[25%]">Name</th>
+              <th className="p-3 border-2 border-gray-300 w-[15%]">Role</th>
+              <th className="p-3 border-2 border-gray-300 w-[35%]">Email</th>
+              <th className="p-3 border-2 border-gray-300 w-[20%]">Actions</th>
             </tr>
           </thead>
           <tbody>
             {currentAccounts.map((account, index) => (
-              <tr key={account.id} className="border-t">
-                <td className="p-3">
+              <tr key={account.id} className="border-2 border-gray-300 hover:bg-gray-100">
+                <td className="p-3 border-2 border-gray-300">
                   {(currentPage - 1) * itemsPerPage + index + 1}
                 </td>
-                <td className="p-3">{account.full_name}</td>
-                <td className="p-3">{account.role}</td>
-                <td className="p-3">{account.email}</td>
-                <td className="p-3 flex justify-center space-x-3">
+                <td className="p-3 border-2 border-gray-300">{account.full_name}</td>
+                <td className="p-3 border-2 border-gray-300">{account.role}</td>
+                <td className="p-3 border-2 border-gray-300">{account.email}</td>
+                <td className="p-3  border-gray-300 flex justify-center space-x-3">
                   <Link
                     to={`/admin/edit-user/${account.id}`}
                     className="flex items-center text-blue-500 hover:text-blue-700 space-x-1 cursor-pointer"
@@ -134,41 +133,27 @@ function AccountManagement() {
             ))}
           </tbody>
         </table>
+      </div>
 
-        {/* Phân trang */}
-        <div className="flex justify-start mt-4 space-x-2 ">
-          {currentPage > 1 && (
-            <button
-              className="px-3 py-1 rounded bg-blue-500 text-white cursor-pointer"
-              onClick={() => setCurrentPage(currentPage - 1)}
-            >
-              Prev
-            </button>
-          )}
-
-          {[...Array(totalPages)].map((_, index) => (
-            <button
-              key={index}
-              className={`px-3 py-1 rounded cursor-pointer ${
-                currentPage === index + 1
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-300 text-black"
-              }`}
-              onClick={() => setCurrentPage(index + 1)}
-            >
-              {index + 1}
-            </button>
-          ))}
-
-          {currentPage < totalPages && (
-            <button
-              className="px-3 py-1 rounded bg-blue-500 text-white cursor-pointer"
-              onClick={() => setCurrentPage(currentPage + 1)}
-            >
-              Next
-            </button>
-          )}
-        </div>
+      {/* Pagination controls - positioned at bottom */}
+      <div className="flex justify-center py-4 mt-auto">
+        <button
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+        >
+          Previous
+        </button>
+        <span className="mx-4 self-center">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+        >
+          Next
+        </button>
       </div>
     </div>
   );

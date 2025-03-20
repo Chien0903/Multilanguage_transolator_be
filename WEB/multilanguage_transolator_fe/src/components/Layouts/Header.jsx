@@ -18,6 +18,9 @@ const Header = () => {
     if (path.includes("/commonlibrary")) {
       return "COMMON LIBRARY";
     } 
+    if (path.includes("/admin")) {
+      return "Account Management";
+    }
     
     return null;
   };

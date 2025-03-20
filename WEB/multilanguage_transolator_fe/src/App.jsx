@@ -11,7 +11,7 @@ import ChangePassword from "./pages/User/profile/ChangePassword";
 import EditUserRole from "./pages/Admin/EditUserRole"; 
 import Layout from "./components/Layouts/layout";
 import CommonLibraryManagement from './pages/Admin/CommonLibraryManagement';
-import UserLibrary from './pages/User/home/UserLibrary';
+import PrivateLibraryManagement from './pages/User/home/PrivateLibraryManagement';
 
 function Logout() {
   localStorage.removeItem("access");
@@ -36,7 +36,7 @@ function App() {
           <Route path="/admin" element={<AccountManagement />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/commonlibrary" element={<CommonLibraryManagement />} />
-          <Route path="/userlibrary" element={<UserLibrary />} />
+          <Route path="/privatelibrary" element={<PrivateLibraryManagement />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
