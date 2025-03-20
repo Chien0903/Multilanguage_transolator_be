@@ -5,6 +5,9 @@ const images = [
   "https://www.toray.com/global/images/index_kv_06.webp",
   "https://www.toray.com/global/images/index_kv_08.webp",
   "https://www.toray.com/global/images/index_kv_04.webp",
+  "https://www.toray.com/global/images/index_kv_01.webp",
+  "https://www.toray.com/global/images/index_kv_05.webp",
+  "https://www.toray.com/global/images/index_kv_02.webp",
 ];
 
 const RegisterPage = () => {

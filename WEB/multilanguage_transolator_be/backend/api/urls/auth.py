@@ -4,8 +4,8 @@ from backend.api.views.auth import RegisterView, CustomTokenObtainPairView, Chan
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
-    path("api/user/register/", RegisterView.as_view(), name="register"),
+    path("user/register/", RegisterView.as_view(), name="register"),
     # path("api/token/", CustomTokenObtainPairView.as_view(), name="get_token"),
     # path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh_token"),
-     path("api/change-password/", ChangePasswordView.as_view(), name="change_password"),
+     path("change-password/", ChangePasswordView.as_view(), name="change_password"),
 ]

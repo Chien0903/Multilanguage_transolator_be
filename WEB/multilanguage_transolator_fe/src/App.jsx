@@ -6,7 +6,7 @@ import Home from "./pages/HomePage";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProfilePage from "./pages/ProfilePage";
-import AccountManagement from "./pages/AccManager";
+import AccountManagement from "./pages/AccountManagement";
 import ChangePassword from "./pages/ChangePassword";
 import EditUserRole from "./pages/EditUserRole";
 import Layout from "./components/Layouts/layout";

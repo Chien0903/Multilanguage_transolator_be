@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import UploadBox from "./UploadBox";
+import LanguageUploadSection from "./LanguageUploadSection";
 
 const TranslationPanel = () => {
   const [selectedOriginLanguage, setSelectedOriginLanguage] = useState("Origin Language");
@@ -20,7 +20,7 @@ const TranslationPanel = () => {
 
   return (
     <>
-      <UploadBox
+      <LanguageUploadSection
         selectedOriginLanguage={selectedOriginLanguage}
         availableTargetLanguages={availableTargetLanguages}
         selectedTargetLanguages={selectedTargetLanguages}
