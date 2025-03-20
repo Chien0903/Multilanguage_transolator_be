@@ -286,14 +286,14 @@ const CommonLibraryManagement = () => {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-min-screen">
         Loading...
       </div>
     );
 
   return (
-    <div className="flex-1 flex flex-col">
-      <div className="p-6 flex-1">
+    <div className="flex flex-1 flex-col justify-center">
+      <div className=" flex p-6 flex-1 flex-col  justify-center">
         <div className="bg-[#004098CC] p-3 rounded mb-4 flex flex-wrap items-center text-white gap-4">
           <div className="flex items-center gap-3">
             <button
@@ -411,7 +411,7 @@ const CommonLibraryManagement = () => {
           </table>
         </div>
 
-        <div className="flex justify-center mt-7 mb-4">
+        <div className="flex justify-center mt-10 ">
           <button
             onClick={handlePreviousPage}
             disabled={currentPage === 1}

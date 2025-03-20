@@ -127,9 +127,9 @@ const LanguageUploadSection = ({ onSelectOrigin, onSelectTarget, onTranslate }) 
 
   // ---- Giao diện ----
   return (
-    <div className="w-full">
+    <div className=" w-full items-center justify-center bg-white p-6">  
       {/* Dropdown chọn ngôn ngữ */}
-      <div className="border-b-2 border-blue-700 flex flex-wrap items-center justify-between p-2 w-full bg-gray-100 relative mt-4">
+      <div className="border-b-2 border-blue-700 flex flex-wrap items-center justify-between p-2 w-full bg-gray-100 mt-4">
         <div className="flex items-center mb-2 sm:mb-0 relative">
           <button
             className="bg-gray-300 px-3 py-2 rounded flex items-center justify-between text-sm mr-4 w-44"
@@ -156,13 +156,13 @@ const LanguageUploadSection = ({ onSelectOrigin, onSelectTarget, onTranslate }) 
 
         <div className="flex items-center relative">
           <button
-            className="bg-gray-300 px-3 py-2 rounded flex items-center justify-between text-sm w-44"
+            className="bg-gray-300 px-3 py-2 rounded flex items-center justify-between text-sm w-46"
             onClick={() => setShowTargetDropdown(!showTargetDropdown)}
           >
             <span>Target Language</span> <span>▼</span>
           </button>
           {showTargetDropdown && (
-            <div className="absolute right-0 top-full mt-1 bg-white border rounded shadow-md w-44 z-10">
+            <div className="absolute right-0 top-full mt-1 bg-white border rounded shadow-md w-46 z-10">
               <ul>
                 {availableTargetLanguages.map((lang) => (
                   <li
