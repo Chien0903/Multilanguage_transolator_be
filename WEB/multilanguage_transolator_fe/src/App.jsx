@@ -30,13 +30,13 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<ProtectedRoute> <HomePage /> </ProtectedRoute>} />
           <Route path="/logout" element={<Logout />} />
-          <Route path="/myprofile" element={<MyProfile />} />
+          <Route path="/my-profile" element={<MyProfile />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/admin/edit-user/:id" element={<EditUserRole />} />
           <Route path="/admin" element={<AccountManagement />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/commonlibrary" element={<CommonLibraryManagement />} />
-          <Route path="/privatelibrary" element={<PrivateLibraryManagement />} />
+          <Route path="/common-library" element={<CommonLibraryManagement />} />
+          <Route path="/private-library" element={<PrivateLibraryManagement />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />

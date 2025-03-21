@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Progress, notification } from "antd";
-import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
-import "@cyntler/react-doc-viewer/dist/index.css";
 
 // Cấu hình Cloudinary
 const CLOUD_NAME = "dzojcrdto";
@@ -68,26 +66,14 @@ const LanguageUploadSection = ({ onSelectOrigin, onSelectTarget, onTranslate }) 
     event.preventDefault();
   };
 
-  // ---- Xử lý file: PDF => local, DOCX/XLSX => upload Cloudinary ----
+  // ---- Xử lý file: PDF, DOCX, XLSX => upload lên Cloudinary ----
   const handleFile = async (fileToUpload) => {
     const ext = fileToUpload.name.split(".").pop().toLowerCase();
 
-    if (ext === "pdf") {
-      // PDF => Tạo URL cục bộ, render react-doc-viewer
-      const localUrl = URL.createObjectURL(fileToUpload);
-      setFile({ uri: localUrl, fileType: "pdf" });
-    } else if (ext === "docx" || ext === "xlsx") {
-      // DOCX/XLSX => Upload Cloudinary, hiển thị progress
-      await uploadFileToCloudinary(fileToUpload, ext);
-    } else {
-      notification.error({
-        message: "Định dạng không hợp lệ",
-        description: "Chỉ hỗ trợ: PDF, DOCX, XLSX.",
-      });
-    }
+    await uploadFileToCloudinary(fileToUpload, ext);
   };
 
-  // ---- Upload file DOCX/XLSX lên Cloudinary ----
+  // ---- Upload file lên Cloudinary ----
   const uploadFileToCloudinary = async (fileToUpload, ext) => {
     setUploading(true);
     setUploadProgress(0);
@@ -234,18 +220,31 @@ const LanguageUploadSection = ({ onSelectOrigin, onSelectTarget, onTranslate }) 
               Remove File
             </button>
           </h3>
-          {file.fileType === "pdf" ? (
-            <DocViewer
-              documents={[file]}
-              pluginRenderers={DocViewerRenderers}
-              style={{ width: "100%", height: "800px", overflow: "auto" }}
-            />
-          ) : (
+
+          {file.uri.includes(".docx") && (
             <iframe
               src={`https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(file.uri)}`}
               style={{ width: "100%", height: "800px" }}
               frameBorder="0"
-              title="Office Web Viewer"
+              title="DOCX Viewer"
+            />
+          )}
+
+          {file.uri.includes(".xlsx") && (
+            <iframe
+              src={`https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(file.uri)}`}
+              style={{ width: "100%", height: "800px" }}
+              frameBorder="0"
+              title="XLSX Viewer"
+            />
+          )}
+
+          {file.uri.includes(".pdf") && (
+            <iframe
+              src={file.uri}
+              style={{ width: "100%", height: "800px" }}
+              frameBorder="0"
+              title="PDF Viewer"
             />
           )}
         </div>
