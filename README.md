@@ -4,11 +4,8 @@ Dự án hỗ trợ dịch và xử lý đa ngôn ngữ với các tính năng n
 
 ## Cấu trúc dự án
 
-Dự án bao gồm 3 phần chính:
-
 - **WEB/multilanguage_transolator_fe**: Frontend được xây dựng bằng React + Vite
 - **WEB/multilanguage_transolator_be**: Backend được xây dựng bằng Django
-- **AI_Pipeline**: Module xử lý trí tuệ nhân tạo
 
 ## Yêu cầu hệ thống
 
@@ -63,21 +60,6 @@ npm run dev
 
 Frontend sẽ chạy tại địa chỉ: http://localhost:5173/
 
-### 4. Cài đặt AI Pipeline (nếu cần)
-
-```bash
-cd AI_Pipeline
-
-# Tạo và kích hoạt môi trường ảo
-python -m venv env
-source env/bin/activate  # Trên Linux/Mac
-# hoặc
-env\Scripts\activate  # Trên Windows
-
-# Cài đặt các thư viện cần thiết
-pip install -r requirements.txt
-```
-
 ## Cấu hình môi trường
 
 Cả frontend và backend đều sử dụng file .env để cấu hình.
@@ -86,12 +68,11 @@ Cả frontend và backend đều sử dụng file .env để cấu hình.
 
 Tạo file .env trong thư mục WEB/multilanguage_transolator_be với nội dung:
 
-```
-DEBUG=True
-SECRET_KEY=your_secret_key
-DATABASE_URL=sqlite:///db.sqlite3
-ALLOWED_HOSTS=127.0.0.1,localhost
-```
+DB_HOST="toray-database1.croy20i26wfv.ap-southeast-2.rds.amazonaws.com"
+DB_PORT="5432"
+DB_USER="postgres"
+DB_NAME="torayinitial"
+DB_PASSWORD="locvuong01"
 
 ### File .env cho Frontend
 
@@ -100,15 +81,3 @@ Tạo file .env trong thư mục WEB/multilanguage_transolator_fe với nội du
 ```
 VITE_API_URL=http://localhost:8000
 ```
-
-## Các tính năng chính
-
-- Đăng nhập/Đăng ký người dùng
-- Quản lý tài khoản
-- Dịch đa ngôn ngữ
-- Thư viện chung và riêng
-- Xử lý và phân tích tài liệu
-
-## Đóng góp
-
-Mọi đóng góp đều được hoan nghênh. Vui lòng tạo Pull Request hoặc báo cáo Issues nếu bạn phát hiện lỗi.
