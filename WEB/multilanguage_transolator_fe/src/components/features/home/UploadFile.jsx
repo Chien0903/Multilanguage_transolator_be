@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../../../services/api";
 import { Progress, notification } from "antd";
 
 // Cấu hình Cloudinary
 const CLOUD_NAME = "dzojcrdto";
 const UPLOAD_PRESET = "Torray";
 
-const LanguageUploadSection = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
+const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
   const [showLanguages, setShowLanguages] = useState(false);
   const [selectedOriginLanguage, setSelectedOriginLanguage] = useState("Origin Language");
   const [availableTargetLanguages, setAvailableTargetLanguages] = useState(["English", "Japanese", "Chinese (Simplified)", "Chinese (Traditional)", "Vietnamese"]);
@@ -83,7 +83,7 @@ const LanguageUploadSection = ({ onSelectOrigin, onSelectTarget, onTranslate }) 
     formData.append("upload_preset", UPLOAD_PRESET);
 
     try {
-      const response = await axios.post(
+      const response = await api.post(
         `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`,
         formData,
         {
@@ -263,4 +263,4 @@ const LanguageUploadSection = ({ onSelectOrigin, onSelectTarget, onTranslate }) 
   );
 };
 
-export default LanguageUploadSection;
+export default UploadFile;

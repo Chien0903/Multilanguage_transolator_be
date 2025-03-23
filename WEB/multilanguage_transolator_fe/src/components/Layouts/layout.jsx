@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import Header from "./Header";  
-import Sidebar from "./SideBar";  
-import api from "../../api"
+import Header from "../Layouts/Header/index";  
+import Sidebar from "../Layouts/Sidebar/index";  
+import api from "../../services/api";
 
 const Layout = () => {
   const [role, setRole] = useState(localStorage.getItem("role") || "");

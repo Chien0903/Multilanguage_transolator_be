@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import api from "../../api";
+import api from "../../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +19,6 @@ const ProfileForm = () => {
             "Authorization": "Bearer " + localStorage.getItem("accessToken"),
           },
         });
-        console.log(response.data);
         const userData = response.data;
         setFirstName(userData.first_name || "");
         setLastName(userData.last_name || "");

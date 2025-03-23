@@ -1,17 +1,15 @@
-import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "./pages/User/login/LoginPage";
-import RegisterPage from "./pages/User/login/registerPage";
-import HomePage from "./pages/User/home/HomePage"; 
-import NotFound from "./pages/NotFound"; 
-import ProtectedRoute from "./components/ProtectedRoute";
-import MyProfile from "./pages/User/profile/MyProfile";
-import AccountManagement from "./pages/Admin/AccountManagement"; 
-import ChangePassword from "./pages/User/profile/ChangePassword";
-import EditUserRole from "./pages/Admin/EditUserRole"; 
-import Layout from "./components/Layouts/layout";
-import CommonLibraryManagement from './pages/Admin/CommonLibraryManagement';
-import PrivateLibraryManagement from './pages/User/home/PrivateLibraryManagement';
+import LoginPage from "../pages/login/index";
+import RegisterPage from "../pages/register/index";
+import HomePage from "../pages/home"; 
+import NotFound from "../pages/error/notFound"; 
+import ProtectedRoute from "../services/ProtectedRoute";
+import MyProfile from "../pages/profile/index";
+import AccountManagement from "../pages/Admin/AccountManagement"; 
+import ChangePassword from "../pages/profile/change";
+import EditUserRole from "../components/features/admin/editUserRole"; 
+import Layout from "../components/Layouts/layout";
+import CommonLibraryManagement from '../pages/Admin/CommonLibraryManagement';
 
 function Logout() {
   localStorage.removeItem("access");
@@ -36,7 +34,6 @@ function App() {
           <Route path="/admin" element={<AccountManagement />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/common-library" element={<CommonLibraryManagement />} />
-          <Route path="/private-library" element={<PrivateLibraryManagement />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />

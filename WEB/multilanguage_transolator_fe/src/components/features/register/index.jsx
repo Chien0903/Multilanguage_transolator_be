@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../../constants/constants";
 import { ToastContainer, toast } from "react-toastify";
 import { FiAlertCircle } from "react-icons/fi";
-import api from "../../api";
+import api from "../../../services/api";
 
 function RegisterForm({ route }) {
   const [email, setEmail] = useState("");

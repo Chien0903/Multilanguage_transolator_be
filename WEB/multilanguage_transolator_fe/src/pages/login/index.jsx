@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import LoginForm from "../../../components/Form/LoginForm";
+import LoginForm from "../../components/features/login/index";
 
 const images = [
   "https://www.toray.com/global/images/index_kv_06.webp",

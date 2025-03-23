@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { FaEdit, FaTrash, FaSearch, FaPlus } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom"; 
-import api from "../../api";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../services/api";
 
 import { toast } from "react-toastify";
 
 function AccountManagement() {
   const navigate = useNavigate();
   const [user, setUser] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); 
-  const [filterRole, setFilterRole] = useState(""); 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterRole, setFilterRole] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7;
   const [isAddingAccount, setIsAddingAccount] = useState(false);
@@ -18,14 +18,14 @@ function AccountManagement() {
     last_name: "",
     email: "",
     password: "",
-    role: "User"
+    role: "User",
   });
 
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     if (userRole !== "Admin") {
       toast.error("Bạn không có quyền truy cập!");
-      navigate("/"); 
+      navigate("/");
     }
   }, [navigate]);
 
@@ -36,9 +36,9 @@ function AccountManagement() {
   const fetchUsers = async () => {
     try {
       const response = await api.get("/api/user/");
-      const usersWithFullName = response.data.map(user => ({
+      const usersWithFullName = response.data.map((user) => ({
         ...user,
-        full_name: `${user.first_name || ""} ${user.last_name || ""}`.trim()
+        full_name: `${user.first_name || ""} ${user.last_name || ""}`.trim(),
       }));
       setUser(usersWithFullName);
     } catch (error) {
@@ -82,24 +82,24 @@ function AccountManagement() {
         last_name: "",
         email: "",
         password: "",
-        role: "User"
+        role: "User",
       });
     } catch (error) {
-      const errorMsg = 
-        error.response?.data?.detail || 
-        Object.values(error.response?.data || {}).join(", ") || 
+      const errorMsg =
+        error.response?.data?.detail ||
+        Object.values(error.response?.data || {}).join(", ") ||
         "Failed to create account!";
       toast.error(errorMsg);
     }
   };
 
-  const filteredUsers = user.filter(account => {
+  const filteredUsers = user.filter((account) => {
     return (
       account.full_name.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (filterRole === "" || account.role === filterRole)
     );
   });
-  
+
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   const currentAccounts = filteredUsers.slice(
     (currentPage - 1) * itemsPerPage,
@@ -108,7 +108,6 @@ function AccountManagement() {
 
   return (
     <div className="flex-1 p-6 flex flex-col h-screen overflow-hidden">
-      
       <div className="bg-[#004098CC] p-3 rounded flex flex-wrap items-center text-white gap-4">
         <div className="flex items-center gap-3">
           <button
@@ -129,7 +128,7 @@ function AccountManagement() {
               className="p-2 pl-10 border rounded w-full bg-white text-black placeholder-gray-400"
             />
           </div>
-          
+
           <select
             value={filterRole}
             onChange={(e) => setFilterRole(e.target.value)}
@@ -155,13 +154,20 @@ function AccountManagement() {
           </thead>
           <tbody>
             {currentAccounts.map((account, index) => (
-              <tr key={account.id} className="border-2 border-gray-300 hover:bg-gray-100">
+              <tr
+                key={account.id}
+                className="border-2 border-gray-300 hover:bg-gray-100"
+              >
                 <td className="p-3 border-2 border-gray-300">
                   {(currentPage - 1) * itemsPerPage + index + 1}
                 </td>
-                <td className="p-3 border-2 border-gray-300">{account.full_name}</td>
+                <td className="p-3 border-2 border-gray-300">
+                  {account.full_name}
+                </td>
                 <td className="p-3 border-2 border-gray-300">{account.role}</td>
-                <td className="p-3 border-2 border-gray-300">{account.email}</td>
+                <td className="p-3 border-2 border-gray-300">
+                  {account.email}
+                </td>
                 <td className="p-3  border-gray-300 flex justify-center space-x-3">
                   <Link
                     to={`/admin/edit-user/${account.id}`}
@@ -196,91 +202,130 @@ function AccountManagement() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold text-gray-800">Create New Account</h3>
-              <p className="text-gray-500 text-sm mt-1">Fill in the details to create a new user account</p>
+              <h3 className="text-2xl font-bold text-gray-800">
+                Create New Account
+              </h3>
+              <p className="text-gray-500 text-sm mt-1">
+                Fill in the details to create a new user account
+              </p>
             </div>
-            
+
             <form onSubmit={handleAddAccount} className="space-y-4">
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1">
-                  <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="first_name">
+                  <label
+                    className="block text-gray-700 text-sm font-medium mb-1"
+                    htmlFor="first_name"
+                  >
                     First Name
                   </label>
                   <input
                     type="text"
                     id="first_name"
                     value={newAccount.first_name}
-                    onChange={(e) => setNewAccount({...newAccount, first_name: e.target.value})}
+                    onChange={(e) =>
+                      setNewAccount({
+                        ...newAccount,
+                        first_name: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter first name"
                     required
                   />
                 </div>
-                
+
                 <div className="flex-1">
-                  <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="last_name">
+                  <label
+                    className="block text-gray-700 text-sm font-medium mb-1"
+                    htmlFor="last_name"
+                  >
                     Last Name
                   </label>
                   <input
                     type="text"
                     id="last_name"
                     value={newAccount.last_name}
-                    onChange={(e) => setNewAccount({...newAccount, last_name: e.target.value})}
+                    onChange={(e) =>
+                      setNewAccount({
+                        ...newAccount,
+                        last_name: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter last name"
                     required
                   />
                 </div>
               </div>
-              
+
               <div>
-                <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="email">
+                <label
+                  className="block text-gray-700 text-sm font-medium mb-1"
+                  htmlFor="email"
+                >
                   Email Address
                 </label>
                 <input
                   type="email"
                   id="email"
                   value={newAccount.email}
-                  onChange={(e) => setNewAccount({...newAccount, email: e.target.value})}
+                  onChange={(e) =>
+                    setNewAccount({ ...newAccount, email: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="example@mail.toray"
                   required
                 />
               </div>
-              
+
               <div>
-                <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="password">
+                <label
+                  className="block text-gray-700 text-sm font-medium mb-1"
+                  htmlFor="password"
+                >
                   Password
                 </label>
                 <input
                   type="password"
                   id="password"
                   value={newAccount.password}
-                  onChange={(e) => setNewAccount({...newAccount, password: e.target.value})}
+                  onChange={(e) =>
+                    setNewAccount({ ...newAccount, password: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Password"
                   required
                 />
-                <p className="text-xs text-gray-500 mt-1">Password should be at least 8 characters long</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Password should be at least 8 characters long
+                </p>
               </div>
-              
+
               <div>
-                <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="role">
+                <label
+                  className="block text-gray-700 text-sm font-medium mb-1"
+                  htmlFor="role"
+                >
                   Account Role
                 </label>
                 <select
                   id="role"
                   value={newAccount.role}
-                  onChange={(e) => setNewAccount({...newAccount, role: e.target.value})}
+                  onChange={(e) =>
+                    setNewAccount({ ...newAccount, role: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                   required
                 >
                   <option value="User">User</option>
                   <option value="Admin">Admin</option>
                 </select>
-                <p className="text-xs text-gray-500 mt-1">Admin role has access to all features</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  Admin role has access to all features
+                </p>
               </div>
-              
+
               <div className="flex justify-center gap-3 pt-4">
                 <button
                   type="button"

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import api from "../../api";
+import api from "../../../services/api";
 import { useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -10,7 +10,7 @@ const EditUserRole = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("User"); // Mặc định User
+  const [role, setRole] = useState("User");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [dataLoading, setDataLoading] = useState(true);
@@ -28,7 +28,7 @@ const EditUserRole = () => {
         setEmail(response.data.email);
         setRole(response.data.role);
       } catch (error) {
-        console.error("🚨 Lỗi khi lấy thông tin user:", error);
+        console.error(" Lỗi khi lấy thông tin user:", error);
         setError("Không thể tải thông tin người dùng.");
       } finally {
         setDataLoading(false);
@@ -61,7 +61,7 @@ const EditUserRole = () => {
 
       setTimeout(() => navigate("/admin/"), 2000);
     } catch (error) {
-      console.error("🚨 Lỗi khi cập nhật vai trò:", error);
+      console.error("Lỗi khi cập nhật vai trò:", error);
       toast.error("Không thể cập nhật vai trò.");
     } finally {
       setLoading(false);

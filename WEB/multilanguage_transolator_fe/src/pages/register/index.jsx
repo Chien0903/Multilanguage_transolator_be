@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import RegisterForm from "../../../components/Form/RegisterForm";
+import RegisterForm from "../../components/features/register/index";
 
 const images = [
   "https://www.toray.com/global/images/index_kv_06.webp",

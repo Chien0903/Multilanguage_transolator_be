@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  FaSearch,
-  FaSort,
-  FaEdit,
-  FaTrash,
-  FaPlus,
-  FaFileImport,
-  FaFileExport,
-} from "react-icons/fa";
+import {FaSearch,FaSort,FaEdit,FaTrash,FaPlus,FaFileImport,FaFileExport} from "react-icons/fa";
 import * as XLSX from "xlsx";
-import api from "../../api";
+import api from "../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import { FiAlertCircle } from "react-icons/fi";
 
