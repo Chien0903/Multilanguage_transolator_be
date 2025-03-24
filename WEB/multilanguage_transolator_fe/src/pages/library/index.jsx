@@ -5,14 +5,14 @@ import api from "../../services/api";
 import { ToastContainer, toast } from "react-toastify";
 import { FiAlertCircle } from "react-icons/fi";
 
-const CommonLibraryManagement = () => {
+const UserLibraryManagement = () => {
   const [keywords, setKeywords] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("id_asc");
   const [selectedKeyword, setSelectedKeyword] = useState(null);
   const [editingKeyword, setEditingKeyword] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(6); // Changed to state instead of constant
+  const [itemsPerPage, setItemsPerPage] = useState(6);
   const [newKeyword, setNewKeyword] = useState({
     japanese: "",
     english: "",
@@ -24,28 +24,23 @@ const CommonLibraryManagement = () => {
   const [loading, setLoading] = useState(true);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
-  // Function to calculate rows based on screen height
   const calculateItemsPerPage = () => {
-    // More accurate row height measurement
-    const rowHeight = 50; // Slightly reduced from 53px for more accurate measurement
-    const navbarHeight = 60; // Reduced estimate 
-    const headerHeight = 110; // Controls area with buttons - reduced
-    const paginationHeight = 60; // Pagination controls - reduced
-    const tableHeaderHeight = 54; // Table header row
-    const safetyBuffer = 20; // Buffer to prevent scrolling edge cases
+
+    const rowHeight = 50; 
+    const navbarHeight = 60; 
+    const headerHeight = 110; 
+    const paginationHeight = 60; 
+    const tableHeaderHeight = 54;
+    const safetyBuffer = 20; 
     
-    // Calculate precise available height
     const totalNonTableHeight = navbarHeight + headerHeight + paginationHeight + tableHeaderHeight + safetyBuffer;
     const availableHeight = window.innerHeight - totalNonTableHeight;
     
-    // Calculate number of rows that can fit
     const calculatedRows = Math.max(1, Math.floor(availableHeight / rowHeight));
     
-    // Add 1 more row since calculations are conservative, but cap at 15 rows
     return Math.min(calculatedRows -1, 15);
   };
 
-  // Update items per page when window is resized or when content/filters change
   useEffect(() => {
     const handleResize = () => {
       const newItemsPerPage = calculateItemsPerPage();
@@ -55,7 +50,6 @@ const CommonLibraryManagement = () => {
     
     window.addEventListener('resize', handleResize);
     
-    // Call immediately when component mounts or when loading completes
     if (!loading) {
       handleResize();
     }
@@ -65,7 +59,6 @@ const CommonLibraryManagement = () => {
     };
   }, [windowHeight, loading]);
   
-  // Recalculate when search term or sorting changes (as they affect content height)
   useEffect(() => {
     if (!loading) {
       setItemsPerPage(calculateItemsPerPage());
@@ -92,7 +85,6 @@ const CommonLibraryManagement = () => {
   const handleDelete = async (id) => {
     try {
       await api.delete(`/api/common-keyword/${id}/`);
-      // Cập nhật danh sách bằng cách gọi lại API
       const res = await api.get("/api/common-keyword/");
       setKeywords(res.data);
       toast.success("Common keyword deleted successfully!", {
@@ -199,7 +191,6 @@ const CommonLibraryManagement = () => {
       const worksheet = workbook.Sheets[firstSheetName];
       const importedKeywords = XLSX.utils.sheet_to_json(worksheet);
       console.log("Imported Keywords:", importedKeywords);
-      // Chuẩn hóa dữ liệu import
       const standardizedKeywords = importedKeywords.map((keyword) => ({
         japanese: keyword.japanese || "",
         english: keyword.english || "",
@@ -208,7 +199,6 @@ const CommonLibraryManagement = () => {
         chinese_simplified: keyword.chinese_simplified || "",
       }));
       console.log("Standardized Keywords:", standardizedKeywords);
-      // Gọi API để lưu dữ liệu import vào backend
       const saveImportedKeywords = async () => {
         try {
           for (const keyword of standardizedKeywords) {
@@ -237,10 +227,8 @@ const CommonLibraryManagement = () => {
             style: { backgroundColor: "green", color: "white" },
             icon: <FiAlertCircle />,
           });
-          // Cập nhật danh sách từ API
           const res = await api.get("/api/common-keyword/");
           setKeywords(res.data);
-          // Reset input file
           fileInput.value = "";
         } catch (error) {
           const errorMsg =
@@ -251,7 +239,6 @@ const CommonLibraryManagement = () => {
             style: { backgroundColor: "red", color: "white" },
             icon: <FiAlertCircle />,
           });
-          // Reset input file khi có lỗi
           fileInput.value = "";
         }
       };
@@ -386,7 +373,6 @@ const CommonLibraryManagement = () => {
           </div>
         </div>
 
-        {/* Main data table - enhance borders */}
         <div className="overflow-auto flex-1">
           <table className="w-full border border-gray-400 rounded-sm overflow-hidden text-center ">
             <thead>
@@ -473,17 +459,16 @@ const CommonLibraryManagement = () => {
           </button>
         </div>
 
-        {/* Detail modal table - enhance borders */}
+
         {selectedKeyword && (
           <div
             className="fixed inset-0 flex justify-center items-center z-50"
-            style={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }} // Nền trắng mờ thay vì trong suốt
+            style={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }} 
             onClick={() => setSelectedKeyword(null)}
           >
             <div
               className="bg-white p-6 rounded shadow-lg max-w-4xl w-11/12 max-h-[90vh] overflow-auto text-center"
-              style={{ border: "2px solid #ccc" }} // Thêm viền để phân biệt với nền
-              onClick={(e) => e.stopPropagation()}
+              style={{ border: "2px solid #ccc" }} 
             >
               <h3 className="text-lg font-bold mb-4">COMMON KEYWORD DETAILS</h3>
               <div className="overflow-x-auto">
@@ -532,16 +517,16 @@ const CommonLibraryManagement = () => {
           </div>
         )}
 
-        {/* Edit modal table - enhance borders */}
+
         {editingKeyword && (
           <div
             className="fixed inset-0 flex justify-center items-center z-50"
-            style={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }} // Nền trắng mờ thay vì trong suốt
+            style={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }}
             onClick={() => setEditingKeyword(null)}
           >
             <div
               className="bg-white p-6 rounded shadow-lg max-w-4xl w-11/12 max-h-[90vh] overflow-auto text-center"
-              style={{ border: "2px solid #ccc" }} // Thêm viền để phân biệt với nền
+              style={{ border: "2px solid #ccc" }}
               onClick={(e) => e.stopPropagation()}
             >
               <h3 className="text-lg font-bold mb-4">EDIT COMMON KEYWORD</h3>
@@ -641,16 +626,16 @@ const CommonLibraryManagement = () => {
           </div>
         )}
 
-        {/* Add keyword modal table - enhance borders */}
+
         {isAddingKeyword && (
           <div
             className="fixed inset-0 flex justify-center items-center z-50"
-            style={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }} // Nền trắng mờ thay vì trong suốt
+            style={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }} 
             onClick={() => setIsAddingKeyword(false)}
           >
             <div
               className="bg-white p-6 rounded shadow-lg max-w-4xl w-11/12 max-h-[90vh] overflow-auto text-center"
-              style={{ border: "2px solid #ccc" }} // Thêm viền để phân biệt với nền
+              style={{ border: "2px solid #ccc" }} 
               onClick={(e) => e.stopPropagation()}
             >
               <h3 className="text-lg font-bold mb-4">ADD NEW COMMON KEYWORD</h3>
@@ -781,4 +766,4 @@ const CommonLibraryManagement = () => {
   );
 };
 
-export default CommonLibraryManagement;
+export default UserLibraryManagement;

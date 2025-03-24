@@ -32,7 +32,7 @@ const SideBar = () => {
 
         <div 
         className="flex flex-col items-center justify-center cursor-pointer hover:bg-[#003080] p-2 rounded w-full text-center"
-        onClick={() => navigate('/history')}
+        onClick={() => navigate('/file-history')}
         >
           <MdHistory size={32} />
           <span className="text-xs mt-1">File history</span>
@@ -41,7 +41,7 @@ const SideBar = () => {
 
         <div 
         className="flex flex-col items-center justify-center cursor-pointer hover:bg-[#003080] p-2 rounded w-full text-center"
-        onClick={() => navigate('/private-library')}
+        onClick={() => navigate('/user-library')}
         >
           <MdLibraryBooks size={32} />
           <span className="text-xs mt-1">Private Library</span>

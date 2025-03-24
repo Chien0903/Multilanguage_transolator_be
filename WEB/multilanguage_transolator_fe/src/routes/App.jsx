@@ -6,10 +6,13 @@ import NotFound from "../pages/error/notFound";
 import ProtectedRoute from "../services/ProtectedRoute";
 import MyProfile from "../pages/profile/index";
 import AccountManagement from "../pages/Admin/AccountManagement"; 
-import ChangePassword from "../pages/profile/change";
+import ChangePassword from "../pages/profile/changePassword";
 import EditUserRole from "../components/features/admin/editUserRole"; 
 import Layout from "../components/Layouts/layout";
 import CommonLibraryManagement from '../pages/Admin/CommonLibraryManagement';
+import FileHistory from "../pages/fileHistory";
+import ForgotPasswordPage from "../components/features/forgotPassword/index";
+import UserLibraryManagement from "../pages/library";
 
 function Logout() {
   localStorage.removeItem("access");
@@ -34,9 +37,12 @@ function App() {
           <Route path="/admin" element={<AccountManagement />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/common-library" element={<CommonLibraryManagement />} />
+          <Route path="/file-history" element={<FileHistory />} />
+          <Route path="/user-library" element={<UserLibraryManagement />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       </Routes>
     </BrowserRouter>
   );

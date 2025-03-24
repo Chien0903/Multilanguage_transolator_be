@@ -5,17 +5,12 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-(sshduk81^=(3fwf3!-jbbyuzo0p6##13nc1&4i_bp&f%wb06-'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
@@ -99,15 +94,12 @@ DATABASES = {
 }
 
 
-# settings.py
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api	
-cloudinary.config( 
-  	cloud_name = "dzojcrdto",
-  	api_key = "686734241961229",
-  	api_secret = "_O6tJEECfth3YJGWCZDLWibU5O8"
-)
+# S3 Configuration
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
+S3_BASE_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
 
 
 

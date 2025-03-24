@@ -194,11 +194,13 @@ function AccountManagement() {
       {/* Create Account Modal */}
       {isAddingAccount && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+          className="fixed inset-0 flex justify-center items-center z-50"
+          style={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }} // Nền trắng mờ thay vì trong suốt
           onClick={() => setIsAddingAccount(false)}
         >
           <div
             className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full mx-4 transform transition-all duration-300"
+            style={{ border: "2px solid #ccc" }} // Thêm viền để phân biệt với nền
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-center mb-6">

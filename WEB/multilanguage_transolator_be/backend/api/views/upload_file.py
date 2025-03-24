@@ -51,48 +51,33 @@ class DeleteFileView(APIView):
             return Response({"message": "File deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
         except FileUpload.DoesNotExist:
             return Response({"error": "File not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from backend.api.services.upload_to_s3 import upload_to_s3
+import os
 
-class FileHighlightView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
-
-    def post(self, request, pk):
+@csrf_exempt
+def upload_file_to_s3(request):
+    if request.method == 'POST':
         try:
-            uploaded_file = FileUpload.objects.get(pk=pk)
-            highlights = request.data.get("highlights", [])
+            # Lấy file từ request
+            if 'file' not in request.FILES:
+                return JsonResponse({'error': 'No file provided'}, status=400)
 
-            if uploaded_file.file_type == 'pdf':
-                # Lưu metadata highlight
-                uploaded_file.highlights = highlights
-                uploaded_file.save()
+            file = request.FILES['file']
+            bucket_name = os.getenv('AWS_STORAGE_BUCKET_NAME')
 
-                # (Tùy chọn) Áp dụng highlight trực tiếp lên file PDF
-                existing_pdf = PdfReader(io.BytesIO(uploaded_file.file.read()))
-                output_pdf = PdfWriter()
+            # Tạo object name (key) trên S3
+            object_name = f"uploads/{file.name}"
 
-                for page_num in range(len(existing_pdf.pages)):
-                    page = existing_pdf.pages[page_num]
-                    for highlight in highlights:
-                        if highlight.get("page") == page_num:
-                            # Logic vẽ highlight (cần tọa độ từ frontend)
-                            pass  # Hiện tại chỉ lưu metadata, cần mở rộng để vẽ
-                    output_pdf.add_page(page)
-
-                buffer = io.BytesIO()
-                output_pdf.write(buffer)
-                uploaded_file.file = buffer.getvalue()
-                uploaded_file.save()
-
-            return Response({"message": "Highlights saved successfully"}, status=status.HTTP_200_OK)
-        except FileUpload.DoesNotExist:
-            return Response({"message": "File not found"}, status=status.HTTP_404_NOT_FOUND)
+            # Upload file lên S3
+            public_url = upload_to_s3(file, bucket_name, object_name)
+            if public_url:
+                return JsonResponse({'publicUrl': public_url})
+            else:
+                return JsonResponse({'error': 'Failed to upload file to S3'}, status=500)
         except Exception as e:
-            return Response({"message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class FileExportView(APIView):
-    def get(self, request, pk):
-        try:
-            uploaded_file = FileUpload.objects.get(pk=pk)
-            serializer = FileUploadSerializer(uploaded_file)
-            return Response(serializer.data)
-        except FileUpload.DoesNotExist:
-            return Response({"message": "File not found"}, status=status.HTTP_404_NOT_FOUND)    
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Method not allowed'}, status=405)

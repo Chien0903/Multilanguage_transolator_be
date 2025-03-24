@@ -91,8 +91,10 @@ function LoginForm({ route, method }) {
       </div>
 
       <div className="text-right mb-5">
-        <a href="/forgot-password" className="text-blue-600 text-sm hover:underline">
-          Forgot password?
+        <a href="/forgot-password" className="text-blue-600 text-sm hover:underline"
+          onClick={() => navigate('/forgot-password')}
+        >
+          Forgot password?  
         </a>
       </div>
 
