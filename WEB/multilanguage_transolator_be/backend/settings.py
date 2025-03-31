@@ -1,4 +1,3 @@
-
 from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
@@ -63,7 +62,7 @@ ROOT_URLCONF = 'backend.config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'backend/api/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -147,3 +146,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 AUTH_USER_MODEL = "api.customuser"
+
+#SMTP CONFIGURATION
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'chientrungha2004@gmail.com'
+EMAIL_HOST_PASSWORD = 'kvbw tydj otcj tjth'
+EMAIL_FROM = 'chientrungha2004@gmail.com'
+#kvbw tydj otcj tjth

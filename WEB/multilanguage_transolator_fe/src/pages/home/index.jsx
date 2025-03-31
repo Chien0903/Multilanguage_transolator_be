@@ -1,4 +1,4 @@
-import UploadFile from "../../components/features/home/UploadFile";
+import UploadFile from "../../components/features/uploadFile/UploadFile";
 
 const HomePage = () => {
   return (

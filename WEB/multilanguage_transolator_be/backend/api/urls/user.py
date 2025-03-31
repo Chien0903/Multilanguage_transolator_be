@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from backend.api.views.user import UserListView, UserProfileView, UpdateProfileView, UpdateUserRoleView, GetUserDetailView, DeleteUserView
 
+
 urlpatterns = [
     path("", UserListView.as_view(), name="user_list"),
     path("profile/", UserProfileView.as_view(), name="user_profile"),

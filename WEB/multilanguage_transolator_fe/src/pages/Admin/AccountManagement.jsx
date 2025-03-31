@@ -11,11 +11,11 @@ function AccountManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterRole, setFilterRole] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7;
+  const itemsPerPage = 8;
   const [isAddingAccount, setIsAddingAccount] = useState(false);
   const [newAccount, setNewAccount] = useState({
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     role: "User",
@@ -63,8 +63,8 @@ function AccountManagement() {
     e.preventDefault();
 
     if (
-      !newAccount.first_name ||
-      !newAccount.last_name ||
+      !newAccount.firstName ||
+      !newAccount.lastName ||
       !newAccount.email ||
       !newAccount.password
     ) {
@@ -73,8 +73,26 @@ function AccountManagement() {
     }
 
     try {
-      await api.post("/api/user/register/", newAccount);
+      await api.post("/api/user/register/", {
+        first_name: newAccount.firstName,
+        last_name: newAccount.lastName,
+        email: newAccount.email,
+        password: newAccount.password,
+        role: newAccount.role,
+      });
       toast.success("Account created successfully!");
+      try {
+        await api.post("/api/user/send-account-info/", {
+          email: newAccount.email,
+          first_name: newAccount.firstName,
+          last_name: newAccount.lastName,
+          password: newAccount.password // Lưu ý: Chỉ gửi password trong email lần đầu
+        });
+        toast.success("Account created and email sent successfully!");
+      } catch (emailError) {
+        console.error("Failed to send email:", emailError);
+        toast.warning("Account created but failed to send email notification.");
+      }
       fetchUsers();
       setIsAddingAccount(false);
       setNewAccount({
@@ -85,6 +103,11 @@ function AccountManagement() {
         role: "User",
       });
     } catch (error) {
+      console.log("Error details:", {
+        status: error.response?.status,
+        data: error.response?.data,
+        headers: error.response?.headers,
+      });
       const errorMsg =
         error.response?.data?.detail ||
         Object.values(error.response?.data || {}).join(", ") ||
@@ -224,11 +247,11 @@ function AccountManagement() {
                   <input
                     type="text"
                     id="first_name"
-                    value={newAccount.first_name}
+                    value={newAccount.firstName}
                     onChange={(e) =>
                       setNewAccount({
                         ...newAccount,
-                        first_name: e.target.value,
+                        firstName: e.target.value,
                       })
                     }
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -247,11 +270,11 @@ function AccountManagement() {
                   <input
                     type="text"
                     id="last_name"
-                    value={newAccount.last_name}
+                    value={newAccount.lastName}
                     onChange={(e) =>
                       setNewAccount({
                         ...newAccount,
-                        last_name: e.target.value,
+                        lastName: e.target.value,
                       })
                     }
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

@@ -22,7 +22,7 @@ const ForgotPassword = () => {
 
     setLoading(true);
     try {
-      await api.post("/api/user/forgot-password/", { email });
+      await api.post("/api/forgot-password/", { email });
       setEmailSent(true);
       toast.success("Reset instructions sent to your email");
     } catch (error) {
@@ -55,10 +55,10 @@ const ForgotPassword = () => {
 
     setLoading(true);
     try {
-      await api.post("/api/user/reset-password/", {
+      await api.post("/api/reset-password/", {
         token: resetToken,
         email: email,
-        new_password: newPassword,
+        password: newPassword, 
       });
       setResetSuccess(true);
       toast.success("Password reset successfully");
