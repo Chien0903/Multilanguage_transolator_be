@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import api from "../../../services/api";
-import { Progress, notification } from "antd";
-import  WebViewer  from "@pdftron/webviewer";
+import { Progress, notification, Modal } from "antd";
+import WebViewer from "@pdftron/webviewer";
 
 const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
   const [showLanguages, setShowLanguages] = useState(false);
@@ -15,64 +15,69 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
   ]);
   const [selectedTargetLanguages, setSelectedTargetLanguages] = useState([]);
   const [showTargetDropdown, setShowTargetDropdown] = useState(false);
-
-  // State lưu file duy nhất { uri, fileType }
   const [file, setFile] = useState(null);
-
-  // Trạng thái upload
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-
-  // State tạm để lưu publicUrl và fileType
   const [tempFileData, setTempFileData] = useState(null);
-
-  // Thêm ref cho WebViewer
+  const [isHighlightModalVisible, setIsHighlightModalVisible] = useState(false);
   const viewerRef = useRef(null);
+  const webViewerInstanceRef = useRef(null);
 
+  // Gộp useEffect trùng lặp và loại bỏ logic mở Modal
   useEffect(() => {
     if (uploadProgress === 100 && tempFileData) {
       setFile({ uri: tempFileData.publicUrl, fileType: tempFileData.fileType });
       setTempFileData(null);
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: "smooth",
-      });
     }
   }, [uploadProgress, tempFileData]);
 
-  // Khởi tạo WebViewer khi file PDF được load
+  // Khởi tạo WebViewer khi mở Modal highlight
   useEffect(() => {
-    if (file && file.fileType === "pdf" && viewerRef.current) {
-      WebViewer (
+    if (isHighlightModalVisible && file && file.fileType === "pdf" && viewerRef.current) {
+      WebViewer(
         {
-          path: 'lib/webviewer',
+          path: "lib/webviewer",
           initialDoc: file.uri,
-          licenseKey: 'demo:1743049584934:612ba0cd0300000000473c15e33bb44345d450ebbb5e1c4b70c47d5e0f', // Thay bằng key của bạn
+          licenseKey: "demo:1743049584934:612ba0cd0300000000473c15e33bb44345d450ebbb5e1c4b70c47d5e0f",
+          fullAPI: true,
+          disableVirtualDisplay: true,
         },
         viewerRef.current
       ).then((instance) => {
-        const { documentViewer } = instance.Core;
-        documentViewer.addEventListener('documentLoaded', () => {
-          console.log('PDF loaded successfully');
+        webViewerInstanceRef.current = instance;
+        const { documentViewer, annotationManager } = instance.Core;
+
+        documentViewer.addEventListener("documentLoaded", () => {
+          console.log("PDF loaded successfully in WebViewer");
+          documentViewer.setFitMode(documentViewer.FitMode.FitHeight);
+
+          // Bật chế độ highlight mặc định
+          instance.UI.setToolMode("AnnotationCreateTextHighlight");
         });
+
+        // Debug tọa độ chuột
+        documentViewer.addEventListener("mouseMove", (e) => {
+          const { x, y } = e;
+          console.log("WebViewer Mouse coordinates:", x, y);
+        });
+      }).catch((error) => {
+        console.error("WebViewer initialization error:", error);
+        webViewerInstanceRef.current = null; // Đảm bảo không lưu instance lỗi
       });
     }
-  }, [file]);
-  // Theo dõi uploadProgress để hiển thị file khi đạt 100%
-  useEffect(() => {
-    if (uploadProgress === 100 && tempFileData) {
-      setFile({ uri: tempFileData.publicUrl, fileType: tempFileData.fileType });
-      setTempFileData(null); // Xóa dữ liệu tạm sau khi hiển thị
 
-      // Scroll to the bottom of the page smoothly
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: "smooth",
-      });
-    }
-  }, [uploadProgress, tempFileData]);
+    return () => {
+      if (webViewerInstanceRef.current && typeof webViewerInstanceRef.current.UI?.dispose === "function") {
+        try {
+          webViewerInstanceRef.current.UI.dispose(); // Sử dụng phương thức đúng để dispose
+        } catch (error) {
+          console.error("Error disposing WebViewer:", error);
+        }
+        webViewerInstanceRef.current = null;
+      }
+    };
+  }, [isHighlightModalVisible, file]);
 
-  
   const handleOriginLanguageSelect = (language) => {
     setSelectedOriginLanguage(language);
     setShowLanguages(false);
@@ -144,7 +149,6 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
     setUploadProgress(0);
 
     try {
-      // Tạo fake progress
       const fakeProgressInterval = setInterval(() => {
         setUploadProgress((prevProgress) => {
           if (prevProgress < 95) {
@@ -154,11 +158,9 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
         });
       }, 500);
 
-      // Tạo FormData để gửi file
       const formData = new FormData();
       formData.append("file", fileToUpload);
 
-      // Gửi file lên backend
       const response = await api.post("/api/file/upload-to-s3/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -168,14 +170,11 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
       const { publicUrl } = response.data;
       console.log("Public URL:", publicUrl);
 
-      // Dừng fake progress và đặt progress thành 100%
       clearInterval(fakeProgressInterval);
       setUploadProgress(100);
 
-      // Lưu tạm publicUrl và fileType, chờ progress đạt 100%
       setTempFileData({ publicUrl, fileType: ext });
 
-      // Đợi 500ms trước khi ẩn thanh progress
       setTimeout(() => {
         setUploading(false);
         setUploadProgress(0);
@@ -196,9 +195,70 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
   const handleRemoveFile = () => {
     setFile(null);
     setUploadProgress(0);
+    setIsHighlightModalVisible(false);
   };
 
-  
+  const handleHighlight = () => {
+    if (file.fileType !== "pdf") {
+      notification.warning({
+        message: "Unsupported Format",
+        description: "Highlighting is only supported for PDF files.",
+      });
+      return;
+    }
+    setIsHighlightModalVisible(true);
+  };
+
+  const handleSave = async () => {
+    if (!webViewerInstanceRef.current) {
+      notification.error({
+        message: "Error",
+        description: "WebViewer is not initialized.",
+      });
+      return;
+    }
+
+    try {
+      const { documentViewer, annotationManager } = webViewerInstanceRef.current.Core;
+
+      // Export file PDF đã được highlight
+      const doc = documentViewer.getDocument();
+      const xfdfString = await annotationManager.exportAnnotations();
+      const data = await doc.getFileData({ xfdfString });
+      const blob = new Blob([new Uint8Array(data)], { type: "application/pdf" });
+
+      // Tạo FormData để gửi file lên S3
+      const formData = new FormData();
+      formData.append("file", blob, "highlighted.pdf");
+
+      // Gửi file lên S3 (giả sử API hỗ trợ ghi đè file cũ)
+      const response = await api.post("/api/file/upload-to-s3/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      const { publicUrl } = response.data;
+      console.log("Updated Public URL:", publicUrl);
+
+      // Cập nhật state file với URL mới
+      setFile({ uri: publicUrl, fileType: "pdf" });
+      setIsHighlightModalVisible(false);
+
+      notification.success({
+        message: "File Saved",
+        description: "The highlighted PDF has been saved successfully.",
+      });
+    } catch (error) {
+      console.error("Save error:", error);
+      notification.error({
+        message: "Save Failed",
+        description:
+          "An error occurred while saving the file: " +
+          (error.response?.data?.error || error.message),
+      });
+    }
+  };
 
   return (
     <div className="w-full items-center justify-center bg-white p-6">
@@ -296,7 +356,7 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
                 type="file"
                 id="fileInput"
                 className="hidden"
-                accept=".pdf,.docx,.xlsx,.txt"
+                accept=".pdf,.docx,.xlsx"
                 onChange={handleFileChange}
               />
             </>
@@ -304,17 +364,23 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
         </div>
       )}
 
-      {/* Hiển thị file đã upload */}
+      {/* Hiển thị file đã upload trực tiếp bên dưới */}
       {file && (
         <div className="mt-6 w-full bg-white p-4 rounded-lg shadow-md">
           <h3 className="text-lg font-semibold mb-2 flex justify-between items-center">
             File Preview
-            <div>
+            <div className="space-x-2">
               <button
                 onClick={() => window.open(file.uri, "_blank")}
-                className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2"
+                className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
               >
                 Mở
+              </button>
+              <button
+                onClick={handleHighlight}
+                className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+              >
+                Highlight
               </button>
               <button
                 onClick={handleRemoveFile}
@@ -348,13 +414,50 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
           )}
 
           {file.fileType === "pdf" && (
-            <div 
-              ref={viewerRef}
+            <iframe
+              src={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                file.uri
+              )}&embedded=true`}
               style={{ width: "100%", height: "800px" }}
+              frameBorder="0"
+              title="PDF Viewer"
             />
           )}
         </div>
       )}
+
+      {/* Popup hiển thị WebViewer để highlight */}
+      <Modal
+        title="Highlight PDF"
+        open={isHighlightModalVisible}
+        onCancel={() => setIsHighlightModalVisible(false)}
+        footer={null}
+        width="80%"
+        style={{ top: 20 }}
+        styles={{ body: { height: "70vh", overflow: "hidden" } }}
+      >
+        <div className="w-full h-full">
+          <div className="flex justify-end mb-2 space-x-2">
+            <button
+              onClick={handleSave}
+              className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+            >
+              Save
+            </button>
+            <button
+              onClick={() => setIsHighlightModalVisible(false)}
+              className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
+            >
+              Cancel
+            </button>
+          </div>
+
+          <div
+            ref={viewerRef}
+            style={{ width: "100%", height: "100%", position: "relative" }}
+          />
+        </div>
+      </Modal>
 
       <div className="w-full flex justify-end mt-4">
         <button
