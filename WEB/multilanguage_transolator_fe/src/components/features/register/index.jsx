@@ -7,8 +7,7 @@ import api from "../../../services/api";
 
 function RegisterForm({ route }) {
   const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -42,6 +41,11 @@ function RegisterForm({ route }) {
       setLoading(false);
       return;
     }
+
+    // Split full name into first and last name
+    const nameParts = fullName.trim().split(" ");
+    const lastName = nameParts.pop() || ""; // Last word as last name
+    const firstName = nameParts.join(" ") || ""; // Rest as first name
 
     try {
       const data = {
@@ -77,86 +81,92 @@ function RegisterForm({ route }) {
   return (
     <form onSubmit={handleSubmit} className="text-left">
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-semibold mb-2">Email address</label>
-        <input
-          type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-          placeholder="example@mail.toray"
-          required
-        />
-      </div>
-
-      {/* First Name & Last Name in one row */}
-      <div className="mb-4 grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-gray-700 text-sm font-semibold mb-2">First Name</label>
+        <label className="block text-gray-700 text-sm font-normal mb-2">Email address</label>
+        <div className="relative">
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+            <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+            </svg>
+          </div>
           <input
             type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter first name"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 text-sm font-semibold mb-2">Last Name</label>
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Enter last name"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#3881A2]"
+            placeholder="example@mail.toray"
             required
           />
         </div>
       </div>
 
       <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-semibold mb-2">Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-          placeholder="Enter password"
-          required
-        />
+        <label className="block text-gray-700 text-sm font-normal mb-2">Full Name</label>
+        <div className="relative">
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+            <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <input
+            type="text"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#3881A2]"
+            placeholder="Enter your full name"
+            required
+          />
+        </div>
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-normal mb-2">Password</label>
+        <div className="relative">
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+            <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#3881A2]"
+            placeholder="Enter password"
+            required
+          />
+        </div>
       </div>
 
       <div className="mb-5">
-        <label className="block text-gray-700 text-sm font-semibold mb-2">Confirm Password</label>
-        <input
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-          placeholder="Confirm password"
-          required
-        />
+        <label className="block text-gray-700 text-sm font-normal mb-2">Confirm Password</label>
+        <div className="relative">
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+            <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#3881A2]"
+            placeholder="Confirm password"
+            required
+          />
+        </div>
       </div>
 
       <ToastContainer />
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition font-medium shadow-md flex justify-center items-center"
-      >
-        {loading ? (
-          <>
-            <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            Creating Account...
-          </>
-        ) : (
-          "Sign up"
-        )}
-      </button>
+      <div className="flex justify-center">
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-48 py-2 bg-[#3881A2] text-white rounded-full hover:bg-[#2d6a86] transition font-medium"
+        >
+          {loading ? "Creating Account..." : "Sign up"}
+        </button>
+      </div>
     </form>
   );
 }

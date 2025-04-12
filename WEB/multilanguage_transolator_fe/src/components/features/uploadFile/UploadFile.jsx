@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../../../services/api";
 import { Progress, notification, Modal } from "antd";
 import WebViewer from "@pdftron/webviewer";
@@ -22,8 +23,8 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
   const [isHighlightModalVisible, setIsHighlightModalVisible] = useState(false);
   const viewerRef = useRef(null);
   const webViewerInstanceRef = useRef(null);
+  const navigate = useNavigate();
 
-  // Gộp useEffect trùng lặp và loại bỏ logic mở Modal
   useEffect(() => {
     if (uploadProgress === 100 && tempFileData) {
       setFile({ uri: tempFileData.publicUrl, fileType: tempFileData.fileType });
@@ -31,7 +32,6 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
     }
   }, [uploadProgress, tempFileData]);
 
-  // Khởi tạo WebViewer khi mở Modal highlight
   useEffect(() => {
     if (isHighlightModalVisible && file && file.fileType === "pdf" && viewerRef.current) {
       WebViewer(
@@ -51,25 +51,23 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
           console.log("PDF loaded successfully in WebViewer");
           documentViewer.setFitMode(documentViewer.FitMode.FitHeight);
 
-          // Bật chế độ highlight mặc định
           instance.UI.setToolMode("AnnotationCreateTextHighlight");
         });
 
-        // Debug tọa độ chuột
         documentViewer.addEventListener("mouseMove", (e) => {
           const { x, y } = e;
           console.log("WebViewer Mouse coordinates:", x, y);
         });
       }).catch((error) => {
         console.error("WebViewer initialization error:", error);
-        webViewerInstanceRef.current = null; // Đảm bảo không lưu instance lỗi
+        webViewerInstanceRef.current = null;
       });
     }
 
     return () => {
       if (webViewerInstanceRef.current && typeof webViewerInstanceRef.current.UI?.dispose === "function") {
         try {
-          webViewerInstanceRef.current.UI.dispose(); // Sử dụng phương thức đúng để dispose
+          webViewerInstanceRef.current.UI.dispose();
         } catch (error) {
           console.error("Error disposing WebViewer:", error);
         }
@@ -221,17 +219,14 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
     try {
       const { documentViewer, annotationManager } = webViewerInstanceRef.current.Core;
 
-      // Export file PDF đã được highlight
       const doc = documentViewer.getDocument();
       const xfdfString = await annotationManager.exportAnnotations();
       const data = await doc.getFileData({ xfdfString });
       const blob = new Blob([new Uint8Array(data)], { type: "application/pdf" });
 
-      // Tạo FormData để gửi file lên S3
       const formData = new FormData();
       formData.append("file", blob, "highlighted.pdf");
 
-      // Gửi file lên S3 (giả sử API hỗ trợ ghi đè file cũ)
       const response = await api.post("/api/file/upload-to-s3/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -241,7 +236,6 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
       const { publicUrl } = response.data;
       console.log("Updated Public URL:", publicUrl);
 
-      // Cập nhật state file với URL mới
       setFile({ uri: publicUrl, fileType: "pdf" });
       setIsHighlightModalVisible(false);
 
@@ -260,10 +254,47 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
     }
   };
 
+  const handleTranslateClick = () => {
+    if (!file) {
+      notification.error({
+        message: "No File Selected",
+        description: "Please upload a file before translating."
+      });
+      return;
+    }
+
+    if (selectedOriginLanguage === "Origin Language") {
+      notification.error({
+        message: "Origin Language Required",
+        description: "Please select the origin language."
+      });
+      return;
+    }
+
+    if (selectedTargetLanguages.length === 0) {
+      notification.error({
+        message: "Target Language Required", 
+        description: "Please select at least one target language."
+      });
+      return;
+    }
+
+    navigate("/translation-results", {
+      state: {
+        fileData: file,
+        originLanguage: selectedOriginLanguage,
+        targetLanguages: selectedTargetLanguages
+      }
+    });
+
+    if (onTranslate) {
+      onTranslate();
+    }
+  };
+
   return (
-    <div className="w-full items-center justify-center bg-white p-6">
-      {/* Dropdown chọn ngôn ngữ */}
-      <div className="border-b-2 border-blue-700 flex flex-wrap items-center justify-between p-2 w-full bg-gray-100 mt-4">
+    <div className="w-full items-center justify-center bg-white  overflow-hidden ">
+      <div className="border-b-2 border-blue-700 flex flex-wrap items-center justify-between p-2 w-full bg-gray-100 ">
         <div className="flex items-center mb-2 sm:mb-0 relative">
           <button
             className="bg-gray-300 px-3 py-2 rounded flex items-center justify-between text-sm mr-4 w-44"
@@ -325,10 +356,9 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
         </div>
       </div>
 
-      {/* Khu vực upload */}
       {!file && (
         <div
-          className="w-full bg-white rounded-lg flex flex-col items-center text-center border border-gray-300 p-8 md:p-16 shadow-md h-auto mt-4"
+          className="w-full bg-white rounded-lg flex flex-col items-center text-center border border-gray-300 p-8 md:p-16 shadow-md mt-4"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
@@ -364,9 +394,8 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
         </div>
       )}
 
-      {/* Hiển thị file đã upload trực tiếp bên dưới */}
       {file && (
-        <div className="mt-6 w-full bg-white p-4 rounded-lg shadow-md">
+        <div className="w-full bg-white p-4 rounded-lg shadow-md">
           <h3 className="text-lg font-semibold mb-2 flex justify-between items-center">
             File Preview
             <div className="space-x-2">
@@ -374,7 +403,7 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
                 onClick={() => window.open(file.uri, "_blank")}
                 className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
               >
-                Mở
+                Open
               </button>
               <button
                 onClick={handleHighlight}
@@ -391,42 +420,43 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
             </div>
           </h3>
 
-          {file.fileType === "docx" && (
-            <iframe
-              src={`https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(
-                file.uri
-              )}`}
-              style={{ width: "100%", height: "800px" }}
-              frameBorder="0"
-              title="DOCX Viewer"
-            />
-          )}
+          <div className="iframe-container" style={{ height: "calc(70vh - 100px)", overflow: "hidden" }}>
+            {file.fileType === "docx" && (
+              <iframe
+                src={`https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(
+                  file.uri
+                )}`}
+                style={{ width: "100%", height: "100%" }}
+                frameBorder="0"
+                title="DOCX Viewer"
+              />
+            )}
 
-          {file.fileType === "xlsx" && (
-            <iframe
-              src={`https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(
-                file.uri
-              )}`}
-              style={{ width: "100%", height: "800px" }}
-              frameBorder="0"
-              title="XLSX Viewer"
-            />
-          )}
+            {file.fileType === "xlsx" && (
+              <iframe
+                src={`https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(
+                  file.uri
+                )}`}
+                style={{ width: "100%", height: "100%" }}
+                frameBorder="0"
+                title="XLSX Viewer"
+              />
+            )}
 
-          {file.fileType === "pdf" && (
-            <iframe
-              src={`https://docs.google.com/viewer?url=${encodeURIComponent(
-                file.uri
-              )}&embedded=true`}
-              style={{ width: "100%", height: "800px" }}
-              frameBorder="0"
-              title="PDF Viewer"
-            />
-          )}
+            {file.fileType === "pdf" && (
+              <iframe
+                src={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                  file.uri
+                )}&embedded=true`}
+                style={{ width: "100%", height: "100%" }}
+                frameBorder="0"
+                title="PDF Viewer"
+              />
+            )}
+          </div>
         </div>
       )}
 
-      {/* Popup hiển thị WebViewer để highlight */}
       <Modal
         title="Highlight PDF"
         open={isHighlightModalVisible}
@@ -459,10 +489,10 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
         </div>
       </Modal>
 
-      <div className="w-full flex justify-end mt-4">
+      <div className="w-full flex justify-end mt-2">
         <button
           className="bg-blue-500 text-white px-3 py-2 rounded shadow hover:bg-blue-600"
-          onClick={onTranslate}
+          onClick={handleTranslateClick}
           disabled={!file}
         >
           Translate
