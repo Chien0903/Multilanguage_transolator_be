@@ -131,7 +131,7 @@ function AccountManagement() {
 
   return (
     <div className="flex-1 p-6 flex flex-col h-screen overflow-hidden">
-      <div className="bg-[#004098CC] p-3 rounded flex flex-wrap items-center text-white gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-4 ">
         <div className="flex items-center gap-3">
           <button
             className="flex items-center px-4 py-2 rounded text-white bg-orange-500 hover:bg-orange-600"
@@ -140,7 +140,7 @@ function AccountManagement() {
             <FaPlus className="mr-2" /> Create Account
           </button>
         </div>
-        <div className="flex items-center gap-3 ml-auto">
+        <div className="flex items-center gap-3">
           <div className="relative w-64">
             <FaSearch className="absolute left-3 top-3 text-black z-10" />
             <input
@@ -165,33 +165,33 @@ function AccountManagement() {
       </div>
 
       <div className="overflow-auto flex-1">
-        <table className="w-full border border-gray-400 rounded-smsm overflow-hidden text-center">
+        <table className="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
           <thead>
-            <tr className="bg-white text-black font-bold border-b-2 border-gray-400">
-              <th className="p-3 border-2 border-gray-300 w-[5%]">#</th>
-              <th className="p-3 border-2 border-gray-300 w-[25%]">Name</th>
-              <th className="p-3 border-2 border-gray-300 w-[15%]">Role</th>
-              <th className="p-3 border-2 border-gray-300 w-[35%]">Email</th>
-              <th className="p-3 border-2 border-gray-300 w-[20%]">Actions</th>
+            <tr className="bg-[#004098CC] text-white font-bold">
+              <th className="p-3 border-b border-r border-gray-300 w-[5%] text-center">#</th>
+              <th className="p-3 border-b border-r border-gray-300 w-[25%] text-center">Name</th>
+              <th className="p-3 border-b border-r border-gray-300 w-[15%] text-center">Role</th>
+              <th className="p-3 border-b border-r border-gray-300 w-[35%] text-center">Email</th>
+              <th className="p-3 border-b border-gray-300 w-[20%] text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
             {currentAccounts.map((account, index) => (
               <tr
                 key={account.id}
-                className="border-2 border-gray-300 hover:bg-gray-100"
+                className="hover:bg-gray-50 cursor-pointer transition-colors duration-150"
               >
-                <td className="p-3 border-2 border-gray-300">
+                <td className="p-3 border-b border-r border-gray-200 text-center">
                   {(currentPage - 1) * itemsPerPage + index + 1}
                 </td>
-                <td className="p-3 border-2 border-gray-300">
+                <td className="p-3 border-b border-r border-gray-200 text-center">
                   {account.full_name}
                 </td>
-                <td className="p-3 border-2 border-gray-300">{account.role}</td>
-                <td className="p-3 border-2 border-gray-300">
+                <td className="p-3 border-b border-r border-gray-200 text-center">{account.role}</td>
+                <td className="p-3 border-b border-r border-gray-200 text-center">
                   {account.email}
                 </td>
-                <td className="p-3  border-gray-300 flex justify-center space-x-3">
+                <td className="p-3 border-b border-gray-200 text-center flex justify-center space-x-3">
                   <Link
                     to={`/admin/edit-user/${account.id}`}
                     className="flex items-center text-blue-500 hover:text-blue-700 space-x-1 cursor-pointer"

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { FaUser, FaKey, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
+import KeywordUpdate from "../../features/keywordupdate";
 
 const Header = () => {
   const [firstName, setFirstName] = useState("");
@@ -19,7 +20,10 @@ const Header = () => {
       return "COMMON LIBRARY";
     } 
     if (path.includes("/admin")) {
-      return "Account Management";
+      return "ACCOUNT MANAGEMENT";
+    }
+    if (path.includes("/file-history")) {
+      return "FILE HISTORY";
     }
     
     return null;
@@ -63,47 +67,53 @@ const Header = () => {
       )}
 
       {/* User menu on right */}
-      <div
-        className="relative inline-flex items-center whitespace-nowrap ml-auto z-10" 
-        onMouseEnter={() => setShowUserMenu(true)}
-        onMouseLeave={() => setShowUserMenu(false)}
-      >
-        <div className="flex flex-col items-end mr-2">
-          <span className="font-semibold">{firstName} {lastName}</span>
-          <span className="text-xs text-gray-600">{role}</span>
-        </div>
-        <IoPersonCircleOutline size={40} className="cursor-pointer" />
-
-        {/* Dropdown Menu */}
-        {showUserMenu && (
-          <div className="absolute right-0 top-full bg-white border rounded-md shadow-md w-44 z-10">
-            <ul className="flex flex-col">
-              <li
-                className="p-3 text-sm font-medium text-gray-700 hover:bg-blue-100 cursor-pointer flex items-center space-x-2"
-                onClick={() => navigate("/my-profile")}
-              >
-                <FaUser className="text-gray-600" />
-                <span>My Account</span>
-              </li>
-              <hr className="border-gray-300" />
-              <li
-                className="p-3 text-sm font-medium text-gray-700 hover:bg-blue-100 cursor-pointer flex items-center space-x-2"
-                onClick={() => navigate("/change-password")}
-              >
-                <FaKey className="text-gray-600" />
-                <span>Change Password</span>
-              </li>
-              <hr className="border-gray-300" />
-              <li
-                className="p-3 text-sm font-medium text-gray-700 hover:bg-blue-100 cursor-pointer flex items-center space-x-2"
-                onClick={() => navigate("/logout")}
-              >
-                <FaSignOutAlt className="text-gray-600" />
-                <span>Log out</span>
-              </li>
-            </ul>
+      <div className="flex items-center ml-auto z-10">
+        {/* User Profile */}
+        <div
+          className="relative inline-flex items-center whitespace-nowrap z-10" 
+          onMouseEnter={() => setShowUserMenu(true)}
+          onMouseLeave={() => setShowUserMenu(false)}
+        >
+          <div className="flex flex-col items-end mr-2">
+            <span className="font-semibold">{firstName} {lastName}</span>
+            <span className="text-xs text-gray-600">{role}</span>
           </div>
-        )}
+          <IoPersonCircleOutline size={40} className="cursor-pointer" />
+
+          {/* Dropdown Menu */}
+          {showUserMenu && (
+            <div className="absolute right-0 top-full bg-white border rounded-md shadow-md w-44 z-10">
+              <ul className="flex flex-col">
+                <li
+                  className="p-3 text-sm font-medium text-gray-700 hover:bg-blue-100 cursor-pointer flex items-center space-x-2"
+                  onClick={() => navigate("/my-profile")}
+                >
+                  <FaUser className="text-gray-600" />
+                  <span>My Account</span>
+                </li>
+                <hr className="border-gray-300" />
+                <li
+                  className="p-3 text-sm font-medium text-gray-700 hover:bg-blue-100 cursor-pointer flex items-center space-x-2"
+                  onClick={() => navigate("/change-password")}
+                >
+                  <FaKey className="text-gray-600" />
+                  <span>Change Password</span>
+                </li>
+                <hr className="border-gray-300" />
+                <li
+                  className="p-3 text-sm font-medium text-gray-700 hover:bg-blue-100 cursor-pointer flex items-center space-x-2"
+                  onClick={() => navigate("/logout")}
+                >
+                  <FaSignOutAlt className="text-gray-600" />
+                  <span>Log out</span>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+
+        {/* Keyword Update Component */}
+        <KeywordUpdate />
       </div>
     </div>
   );

@@ -24,8 +24,7 @@ const FileHistory = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
   const [fileToDelete, setFileToDelete] = useState(null);
-  
-  // Function to calculate rows based on screen height
+
   const calculateItemsPerPage = () => {
     const rowHeight = 50;
     const navbarHeight = 60;
@@ -33,35 +32,32 @@ const FileHistory = () => {
     const paginationHeight = 60;
     const tableHeaderHeight = 54;
     const safetyBuffer = 20;
-    
+
     const totalNonTableHeight = navbarHeight + headerHeight + paginationHeight + tableHeaderHeight + safetyBuffer;
     const availableHeight = window.innerHeight - totalNonTableHeight;
-    
+
     const calculatedRows = Math.max(1, Math.floor(availableHeight / rowHeight));
     return Math.min(calculatedRows - 1, 15);
   };
 
-  // Update items per page when window is resized
   useEffect(() => {
     const handleResize = () => {
       const newItemsPerPage = calculateItemsPerPage();
       setItemsPerPage(newItemsPerPage);
       setWindowHeight(window.innerHeight);
     };
-    
-    window.addEventListener('resize', handleResize);
+
+    window.addEventListener("resize", handleResize);
     handleResize();
-    
+
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, [windowHeight]);
 
-  // Filter and sort files
   const filteredFiles = files
     .filter((file) => {
-      return file.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        file.lang.toLowerCase().includes(searchTerm.toLowerCase());
+      return file.name.toLowerCase().includes(searchTerm.toLowerCase()) || file.lang.toLowerCase().includes(searchTerm.toLowerCase());
     })
     .sort((a, b) => {
       switch (sortOrder) {
@@ -78,7 +74,6 @@ const FileHistory = () => {
       }
     });
 
-  // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredFiles.slice(indexOfFirstItem, indexOfLastItem);
@@ -92,47 +87,43 @@ const FileHistory = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
-  // Xử lý tải xuống file
   const handleDownload = (file) => {
     console.log("Downloading file:", file.name);
-    
-    const link = document.createElement('a');
+
+    const link = document.createElement("a");
     link.href = `/api/files/download/${file.id}`;
     link.download = file.name;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
+
     alert(`Downloading ${file.name}`);
   };
-  
-  // Xử lý mở file trong cửa sổ mới
+
   const handleOpenInNewTab = (file) => {
     console.log("Opening file in new tab:", file.name);
-    
+
     const fileViewerUrl = `/view-file/${file.id}`;
-    
-    window.open(fileViewerUrl, '_blank');
+
+    window.open(fileViewerUrl, "_blank");
   };
-  
-  // Xử lý xóa file
+
   const handleDelete = (fileId) => {
     console.log("Deleting file with ID:", fileId);
-    
-    const updatedFiles = files.filter(file => file.id !== fileId);
+
+    const updatedFiles = files.filter((file) => file.id !== fileId);
     console.log("Files after deletion:", updatedFiles);
-    
+
     setFileToDelete(null);
-    
+
     alert("File deleted successfully!");
   };
-  
+
   return (
     <div className="flex flex-1 flex-col h-screen overflow-hidden">
       <div className="flex p-2 flex-1 flex-col h-full overflow-hidden">
         {/* Header section with search and filters */}
-        <div className="bg-[#004098CC] p-3 rounded flex flex-wrap items-center text-white gap-4">
-          <div className="text-lg font-semibold">File History</div>
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
           <div className="flex items-center gap-3 ml-auto">
             <div className="relative w-64">
               <FaSearch className="absolute left-3 top-3 text-black z-10" />
@@ -162,35 +153,35 @@ const FileHistory = () => {
 
         {/* Table section */}
         <div className="overflow-auto flex-1">
-          <table className="w-full border border-gray-400 rounded-sm overflow-hidden text-center">
+          <table className="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
             <thead>
-              <tr className="bg-white text-black font-bold border-b-2 border-gray-400">
-                <th className="p-3 border-2 border-gray-300 w-[5%]">No</th>
-                <th className="p-3 border-2 border-gray-300 w-[35%]">Name</th>
-                <th className="p-3 border-2 border-gray-300 w-[20%]">Language</th>
-                <th className="p-3 border-2 border-gray-300 w-[20%]">Date</th>
-                <th className="p-3 border-2 border-gray-300 w-[20%]">Action</th>
+              <tr className="bg-[#004098CC] text-white font-bold">
+                <th className="p-3 border-b border-r border-gray-300 w-[5%] text-center">No</th>
+                <th className="p-3 border-b border-r border-gray-300 w-[35%] text-center">Name</th>
+                <th className="p-3 border-b border-r border-gray-300 w-[20%] text-center">Language</th>
+                <th className="p-3 border-b border-r border-gray-300 w-[20%] text-center">Date</th>
+                <th className="p-3 border-b border-gray-300 w-[20%] text-center">Action</th>
               </tr>
             </thead>
             <tbody>
               {currentItems.map((file, index) => (
-                <tr 
-                  key={file.id} 
-                  className="border-2 border-gray-300 hover:bg-gray-100 cursor-pointer"
+                <tr
+                  key={file.id}
+                  className="hover:bg-gray-50 cursor-pointer transition-colors duration-150"
                   onClick={() => setSelectedFile(file)}
                 >
-                  <td className="p-3 border-2 border-gray-300">
+                  <td className="p-3 border-b border-r border-gray-200 text-center">
                     {index + 1 + (currentPage - 1) * itemsPerPage}
                   </td>
-                  <td className="p-3 border-2 border-gray-300">
+                  <td className="p-3 border-b border-r border-gray-200 text-center">
                     <div className="flex items-center space-x-2 justify-center">
                       {fileIcons[file.type]}
                       <span>{file.name}</span>
                     </div>
                   </td>
-                  <td className="p-3 border-2 border-gray-300">{file.lang}</td>
-                  <td className="p-3 border-2 border-gray-300">{file.date}</td>
-                  <td className="p-3 border-2 border-gray-300">
+                  <td className="p-3 border-b border-r border-gray-200 text-center">{file.lang}</td>
+                  <td className="p-3 border-b border-r border-gray-200 text-center">{file.date}</td>
+                  <td className="p-3 border-b border-gray-200 text-center">
                     <div className="flex justify-center space-x-4">
                       <button
                         className="p-2 bg-blue-100 rounded-md hover:bg-blue-200 flex items-center justify-center transition-colors"
@@ -260,32 +251,31 @@ const FileHistory = () => {
             Next
           </button>
         </div>
-        
+
         {/* File detail modal */}
         {selectedFile && (
           <div
-            className="fixed inset-0 flex justify-center items-center"
-            style={{ backgroundColor: "rgba(255, 255, 255, 0.9)" }}
+            className="fixed inset-0 flex justify-center items-center z-50"
+            style={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }}
             onClick={() => setSelectedFile(null)}
           >
             <div
-              className="bg-white p-6 rounded shadow-lg max-w-2xl w-11/12 max-h-[90vh] overflow-auto text-center"
-              style={{ border: "2px solid #ccc" }}
+              className="bg-white p-6 rounded-lg shadow-xl max-w-2xl w-11/12 max-h-[90vh] overflow-auto text-center"
               onClick={(e) => e.stopPropagation()}
             >
               <h3 className="text-lg font-bold mb-4">FILE DETAILS</h3>
               <div className="overflow-x-auto">
-                <table className="border-collapse border-2 border-gray-400 w-full">
+                <table className="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
                   <thead>
-                    <tr className="bg-gray-200">
-                      <th className="p-3 border-2 border-gray-300">Property</th>
-                      <th className="p-3 border-2 border-gray-300">Value</th>
+                    <tr className="bg-gray-100">
+                      <th className="p-3 border-b border-r border-gray-300 text-center">Property</th>
+                      <th className="p-3 border-b border-gray-300 text-center">Value</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="p-3 border-2 border-gray-300">File Name</td>
-                      <td className="p-3 border-2 border-gray-300">
+                      <td className="p-3 border-b border-r border-gray-200 text-center">File Name</td>
+                      <td className="p-3 border-b border-gray-200 text-center">
                         <div className="flex items-center space-x-2 justify-center">
                           {fileIcons[selectedFile.type]}
                           <span>{selectedFile.name}</span>
@@ -293,16 +283,16 @@ const FileHistory = () => {
                       </td>
                     </tr>
                     <tr>
-                      <td className="p-3 border-2 border-gray-300">Language</td>
-                      <td className="p-3 border-2 border-gray-300">{selectedFile.lang}</td>
+                      <td className="p-3 border-b border-r border-gray-200 text-center">Language</td>
+                      <td className="p-3 border-b border-gray-200 text-center">{selectedFile.lang}</td>
                     </tr>
                     <tr>
-                      <td className="p-3 border-2 border-gray-300">Date</td>
-                      <td className="p-3 border-2 border-gray-300">{selectedFile.date}</td>
+                      <td className="p-3 border-b border-r border-gray-200 text-center">Date</td>
+                      <td className="p-3 border-b border-gray-200 text-center">{selectedFile.date}</td>
                     </tr>
                     <tr>
-                      <td className="p-3 border-2 border-gray-300">File Type</td>
-                      <td className="p-3 border-2 border-gray-300">{selectedFile.type.toUpperCase()}</td>
+                      <td className="p-3 border-r border-gray-200 text-center">File Type</td>
+                      <td className="p-3 border-gray-200 text-center">{selectedFile.type.toUpperCase()}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -330,7 +320,7 @@ const FileHistory = () => {
             </div>
           </div>
         )}
-        
+
         {/* Delete confirmation modal */}
         {fileToDelete && (
           <div

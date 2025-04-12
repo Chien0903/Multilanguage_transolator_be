@@ -42,8 +42,7 @@ const Layout = () => {
 
       <div className="flex flex-1 w-full overflow-hidden">        
         <Sidebar />
-        
-        <div className="flex flex-1 p-6 flex-col justify-center ">
+        <div className="flex flex-1 p-6 flex-col justify-center overflow-hidden">
           <Outlet />  
         </div>
       </div>

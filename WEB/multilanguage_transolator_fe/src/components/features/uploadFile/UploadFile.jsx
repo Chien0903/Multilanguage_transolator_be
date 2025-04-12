@@ -261,7 +261,7 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
   };
 
   return (
-    <div className="w-full items-center justify-center bg-white p-6">
+    <div className="w-full items-center justify-center bg-white p-6 overflow-hidden ">
       {/* Dropdown chọn ngôn ngữ */}
       <div className="border-b-2 border-blue-700 flex flex-wrap items-center justify-between p-2 w-full bg-gray-100 mt-4">
         <div className="flex items-center mb-2 sm:mb-0 relative">
@@ -328,7 +328,7 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
       {/* Khu vực upload */}
       {!file && (
         <div
-          className="w-full bg-white rounded-lg flex flex-col items-center text-center border border-gray-300 p-8 md:p-16 shadow-md h-auto mt-4"
+          className="w-full bg-white rounded-lg flex flex-col items-center text-center border border-gray-300 p-8 md:p-16 shadow-md mt-4"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
@@ -366,7 +366,7 @@ const UploadFile = ({ onSelectOrigin, onSelectTarget, onTranslate }) => {
 
       {/* Hiển thị file đã upload trực tiếp bên dưới */}
       {file && (
-        <div className="mt-6 w-full bg-white p-4 rounded-lg shadow-md">
+        <div className="mt-6 w-full bg-white p-4 rounded-lg shadow-md ">
           <h3 className="text-lg font-semibold mb-2 flex justify-between items-center">
             File Preview
             <div className="space-x-2">
