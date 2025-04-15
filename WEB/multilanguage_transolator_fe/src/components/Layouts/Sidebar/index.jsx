@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { MdTranslate, MdHistory, MdLibraryBooks, MdManageAccounts, MdMenu, MdNoteAlt } from "react-icons/md";
+=======
+import { MdTranslate, MdHistory, MdLibraryBooks, MdManageAccounts, MdMenu } from "react-icons/md";
+>>>>>>> c1523819c09fc53053c1fc9b48c7c46bd70d3e42
 import { useNavigate, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 
@@ -72,8 +76,13 @@ const SideBar = () => {
           className={`flex items-center cursor-pointer p-3 ${isActive('/user-library') ? 'bg-[#E2F0F6] text-[#3186B1]' : 'hover:bg-gray-100'} mx-3 rounded-md whitespace-nowrap`}
           onClick={() => navigate('/user-library')}
         >
+<<<<<<< HEAD
           <MdNoteAlt size={24} className={`${isActive('/user-library') ? 'text-[#3186B1]' : 'text-gray-500'} flex-shrink-0`} />
           <span className={`ml-3 font-medium transform ${expanded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5 absolute'}`} style={{ transition: 'transform 250ms ease, opacity 200ms ease' }}>Note</span>
+=======
+          <MdLibraryBooks size={24} className={`${isActive('/user-library') ? 'text-[#3186B1]' : 'text-gray-500'} flex-shrink-0`} />
+          <span className={`ml-3 font-medium transform ${expanded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5 absolute'}`} style={{ transition: 'transform 250ms ease, opacity 200ms ease' }}>Private library</span>
+>>>>>>> c1523819c09fc53053c1fc9b48c7c46bd70d3e42
         </div>
         
         {/* Admin-only sections - positioned at bottom of the list */}
@@ -87,7 +96,11 @@ const SideBar = () => {
               onClick={() => navigate('/common-library')}
             >
               <MdLibraryBooks size={24} className={`${isActive('/common-library') ? 'text-[#3186B1]' : 'text-gray-500'} flex-shrink-0`} />
+<<<<<<< HEAD
               <span className={`ml-3 font-medium transform ${expanded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5 absolute'}`} style={{ transition: 'transform 250ms ease, opacity 200ms ease' }}>Library</span>
+=======
+              <span className={`ml-3 font-medium transform ${expanded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5 absolute'}`} style={{ transition: 'transform 250ms ease, opacity 200ms ease' }}>Common Library</span>
+>>>>>>> c1523819c09fc53053c1fc9b48c7c46bd70d3e42
             </div>
 
             {/* Account Management */}
