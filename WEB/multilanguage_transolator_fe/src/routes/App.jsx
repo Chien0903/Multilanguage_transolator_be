@@ -13,6 +13,7 @@ import CommonLibraryManagement from '../pages/Admin/CommonLibraryManagement';
 import FileHistory from "../pages/fileHistory";
 import ForgotPasswordPage from "../components/features/forgotPassword/index";
 import UserLibraryManagement from "../pages/library";
+import TranslationResults from "../pages/translationResults";
 
 function Logout() {
   localStorage.removeItem("access");
@@ -35,6 +36,7 @@ function App() {
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/admin/edit-user/:id" element={<EditUserRole />} />
           <Route path="/admin" element={<AccountManagement />} />
+          <Route path="/translation-results" element={<ProtectedRoute><TranslationResults /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
           <Route path="/common-library" element={<CommonLibraryManagement />} />
           <Route path="/file-history" element={<FileHistory />} />

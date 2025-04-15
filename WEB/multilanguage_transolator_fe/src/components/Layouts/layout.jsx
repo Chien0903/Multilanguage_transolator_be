@@ -37,12 +37,11 @@ const Layout = () => {
   }, [navigate]);
 
   return (
-    <div className="flex flex-col min-h-screen w-full overflow-hidden">
-      <Header />
-
-      <div className="flex flex-1 w-full overflow-hidden">        
-        <Sidebar />
-        <div className="flex flex-1 p-6 flex-col justify-center overflow-hidden">
+    <div className="flex h-screen w-full overflow-hidden">
+      <Sidebar />
+      <div className="flex flex-col flex-1 overflow-hidden h-screen">
+        <Header />
+        <div className="flex flex-1 p-6 flex-col justify-center ">
           <Outlet />  
         </div>
       </div>

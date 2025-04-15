@@ -10,7 +10,12 @@ function LoginForm({ route, method }) {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [generalError, setGeneralError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -56,65 +61,86 @@ function LoginForm({ route, method }) {
   };
 
   return (
-    <form onSubmit={handleLogin} className="form-container">
-      <div className="mb-4 text-left">
-        <label className="block text-gray-700 text-sm font-semibold mb-2">
+    <form onSubmit={handleLogin} className="form-container w-full">
+      <div className="mb-5 text-left">
+        <label className="block text-gray-700 text-sm font-normal mb-2">
           Email address
         </label>
-        <input
-          type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className={`w-full px-4 py-3 border ${
-            emailError || generalError ? "border-red-500" : "border-gray-300"
-          } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400`}
-          placeholder="example@mail.toray"
-        />
+        <div className="relative">
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+            <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+            </svg>
+          </div>
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={`w-full pl-10 pr-4 py-2 border ${
+              emailError || generalError ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-1 focus:ring-[#3881A2]`}
+            placeholder="nguyenthia@gmail.com"
+          />
+        </div>
         {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
       </div>
 
       <div className="mb-4 text-left">
-        <label className="block text-gray-700 text-sm font-semibold mb-2">
+        <label className="block text-gray-700 text-sm font-normal mb-2">
           Password
         </label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className={`w-full px-4 py-3 border ${
-            passwordError || generalError ? "border-red-500" : "border-gray-300"
-          } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400`}
-          placeholder="Enter password"
-        />
+        <div className="relative">
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+            <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <input
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={`w-full pl-10 pr-10 py-2 border ${
+              passwordError || generalError ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400`}
+            placeholder="Your password"
+          />
+          <div 
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+            onClick={togglePasswordVisibility}
+          >
+            {showPassword ? (
+              <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fillRule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clipRule="evenodd" />
+                <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+              </svg>
+            )}
+          </div>
+        </div>
         {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
         {generalError && <p className="text-red-500 text-sm mt-1">{generalError}</p>}
       </div>
 
-      <div className="text-right mb-5">
-        <a href="/forgot-password" className="text-blue-600 text-sm hover:underline"
-          onClick={() => navigate('/forgot-password')}
-        >
+      <div className="text-right mb-6">
+        <a href="/forgot-password" className="text-[#3881A2] text-sm hover:underline">
           Forgot password?  
         </a>
       </div>
 
-      <button
-        type="submit"
-        className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition shadow-md font-medium flex justify-center items-center"
-        disabled={loading}
-      >
-        {loading ? (
-          <>
-            <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            Signing in...
-          </>
-        ) : (
-          "Sign in"
-        )}
-      </button>
+      <div className="flex justify-center">
+        <button
+          type="submit"
+          className="w-48 py-2 bg-[#3881A2] text-white rounded-full hover:bg-[#2d6a86] transition font-medium"
+          disabled={loading}
+        >
+          {loading ? "Signing in..." : "Sign in"}
+        </button>
+      </div>
     </form>
   );
 }

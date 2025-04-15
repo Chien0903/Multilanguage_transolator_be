@@ -352,16 +352,16 @@ const CommonLibraryManagement = () => {
 
   return (
     <div className="flex flex-1 flex-col h-screen overflow-hidden ">
-      <div className="flex p-2 flex-1 flex-col h-full overflow-hidden  ">
+      <div className="flex flex-1 flex-col h-full overflow-hidden  ">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
           <div className="flex items-center gap-3">
             <button
-              className="flex items-center px-4 py-2 rounded text-white bg-orange-500 hover:bg-orange-600"
+              className="flex items-center px-4 py-2 rounded-full text-white bg-[#3B96AB] hover:bg-[#328699]"
               onClick={() => setIsAddingKeyword(true)}
             >
-              <FaPlus className="mr-2" /> Add Common Keyword
+              <FaPlus className="mr-2" /> Add Keyword
             </button>
-            <label className="flex items-center px-4 py-2 bg-[#2F80ED] text-white rounded hover:bg-[#2967c7] cursor-pointer">
+            <label className="flex items-center justify-center px-4 py-2 bg-[#2F80ED] text-white rounded-full hover:bg-[#2967c7] cursor-pointer min-w-[130px]">
               <FaFileImport className="mr-2" /> Import
               <input
                 type="file"
@@ -371,7 +371,7 @@ const CommonLibraryManagement = () => {
               />
             </label>
             <button
-              className="flex items-center px-4 py-2 bg-[#3B96AB] text-white rounded hover:bg-[#328699]"
+              className="flex items-center justify-center px-4 py-2 bg-[#359740] text-white rounded-full hover:bg-[#2e8237] min-w-[130px]"
               onClick={handleExport}
             >
               <FaFileExport className="mr-2" /> Export
@@ -383,7 +383,7 @@ const CommonLibraryManagement = () => {
               <input
                 type="text"
                 placeholder="Search keyword..."
-                className="p-2 pl-10 border border-gray-400 rounded w-full bg-white text-black placeholder-gray-400"
+                className="p-2 pl-10 border border-gray-400 rounded-full w-full bg-white text-black placeholder-gray-400"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -391,7 +391,7 @@ const CommonLibraryManagement = () => {
             <div className="relative w-64">
               <FaSort className="absolute left-3 top-3 text-black z-10" />
               <select
-                className="p-2 pl-10 border border-gray-400 rounded w-full bg-white text-black"
+                className="p-2 pl-10 border border-gray-400 rounded-full w-full bg-white text-black"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
               >
@@ -407,7 +407,7 @@ const CommonLibraryManagement = () => {
         <div className="overflow-auto flex-1">
           <table className="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
             <thead>
-              <tr className="bg-[#004098CC] text-white font-bold">
+              <tr className="bg-[#E9F9F9] text-black font-bold">
                 <th className="p-3 border-b border-r border-gray-300 w-[5%] text-center">No</th>
                 <th className="p-3 border-b border-r border-gray-300 w-[22%] text-center">Original Word</th>
                 <th className="p-3 border-b border-r border-gray-300 w-[22%] text-center">Target Word</th>

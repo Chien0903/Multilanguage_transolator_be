@@ -130,32 +130,32 @@ function AccountManagement() {
   );
 
   return (
-    <div className="flex-1 p-6 flex flex-col h-screen overflow-hidden">
+    <div className="flex-1 flex flex-col h-screen overflow-hidden">
       <div className="flex flex-wrap items-center justify-between gap-4 mb-4 ">
         <div className="flex items-center gap-3">
           <button
-            className="flex items-center px-4 py-2 rounded text-white bg-orange-500 hover:bg-orange-600"
+            className="flex items-center rounded-full px-4 py-2 rounded text-white bg-[#3B96AB] hover:bg-[#328699]"
             onClick={() => setIsAddingAccount(true)}
           >
             <FaPlus className="mr-2" /> Create Account
           </button>
         </div>
         <div className="flex items-center gap-3">
-          <div className="relative w-64">
-            <FaSearch className="absolute left-3 top-3 text-black z-10" />
+          <div className="relative w-64 ">
+            <FaSearch className="absolute left-3 top-3 text-black z-10 " />
             <input
               type="text"
               placeholder="Search by name..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="p-2 pl-10 border rounded w-full bg-white text-black placeholder-gray-400"
+              className="p-2 pl-10 border rounded w-full bg-white text-black placeholder-gray-400 rounded-full"
             />
           </div>
 
           <select
             value={filterRole}
             onChange={(e) => setFilterRole(e.target.value)}
-            className="p-2 border rounded bg-white text-black"
+            className="p-2 border rounded bg-white text-black rounded-full"
           >
             <option value="">All Roles</option>
             <option value="Admin">Admin</option>
@@ -167,7 +167,7 @@ function AccountManagement() {
       <div className="overflow-auto flex-1">
         <table className="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
           <thead>
-            <tr className="bg-[#004098CC] text-white font-bold">
+            <tr className="bg-[#E9F9F9] text-black font-bold">
               <th className="p-3 border-b border-r border-gray-300 w-[5%] text-center">#</th>
               <th className="p-3 border-b border-r border-gray-300 w-[25%] text-center">Name</th>
               <th className="p-3 border-b border-r border-gray-300 w-[15%] text-center">Role</th>

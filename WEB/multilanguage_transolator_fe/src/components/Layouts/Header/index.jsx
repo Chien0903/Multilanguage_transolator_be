@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { IoPersonCircleOutline } from "react-icons/io5";
+import { IoChevronDown } from "react-icons/io5";
 import { FaUser, FaKey, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
 import KeywordUpdate from "../../features/keywordupdate";
@@ -11,25 +11,6 @@ const Header = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
-  // Determine page title based on current route
-  const getPageTitle = () => {
-    const path = location.pathname.toLowerCase();
-    
-    if (path.includes("/common-library")) {
-      return "COMMON LIBRARY";
-    } 
-    if (path.includes("/admin")) {
-      return "ACCOUNT MANAGEMENT";
-    }
-    if (path.includes("/file-history")) {
-      return "FILE HISTORY";
-    }
-    
-    return null;
-  };
-
-  const pageTitle = getPageTitle();
 
   useEffect(() => {
     const updateName = () => {
@@ -47,73 +28,73 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="bg-[#C4D3E7] flex items-center p-4 shadow-md w-full relative">
+    <div className="bg-white flex items-center p-4 border border-gray-200 w-full relative">
       {/* Logo on left */}
       <div className="z-10">
         <img
-          src="https://www.toray.com/global/shared/images/toray_logo.svg"
-          alt="Toray Logo"
+          src="/assets/Logo.png"
+          alt="AI4LIFE Logo"
           className="h-10"
         />
       </div>
       
-      {/* Centered title */}
-      {pageTitle && (
-        <div className="absolute left-0 right-0 flex justify-center items-center pointer-events-none">
-          <h1 className="text-2xl font-bold text-[#004098CC]">
-            {pageTitle}
-          </h1>
-        </div>
-      )}
-
       {/* User menu on right */}
       <div className="flex items-center ml-auto z-10">
         {/* User Profile */}
         <div
-          className="relative inline-flex items-center whitespace-nowrap z-10" 
-          onMouseEnter={() => setShowUserMenu(true)}
-          onMouseLeave={() => setShowUserMenu(false)}
+          className="relative inline-flex items-center whitespace-nowrap z-10 cursor-pointer" 
+          onClick={() => setShowUserMenu(!showUserMenu)}
         >
-          <div className="flex flex-col items-end mr-2">
-            <span className="font-semibold">{firstName} {lastName}</span>
-            <span className="text-xs text-gray-600">{role}</span>
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+              <FaUser size={20} className="text-gray-500" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-semibold">{firstName} {lastName}</span>
+              <span className="text-xs text-gray-600">{role}</span>
+            </div>
+            <IoChevronDown className="ml-1 text-gray-500" />
           </div>
-          <IoPersonCircleOutline size={40} className="cursor-pointer" />
 
           {/* Dropdown Menu */}
           {showUserMenu && (
-            <div className="absolute right-0 top-full bg-white border rounded-md shadow-md w-44 z-10">
-              <ul className="flex flex-col">
+            <div className="absolute right-0 top-full mt-1 bg-white border border-gray-100 rounded-2xl shadow-md w-[170px] z-20 overflow-hidden">
+              <ul className="flex flex-col py-1">
                 <li
-                  className="p-3 text-sm font-medium text-gray-700 hover:bg-blue-100 cursor-pointer flex items-center space-x-2"
-                  onClick={() => navigate("/my-profile")}
+                  className="px-5 py-3 text-base font-normal text-gray-800 cursor-pointer text-left hover:bg-[#E9F9F9] transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate("/my-profile");
+                    setShowUserMenu(false);
+                  }}
                 >
-                  <FaUser className="text-gray-600" />
-                  <span>My Account</span>
+                  My account
                 </li>
-                <hr className="border-gray-300" />
                 <li
-                  className="p-3 text-sm font-medium text-gray-700 hover:bg-blue-100 cursor-pointer flex items-center space-x-2"
-                  onClick={() => navigate("/change-password")}
+                  className="px-5 py-3 text-base font-normal text-gray-800 cursor-pointer text-left hover:bg-[#E9F9F9] transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate("/change-password");
+                    setShowUserMenu(false);
+                  }}
                 >
-                  <FaKey className="text-gray-600" />
-                  <span>Change Password</span>
+                  Change password
                 </li>
-                <hr className="border-gray-300" />
                 <li
-                  className="p-3 text-sm font-medium text-gray-700 hover:bg-blue-100 cursor-pointer flex items-center space-x-2"
-                  onClick={() => navigate("/logout")}
+                  className="px-5 py-3 text-base font-normal text-gray-800 cursor-pointer text-left hover:bg-[#E9F9F9] transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate("/logout");
+                    setShowUserMenu(false);
+                  }}
                 >
-                  <FaSignOutAlt className="text-gray-600" />
-                  <span>Log out</span>
+                  Log out
                 </li>
               </ul>
             </div>
           )}
         </div>
 
-        {/* Keyword Update Component */}
-        <KeywordUpdate />
       </div>
     </div>
   );

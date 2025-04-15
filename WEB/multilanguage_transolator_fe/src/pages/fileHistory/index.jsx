@@ -130,7 +130,7 @@ const FileHistory = () => {
               <input
                 type="text"
                 placeholder="Search files..."
-                className="p-2 pl-10 border rounded w-full bg-white text-black placeholder-gray-400"
+                className="p-2 pl-10 border rounded-full w-full bg-white text-black placeholder-gray-400"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -138,7 +138,7 @@ const FileHistory = () => {
             <div className="relative w-64">
               <FaSort className="absolute left-3 top-3 text-black z-10" />
               <select
-                className="p-2 pl-10 border rounded w-full bg-white text-black"
+                className="p-2 pl-10 border rounded-full w-full bg-white text-black"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
               >
@@ -155,7 +155,7 @@ const FileHistory = () => {
         <div className="overflow-auto flex-1">
           <table className="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
             <thead>
-              <tr className="bg-[#004098CC] text-white font-bold">
+              <tr className="bg-[#E9F9F9] text-black font-bold">
                 <th className="p-3 border-b border-r border-gray-300 w-[5%] text-center">No</th>
                 <th className="p-3 border-b border-r border-gray-300 w-[35%] text-center">Name</th>
                 <th className="p-3 border-b border-r border-gray-300 w-[20%] text-center">Language</th>
