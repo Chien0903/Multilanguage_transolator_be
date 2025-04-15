@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { IoChevronDown } from "react-icons/io5";
 import { FaUser, FaKey, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
-import KeywordUpdate from "../../features/keywordupdate";
 
 const Header = () => {
   const [firstName, setFirstName] = useState("");
@@ -32,8 +31,8 @@ const Header = () => {
       {/* Logo on left */}
       <div className="z-10">
         <img
-          src="/assets/Logo.png"
-          alt="AI4LIFE Logo"
+          src="https://www.toray.com/global/shared/images/toray_logo.svg"
+          alt="Toray Logo"
           className="h-10"
         />
       </div>
@@ -61,7 +60,7 @@ const Header = () => {
             <div className="absolute right-0 top-full mt-1 bg-white border border-gray-100 rounded-2xl shadow-md w-[170px] z-20 overflow-hidden">
               <ul className="flex flex-col py-1">
                 <li
-                  className="px-5 py-3 text-base font-normal text-gray-800 cursor-pointer text-left hover:bg-[#E9F9F9] transition-colors"
+                  className="px-5 py-3 text-base font-normal text-gray-800 cursor-pointer text-left hover:bg-blue-400 transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate("/my-profile");
@@ -71,7 +70,7 @@ const Header = () => {
                   My account
                 </li>
                 <li
-                  className="px-5 py-3 text-base font-normal text-gray-800 cursor-pointer text-left hover:bg-[#E9F9F9] transition-colors"
+                  className="px-5 py-3 text-base font-normal text-gray-800 cursor-pointer text-left hover:bg-blue-400 transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate("/change-password");
@@ -81,7 +80,7 @@ const Header = () => {
                   Change password
                 </li>
                 <li
-                  className="px-5 py-3 text-base font-normal text-gray-800 cursor-pointer text-left hover:bg-[#E9F9F9] transition-colors"
+                  className="px-5 py-3 text-base font-normal text-gray-800 cursor-pointer text-left hover:bg-blue-400 transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate("/logout");

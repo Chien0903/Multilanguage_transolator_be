@@ -356,7 +356,7 @@ const CommonLibraryManagement = () => {
         <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
           <div className="flex items-center gap-3">
             <button
-              className="flex items-center px-4 py-2 rounded-full text-white bg-[#3B96AB] hover:bg-[#328699]"
+              className="flex items-center px-4 py-2 rounded-full text-white bg-orange-500 hover:bg-orange-600"
               onClick={() => setIsAddingKeyword(true)}
             >
               <FaPlus className="mr-2" /> Add Keyword
@@ -407,14 +407,15 @@ const CommonLibraryManagement = () => {
         <div className="overflow-auto flex-1">
           <table className="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
             <thead>
-              <tr className="bg-[#E9F9F9] text-black font-bold">
+              <tr className="bg-[#004098CC] text-white font-bold">
                 <th className="p-3 border-b border-r border-gray-300 w-[5%] text-center">No</th>
-                <th className="p-3 border-b border-r border-gray-300 w-[22%] text-center">Original Word</th>
-                <th className="p-3 border-b border-r border-gray-300 w-[22%] text-center">Target Word</th>
-                <th className="p-3 border-b border-r border-gray-300 w-[13%] text-center">Original Language</th>
-                <th className="p-3 border-b border-r border-gray-300 w-[13%] text-center">Target Language</th>
+                <th className="p-3 border-b border-r border-gray-300 w-[15%] text-center">Japanese</th>
+                <th className="p-3 border-b border-r border-gray-300 w-[15%] text-center">English</th>
+                <th className="p-3 border-b border-r border-gray-300 w-[15%] text-center">Vietnamese</th>
+                <th className="p-3 border-b border-r border-gray-300 w-[15%] text-center">Chinese (Traditional)</th>
+                <th className="p-3 border-b border-r border-gray-300 w-[15%] text-center">Chinese (Simplified)</th>
                 <th className="p-3 border-b border-r border-gray-300 w-[10%] text-center">Date Modified</th>
-                <th className="p-3 border-b border-gray-300 w-[15%] text-center">Action</th>
+                <th className="p-3 border-b border-gray-300 w-[10%] text-center">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -433,11 +434,14 @@ const CommonLibraryManagement = () => {
                   <td className="p-3 border-b border-r border-gray-200 truncate max-w-[200px] text-center">
                     {item.english || ""}
                   </td>
-                  <td className="p-3 border-b border-r border-gray-200 text-center">
-                    Japanese
+                  <td className="p-3 border-b border-r border-gray-200 truncate max-w-[200px] text-center">
+                    {item.vietnamese || ""}
                   </td>
-                  <td className="p-3 border-b border-r border-gray-200 text-center">
-                    English
+                  <td className="p-3 border-b border-r border-gray-200 truncate max-w-[200px] text-center">
+                    {item.chinese_traditional || ""}
+                  </td>
+                  <td className="p-3 border-b border-r border-gray-200 truncate max-w-[200px] text-center">
+                    {item.chinese_simplified || ""}
                   </td>
                   <td className="p-3 border-b border-r border-gray-200 text-center text-sm truncate">
                     {formatDate(item.date_modified)}
@@ -503,26 +507,30 @@ const CommonLibraryManagement = () => {
                 <table className="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
                   <thead>
                     <tr className="bg-[#004098CC] text-white">
-                      <th className="p-3 border-b border-r border-gray-300 w-1/5 text-center">Original Word</th>
-                      <th className="p-3 border-b border-r border-gray-300 w-1/5 text-center">Target Word</th>
-                      <th className="p-3 border-b border-r border-gray-300 w-1/5 text-center">Original Language</th>
-                      <th className="p-3 border-b border-r border-gray-300 w-1/5 text-center">Target Language</th>
-                      <th className="p-3 border-b border-gray-300 w-1/5 text-center">Date Modified</th>
+                      <th className="p-3 border-b border-r border-gray-300 text-center">Japanese</th>
+                      <th className="p-3 border-b border-r border-gray-300 text-center">English</th>
+                      <th className="p-3 border-b border-r border-gray-300 text-center">Vietnamese</th>
+                      <th className="p-3 border-b border-r border-gray-300 text-center">Chinese (Traditional)</th>
+                      <th className="p-3 border-b border-r border-gray-300 text-center">Chinese (Simplified)</th>
+                      <th className="p-3 border-b border-gray-300 text-center">Date Modified</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td className="p-3 border-b border-r border-gray-200 whitespace-normal break-words text-center">
-                        {selectedKeyword.japanese}
+                        {selectedKeyword.japanese || ""}
                       </td>
                       <td className="p-3 border-b border-r border-gray-200 whitespace-normal break-words text-center">
-                        {selectedKeyword.english}
+                        {selectedKeyword.english || ""}
                       </td>
-                      <td className="p-3 border-b border-r border-gray-200 text-center">
-                        Japanese
+                      <td className="p-3 border-b border-r border-gray-200 whitespace-normal break-words text-center">
+                        {selectedKeyword.vietnamese || ""}
                       </td>
-                      <td className="p-3 border-b border-r border-gray-200 text-center">
-                        English
+                      <td className="p-3 border-b border-r border-gray-200 whitespace-normal break-words text-center">
+                        {selectedKeyword.chinese_traditional || ""}
+                      </td>
+                      <td className="p-3 border-b border-r border-gray-200 whitespace-normal break-words text-center">
+                        {selectedKeyword.chinese_simplified || ""}
                       </td>
                       <td className="p-3 border-b border-gray-200 text-center">
                         {formatDate(selectedKeyword.date_modified)}
@@ -562,10 +570,11 @@ const CommonLibraryManagement = () => {
                   <table className="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
                     <thead>
                       <tr className="bg-[#004098CC] text-white">
-                        <th className="p-3 border-b border-r border-gray-300 w-1/4 text-center">Original Word</th>
-                        <th className="p-3 border-b border-r border-gray-300 w-1/4 text-center">Target Word</th>
-                        <th className="p-3 border-b border-r border-gray-300 w-1/4 text-center">Original Language</th>
-                        <th className="p-3 border-b border-gray-300 w-1/4 text-center">Target Language</th>
+                        <th className="p-3 border-b border-r border-gray-300 text-center">Japanese</th>
+                        <th className="p-3 border-b border-r border-gray-300 text-center">English</th>
+                        <th className="p-3 border-b border-r border-gray-300 text-center">Vietnamese</th>
+                        <th className="p-3 border-b border-r border-gray-300 text-center">Chinese (Traditional)</th>
+                        <th className="p-3 border-b border-gray-300 text-center">Chinese (Simplified)</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -573,38 +582,42 @@ const CommonLibraryManagement = () => {
                         <td className="p-3 border-b border-r border-gray-200">
                           <textarea
                             name="japanese"
-                            value={editingKeyword.japanese}
+                            value={editingKeyword.japanese || ""}
                             onChange={handleChange}
                             className="w-full p-2 border-2 border-gray-300 rounded resize-y text-center"
-                            required
                           />
                         </td>
                         <td className="p-3 border-b border-r border-gray-200">
                           <textarea
                             name="english"
-                            value={editingKeyword.english}
+                            value={editingKeyword.english || ""}
                             onChange={handleChange}
                             className="w-full p-2 border-2 border-gray-300 rounded resize-y text-center"
-                            required
                           />
                         </td>
                         <td className="p-3 border-b border-r border-gray-200">
-                          <select
-                            name="original_language"
-                            className="w-full p-2 border-2 border-gray-300 rounded text-center"
-                            disabled
-                          >
-                            <option value="Japanese">Japnese</option>
-                          </select>
+                          <textarea
+                            name="vietnamese"
+                            value={editingKeyword.vietnamese || ""}
+                            onChange={handleChange}
+                            className="w-full p-2 border-2 border-gray-300 rounded resize-y text-center"
+                          />
+                        </td>
+                        <td className="p-3 border-b border-r border-gray-200">
+                          <textarea
+                            name="chinese_traditional"
+                            value={editingKeyword.chinese_traditional || ""}
+                            onChange={handleChange}
+                            className="w-full p-2 border-2 border-gray-300 rounded resize-y text-center"
+                          />
                         </td>
                         <td className="p-3 border-b border-gray-200">
-                          <select
-                            name="target_language"
-                            className="w-full p-2 border-2 border-gray-300 rounded text-center"
-                            disabled
-                          >
-                            <option value="English">English</option>
-                          </select>
+                          <textarea
+                            name="chinese_simplified"
+                            value={editingKeyword.chinese_simplified || ""}
+                            onChange={handleChange}
+                            className="w-full p-2 border-2 border-gray-300 rounded resize-y text-center"
+                          />
                         </td>
                       </tr>
                     </tbody>

@@ -93,7 +93,7 @@ function RegisterForm({ route }) {
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#3881A2]"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#004098CC]"
             placeholder="example@mail.toray"
             required
           />
@@ -112,7 +112,7 @@ function RegisterForm({ route }) {
             type="text"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#3881A2]"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#004098CC]"
             placeholder="Enter your full name"
             required
           />
@@ -131,7 +131,7 @@ function RegisterForm({ route }) {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#3881A2]"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#004098CC]"
             placeholder="Enter password"
             required
           />
@@ -150,7 +150,7 @@ function RegisterForm({ route }) {
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#3881A2]"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#004098CC]"
             placeholder="Confirm password"
             required
           />
@@ -162,7 +162,7 @@ function RegisterForm({ route }) {
         <button
           type="submit"
           disabled={loading}
-          className="w-48 py-2 bg-[#3881A2] text-white rounded-full hover:bg-[#2d6a86] transition font-medium"
+          className="w-48 py-2 bg-[#004098CC] text-white rounded-full hover:bg-[#00306E] transition font-medium"
         >
           {loading ? "Creating Account..." : "Sign up"}
         </button>

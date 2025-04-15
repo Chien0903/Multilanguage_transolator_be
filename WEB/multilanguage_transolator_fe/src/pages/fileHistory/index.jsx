@@ -155,7 +155,7 @@ const FileHistory = () => {
         <div className="overflow-auto flex-1">
           <table className="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
             <thead>
-              <tr className="bg-[#E9F9F9] text-black font-bold">
+              <tr className="bg-[#004098CC] text-white font-bold">
                 <th className="p-3 border-b border-r border-gray-300 w-[5%] text-center">No</th>
                 <th className="p-3 border-b border-r border-gray-300 w-[35%] text-center">Name</th>
                 <th className="p-3 border-b border-r border-gray-300 w-[20%] text-center">Language</th>

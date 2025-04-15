@@ -79,8 +79,8 @@ function LoginForm({ route, method }) {
             onChange={(e) => setEmail(e.target.value)}
             className={`w-full pl-10 pr-4 py-2 border ${
               emailError || generalError ? "border-red-500" : "border-gray-300"
-            } rounded-md focus:outline-none focus:ring-1 focus:ring-[#3881A2]`}
-            placeholder="nguyenthia@gmail.com"
+            } rounded-md focus:outline-none focus:ring-1 focus:ring-[#004098CC]`}
+            placeholder="nguyenthia@mail.toray"
           />
         </div>
         {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
@@ -127,7 +127,7 @@ function LoginForm({ route, method }) {
       </div>
 
       <div className="text-right mb-6">
-        <a href="/forgot-password" className="text-[#3881A2] text-sm hover:underline">
+        <a href="/forgot-password" className="text-[#004098CC] text-sm hover:underline">
           Forgot password?  
         </a>
       </div>
@@ -135,7 +135,7 @@ function LoginForm({ route, method }) {
       <div className="flex justify-center">
         <button
           type="submit"
-          className="w-48 py-2 bg-[#3881A2] text-white rounded-full hover:bg-[#2d6a86] transition font-medium"
+          className="w-48 py-2 bg-[#004098CC] text-white rounded-full hover:bg-[#00306E] transition font-medium"
           disabled={loading}
         >
           {loading ? "Signing in..." : "Sign in"}

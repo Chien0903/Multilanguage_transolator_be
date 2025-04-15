@@ -134,7 +134,7 @@ function AccountManagement() {
       <div className="flex flex-wrap items-center justify-between gap-4 mb-4 ">
         <div className="flex items-center gap-3">
           <button
-            className="flex items-center rounded-full px-4 py-2 rounded text-white bg-[#3B96AB] hover:bg-[#328699]"
+            className="flex items-center rounded-full px-4 py-2 rounded text-white bg-orange-500 hover:bg-orange-600"
             onClick={() => setIsAddingAccount(true)}
           >
             <FaPlus className="mr-2" /> Create Account
@@ -167,7 +167,7 @@ function AccountManagement() {
       <div className="overflow-auto flex-1">
         <table className="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
           <thead>
-            <tr className="bg-[#E9F9F9] text-black font-bold">
+            <tr className="bg-[#004098CC] text-white font-bold">
               <th className="p-3 border-b border-r border-gray-300 w-[5%] text-center">#</th>
               <th className="p-3 border-b border-r border-gray-300 w-[25%] text-center">Name</th>
               <th className="p-3 border-b border-r border-gray-300 w-[15%] text-center">Role</th>
