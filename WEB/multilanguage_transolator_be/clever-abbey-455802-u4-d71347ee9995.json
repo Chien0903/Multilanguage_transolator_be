@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "clever-abbey-455802-u4",
+  "private_key_id": "d71347ee99951c58732c4d98e77487a4bbc50a56",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCdv7yVQvlRkdOK\n9sybvAdk9j+PFx+bcj1f2lgw4/DfwhRWgrI6h8aeQliG49RkRxOmjVLzhsIqrDVb\nCFBJspGg5K1L1sWoU99se1dtTLL13dGlv8wWE541IDaRZy2Gp9wfgQX9S5hl4ZbK\n54vkwAoqumm4RmfSDT/aubbUCF08A5Ilrjm3D9EHkvvgqOB7yY/XwvUAXdXIbLb9\nqZB7rM7Y2kadYc4ppQbCZig7ar6p8KiyCDPm8TCeQy97yM/FJMPL01LIGov/V/zd\nYhUFn0SDcof5eCH79rC/tNMacoq8121ksfYDdNR+CyZIyiB2PvhRGXMQ0+jDqULn\nxXzonrK9AgMBAAECggEAC0h6KmScinanU8v50BTSTujPHIK/URd00jI+9xuYBcUv\nE7isRgP3/fy0XMzsdZILktuOaJqbBkGEMniagjRKdss3JagdF1W3yB2ytT+/GCzE\nxfnSlOypIax7bV8yJ4IXpvg2pQqpwfXGsEjWCHyqQtVLt7FvfnEnVVN4bduS9vZp\n7TIVca5cKHP8S/yEN5tShcfqYY4guzNC9L4nWU5sI5kZ3H1U/39w8agDTn5imIWR\nJ+dH+rqD1yqt5RnatdRbwK9yW8fIeFxoB5f/5UcfW6sF583M4IXy7h050worj2+w\nxH4VGBPEyEHczvSmDItKDLJA8seIIhlq9rPWglgq6QKBgQDYyMF1deQzAHA3ou7o\nkl7YWdIxLyIQURkKlb81m+HdIJrvWMekHNPLEMiFHSOJWEhPMMlvk2C7GX2danXZ\nXhdtAL6GNIrxi9kd1+XuGt+A+82XLtHrozEucye9v0p22Sooc/1O09FvNZQ8VTx8\ndeYhlW16UzULsBcTwsWq3bMDiQKBgQC6SRFzC5C9qcb46DyGvmJ8afgqRrjuihmp\ne+JJGZzIE6DLWJ299po94KYCMF38YIRWM9Jq9jyTQ2r6nL6zQ8qhTg7gNyGCYvRs\n+1D9merQTD8GfcMUJXRaXpCN/nKkD2hbBogRAva4EcamHVMyMBGg1gYcTPcnXpG4\nl7yvjwOElQKBgQCXSvSJL2/FkGbAzXuC4LREtdsV7FkPniml04CQv2vQUbMPm5wp\nEt1U+S+Yhw+ICQ7eBaRvtCFsMowSUnxQ6XPb5QsSypS1ou4x/70+gY6+i/2dp1Vl\n6IyoaEGyEVC8xS7A8MI2Q2oE/RWpTatbCUVE5u5y0qNQtuJELkiZyQPoUQKBgBf8\nDGkZlhs1Xs7xZ8mZfaizJCadUHY2BbPSpYHv8EW6cTt9P2IT/Cv3XqhtfcxeyOso\nZPEsnwP+7Ck0QUFnexFlsXig4ImfIAVgHj9or9j92CeHzbQsVlzETCxcFHqXGUKP\nBrnZ/dYZQ9BjejC+C6b/p23BYxkIjg6MStj3uuY5AoGBALxknGnkMOGJVp/3t6Qm\n1LdkOlI75EQ292zO5gKGpqgGCvv/4WrB+uu43KUMiVN6chTjegk7bIVPnEELEy9N\nzam0eQJw+8TxUapx+Ub/Nr+EdZU56QQJLFI54VCzeG9hG1x323tJnOFhy6HF7r0n\n11Dj/ULgbykamPNRKAOWMGHa\n-----END PRIVATE KEY-----\n",
+  "client_email": "toray-translation-project@clever-abbey-455802-u4.iam.gserviceaccount.com",
+  "client_id": "112430760672981798860",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/toray-translation-project%40clever-abbey-455802-u4.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
