@@ -1,11 +1,24 @@
-import { MdTranslate, MdHistory, MdLibraryBooks, MdManageAccounts, MdMenu, MdNoteAlt } from "react-icons/md";
+import { MdTranslate, MdHistory, MdLibraryBooks, MdManageAccounts, MdMenu, MdNoteAlt, MdRuleFolder, MdFeedback } from "react-icons/md";
 import { useNavigate, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 
 const SideBar = () => {
+  const [role, setRole] = useState(localStorage.getItem("role") || "");
   const [expanded, setExpanded] = useState(false); 
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // Update role when localStorage changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setRole(localStorage.getItem("role") || "");
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   const toggleSidebar = () => {
     setExpanded(!expanded);
@@ -58,31 +71,58 @@ const SideBar = () => {
           </span>
         </div>
 
-          <>
-            <div className="flex-grow"></div>
+        {/* Suggestion Review - visible to both Admin and Library Keeper */}
+        {(role === "Admin" || role === "Library Keeper") && (
+          <div
+            className={`flex items-center cursor-pointer p-[0.75rem] ${isActive('/suggestion-review') ? 'bg-[#E6F0FD] text-[#2F80ED]' : 'hover:bg-gray-100'} mx-[0.75rem] rounded-md whitespace-nowrap`}
+            onClick={() => navigate('/suggestion-review')}
+          >
+            <MdFeedback size={24} className={`${isActive('/suggestion-review') ? 'text-[#2F80ED]' : 'text-gray-500'} flex-shrink-0`} />
+            <span className={`ml-[0.75rem] font-medium transform ${expanded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[1.25rem] absolute'}`} style={{ transition: 'transform 250ms ease, opacity 200ms ease' }}>
+              Review Suggestions
+            </span>
+          </div>
+        )}
 
-            {/* Library */}
-            <div
-              className={`flex items-center cursor-pointer p-[0.75rem] ${isActive('/common-library') ? 'bg-[#E6F0FD] text-[#2F80ED]' : 'hover:bg-gray-100'} mx-[0.75rem] rounded-md whitespace-nowrap`}
-              onClick={() => navigate('/common-library')}
-            >
-              <MdLibraryBooks size={24} className={`${isActive('/common-library') ? 'text-[#2F80ED]' : 'text-gray-500'} flex-shrink-0`} />
-              <span className={`ml-[0.75rem] font-medium transform ${expanded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[1.25rem] absolute'}`} style={{ transition: 'transform 250ms ease, opacity 200ms ease' }}>
-                Library
-              </span>
-            </div>
+        {/* Admin and Library sections */}
+        <div className="flex-grow"></div>
 
-            {/* Account Management */}
-            <div
-              className={`flex items-center cursor-pointer p-[0.75rem] ${isActive('/admin') ? 'bg-[#E6F0FD] text-[#2F80ED]' : 'hover:bg-gray-100'} mx-[0.75rem] rounded-md whitespace-nowrap`}
-              onClick={() => navigate('/admin')}
-            >
-              <MdManageAccounts size={24} className={`${isActive('/admin') ? 'text-[#2F80ED]' : 'text-gray-500'} flex-shrink-0`} />
-              <span className={`ml-[0.75rem] font-medium transform ${expanded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[1.25rem] absolute'}`} style={{ transition: 'transform 250ms ease, opacity 200ms ease' }}>
-                Account Management
-              </span>
-            </div>
-          </>
+        {/* Suggestion Approval - only visible to Admin */}
+        {role === "Admin" && (
+          <div
+            className={`flex items-center cursor-pointer p-[0.75rem] ${isActive('/suggestion-approval') ? 'bg-[#E6F0FD] text-[#2F80ED]' : 'hover:bg-gray-100'} mx-[0.75rem] rounded-md whitespace-nowrap`}
+            onClick={() => navigate('/suggestion-approval')}
+          >
+            <MdRuleFolder size={24} className={`${isActive('/suggestion-approval') ? 'text-[#2F80ED]' : 'text-gray-500'} flex-shrink-0`} />
+            <span className={`ml-[0.75rem] font-medium transform ${expanded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[1.25rem] absolute'}`} style={{ transition: 'transform 250ms ease, opacity 200ms ease' }}>
+              Approve Suggestions
+            </span>
+          </div>
+        )}
+
+        {/* Library */}
+        <div
+          className={`flex items-center cursor-pointer p-[0.75rem] ${isActive('/common-library') ? 'bg-[#E6F0FD] text-[#2F80ED]' : 'hover:bg-gray-100'} mx-[0.75rem] rounded-md whitespace-nowrap`}
+          onClick={() => navigate('/common-library')}
+        >
+          <MdLibraryBooks size={24} className={`${isActive('/common-library') ? 'text-[#2F80ED]' : 'text-gray-500'} flex-shrink-0`} />
+          <span className={`ml-[0.75rem] font-medium transform ${expanded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[1.25rem] absolute'}`} style={{ transition: 'transform 250ms ease, opacity 200ms ease' }}>
+            Library
+          </span>
+        </div>
+
+        {/* Account Management */}
+        {role === "Admin" && (
+          <div
+            className={`flex items-center cursor-pointer p-[0.75rem] ${isActive('/admin') ? 'bg-[#E6F0FD] text-[#2F80ED]' : 'hover:bg-gray-100'} mx-[0.75rem] rounded-md whitespace-nowrap`}
+            onClick={() => navigate('/admin')}
+          >
+            <MdManageAccounts size={24} className={`${isActive('/admin') ? 'text-[#2F80ED]' : 'text-gray-500'} flex-shrink-0`} />
+            <span className={`ml-[0.75rem] font-medium transform ${expanded ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[1.25rem] absolute'}`} style={{ transition: 'transform 250ms ease, opacity 200ms ease' }}>
+              Account Management
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

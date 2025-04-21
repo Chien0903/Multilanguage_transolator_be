@@ -10,13 +10,17 @@ from dotenv import load_dotenv
 import tempfile
 import requests
 from backend.api.services.upload_to_s3 import upload_to_s3
+from django.conf import settings
 
 load_dotenv()
 
-# Lấy giá trị từ biến môi trường
-PROJECT_ID = os.getenv("PROJECT_ID")
-GOOGLE_CREDS_PATH = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_CREDS_PATH
+# Check if the credentials file exists before setting it
+if hasattr(settings, 'GOOGLE_CREDS_PATH') and settings.GOOGLE_CREDS_PATH and os.path.isfile(settings.GOOGLE_CREDS_PATH):
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = settings.GOOGLE_CREDS_PATH
+else:
+    # Log a warning or handle the missing credentials case
+    print("WARNING: Google Cloud credentials file not found. Translation features may not work.")
+    # You could also raise an exception if translation is critical to your app
 
 LANGUAGES = {
     'vi': "Vietnamese",

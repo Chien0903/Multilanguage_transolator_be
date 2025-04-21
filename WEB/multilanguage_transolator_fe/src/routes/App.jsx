@@ -12,8 +12,8 @@ import Layout from "../components/Layouts/layout";
 import CommonLibraryManagement from '../pages/Admin/CommonLibraryManagement';
 import FileHistory from "../pages/fileHistory";
 import ForgotPasswordPage from "../components/features/forgotPassword/index";
-import SuggestionApprovalList from "../pages/library/suggestionApprovalList";
-import SuggestionReviewList from "../pages/library/suggestionReviewList";
+import SuggestionApprovalList from "../pages/suggestion/suggestionApprovalList";
+import SuggestionReviewList from "../pages/suggestion/suggestionReviewList";
 import TranslationResults from "../pages/translationResults";
 
 function Logout() {
