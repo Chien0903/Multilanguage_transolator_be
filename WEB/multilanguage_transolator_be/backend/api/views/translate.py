@@ -9,25 +9,80 @@ from google.cloud import translate
 from dotenv import load_dotenv
 import tempfile
 import requests
-from backend.api.services.upload_to_s3 import upload_to_s3
+
+import boto3
+from botocore.exceptions import NoCredentialsError
 
 load_dotenv()
 
 # Lấy giá trị từ biến môi trường
 PROJECT_ID = os.getenv("PROJECT_ID")
-GOOGLE_CREDS_PATH = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_CREDS_PATH
-
+GOOGLE_CREDENTIALS_PATH = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = GOOGLE_CREDENTIALS_PATH
 LANGUAGES = {
     'vi': "Vietnamese",
     'ja': "Japanese",
     'zh-CN': "Chinese",
     'en': "English"
 }
+def upload_to_s3(file_path, bucket_name, object_name=None):
+    """
+    Upload a file to an S3 bucket
+
+    :param file_path: Path to file on disk
+    :param bucket_name: S3 bucket name
+    :param object_name: S3 object name. If not specified, file_name is used
+    :return: URL of the uploaded file if successful, else None
+    """
+    # If S3 object_name was not specified, use file_path
+    if object_name is None:
+        object_name = os.path.basename(file_path)
+
+    # Create an S3 client
+    s3_client = boto3.client(
+        's3',
+        aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+        aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
+        region_name=os.getenv('AWS_S3_REGION_NAME')
+    )
+
+    try:
+        # Mở file và tải lên S3
+        with open(file_path, 'rb') as file_obj:
+            # Determine Content-Disposition and Content-Type
+            content_disposition = 'inline' if object_name.endswith('.pdf') else 'attachment'
+            content_type = 'application/pdf' if object_name.endswith('.pdf') else 'binary/octet-stream'
+            
+            # Upload the file
+            s3_client.upload_fileobj(
+                file_obj,
+                bucket_name,
+                object_name,
+                ExtraArgs={
+                    'ContentDisposition': content_disposition,
+                    'ContentType': content_type
+                }
+            )
+        
+        print(f"File {object_name} uploaded to {bucket_name}/{object_name}")
+        
+        # Generate the public URL
+        public_url = f"https://{bucket_name}.s3.amazonaws.com/{object_name}"
+        return public_url
+    except FileNotFoundError:
+        print("The file was not found")
+        return None
+    except NoCredentialsError:
+        print("Credentials not available")
+        return None
+    except Exception as e:
+        print(f"Error uploading file: {str(e)}")
+        return None
 
 # Hàm để trích xuất nội dung từ các file PDF, DOCX, XLSX
 def extract_content(file_path: str) -> str:
     file_extension = file_path.split(".")[-1].lower()
+    
     if file_extension == "pdf":
         return extract_from_pdf(file_path)
     elif file_extension == "docx":
@@ -141,28 +196,43 @@ def translate_document(file_path: str, target_language: str):
 
 
 # API View để upload và dịch file
+
 class TranslateFileView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
         file_url = request.data.get("file_url")
-        target_language = request.data.get("target_languages")
-        print(file_url, target_language)
-        if not file_url or not target_language:
-            return JsonResponse({"detail": "Missing file_url or target_language"}, status=400)
+        target_languages = request.data.get("target_languages") or []
 
+        if not file_url or not target_languages:
+            return JsonResponse(
+                {"detail": "Missing file_url or target_languages"}, status=400
+            )
+        if not isinstance(target_languages, list):
+            return JsonResponse(
+                {"detail": "target_languages phải là một list"}, status=400
+            )
+
+        # Tải file về tạm
+        file_ext = file_url.rsplit(".",1)[-1].lower()
+        temp_path = os.path.join(tempfile.gettempdir(), f"tempfile.{file_ext}")
+        resp = requests.get(file_url)
+        resp.raise_for_status()
+        with open(temp_path, "wb") as f:
+            f.write(resp.content)
+
+        results = []
         try:
-            # Tải file về từ URL
-            file_extension = file_url.split(".")[-1].lower()
-            temp_file_path = os.path.join(tempfile.gettempdir(), f"tempfile.{file_extension}")
+            for lang in target_languages:
+                # translate_document phải nhận str
+                if not isinstance(lang, str):
+                    continue
+                url = translate_document(temp_path, lang)
+                results.append({"language": lang, "url": url})
+                print(url)
+        finally:
+            # luôn xóa file tạm
+            os.remove(temp_path)
 
-            response = requests.get(file_url)
-            with open(temp_file_path, "wb") as file:
-                file.write(response.content)
-            # Dịch tài liệu và tải lên S3
-            translated_file_url = translate_document(temp_file_path, target_language)
-            
-            return JsonResponse({"translated_file_url": translated_file_url}, status=200)
+        return JsonResponse({"translated_files": results}, status=200)
 
-        except Exception as e:
-            return JsonResponse({"detail": f"Error: {str(e)}"}, status=500)
