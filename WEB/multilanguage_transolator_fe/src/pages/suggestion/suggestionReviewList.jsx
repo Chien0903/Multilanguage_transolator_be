@@ -55,7 +55,6 @@ const SuggestionReviewList = () => {
     }
 
     try {
-      // Update the status to "reviewed" so it appears in the approval list
       const reviewData = { 
         ...editedData, 
         status: "reviewed",
@@ -79,13 +78,11 @@ const SuggestionReviewList = () => {
     }
   };
 
-  // Function to check if all languages are filled
   const areAllLanguagesFilled = (data) => {
     return ['japanese', 'english', 'vietnamese', 'chinese_traditional', 'chinese_simplified']
       .every(lang => data[lang] && data[lang].trim() !== '');
   }
 
-  // Count filled languages
   const countFilledLanguages = (data) => {
     return ['japanese', 'english', 'vietnamese', 'chinese_traditional', 'chinese_simplified']
       .filter(lang => data[lang] && data[lang].trim() !== '')
